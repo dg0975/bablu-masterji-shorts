@@ -3,11 +3,12 @@
 This file is the instruction set for the daily scheduled task. Each run is a fresh Claude
 session with no memory of earlier runs; everything it needs is in this repo.
 
-Channel: **@bablu.masterji** (Instagram Reels; YouTube Shorts posted by hand for now).
+Channel: **@bablu.masterji** (Instagram Reels via Windsor.ai; YouTube Shorts via Metricool).
 Language: Hindi narration, Hinglish on-screen text. Mascot: Bablu Masterji.
 
-**Test runs:** if the task prompt says TEST RUN, do everything except step 4 (no gh-pages
-push, no Instagram post), log nothing, and send the user the video and post text.
+**Test runs:** if the task prompt says TEST RUN, do everything except steps 4 and 4b (no
+gh-pages push, no Instagram or YouTube post), log nothing, and send the user the video and
+post text.
 
 ## 0. Setup
 
@@ -79,15 +80,32 @@ video (if any) plus one line saying which gate failed.
    wait 3 minutes and call it once more. For any other Windsor error (expired trial,
    disconnected account, rejected video), do not retry more than once. Log status `post_failed` and send the user the video and the error.
 
+## 4b. Post to YouTube Shorts (Metricool)
+
+Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
+
+1. Metricool `getBrandSettings`: brand id `8158859`, timezone `Asia/Calcutta`, and
+   `networksData.youtubeData` must be set. If YouTube is not connected, skip this step and
+   tell the user to reconnect it at https://app.metricool.com/brands/connections?blogId=8158859
+2. `createScheduledPost` with `blogId` 8158859, `date` = now + 6 minutes (IST, ISO 8601 with
+   +05:30), and `info`:
+   - `providers` `[{"network":"youtube"}]`, `media` `[PUBLIC_URL]`, `autoPublish` true
+   - `text` = the YouTube description (2-3 Hinglish lines + 8-10 hashtags starting `#shorts`)
+   - `youtubeData`: `title` under 60 characters ending in `#shorts`, `type` `short`,
+     `privacy` `public`, `category` `EDUCATION`, `madeForKids` **false** (user's choice),
+     `isAiGeneratedContent` false (animated cartoon, not realistic), 5-8 `tags`
+   - `publicationDate` `{dateTime, timezone: "Asia/Calcutta"}` matching `date`
+3. Wait about 7 minutes, then `getScheduledPosts` for today: the YouTube provider should show
+   `status` `PUBLISHED` with a `publicUrl`. If it shows an error, do not retry more than once;
+   tell the user.
+
 ## 5. Log and report
 
-1. Append to `topics/used.csv`: `date,slug,topic,status,instagram_media_id`
-   (status `posted`, `held` or `post_failed`). Commit the storyboard and the log to `main`
+1. Append to `topics/used.csv`: `date,slug,topic,status,instagram_media_id,youtube_url`
+   (status `posted`, `held` or `post_failed`; leave a field empty if that platform failed). Commit the storyboard and the log to `main`
    with message `short: <date> <slug>` and push.
 2. Send the user (SendUserMessage + SendUserFile) the MP4 and cover, with:
-   - whether it went live on Instagram,
-   - ready-to-paste **YouTube Short** text: title under 60 characters ending in `#shorts`,
-     a 2-3 line description, and 8-10 hashtags,
+   - whether it went live on Instagram and YouTube (with the YouTube Shorts link),
    - any approximate number to double-check, and a note that you cannot hear the audio.
 
 Keep the report short: the user reads it on a phone.

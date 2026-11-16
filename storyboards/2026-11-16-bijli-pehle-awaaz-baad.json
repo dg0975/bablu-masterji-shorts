@@ -1,0 +1,229 @@
+{
+ "title": "Bijli pehle dikhti hai, awaaz baad mein kyun?",
+ "handle": "@bablu.masterji",
+ "mascot": "masterji",
+ "voice": "hi-IN-MadhurNeural",
+ "rate": "+6%",
+ "scenes": [
+  {
+   "color": "amber",
+   "kicker": "Roz ka science",
+   "headline": "Bijli *pehle*, awaaz baad mein kyun?",
+   "visual": {
+    "type": "compare",
+    "vs": true,
+    "left": {
+     "icon": "⚡",
+     "title": "Chamak",
+     "lines": [
+      "Turant dikhi"
+     ],
+     "color": "amber",
+     "step": 0
+    },
+    "right": {
+     "icon": "🔊",
+     "title": "Gadgadahat",
+     "lines": [
+      "Kuch second baad"
+     ],
+     "color": "pink",
+     "step": 0
+    }
+   },
+   "beats": [
+    {
+     "say": "बिजली चमकी... एक, दो, तीन... फिर गड़गड़ाहट!",
+     "pose": "shock",
+     "bubble": "ab aayi awaaz!"
+    },
+    {
+     "say": "दोनों एक ही पल में बनती हैं, तो आवाज़ पीछे क्यों?",
+     "pose": "think",
+     "bubble": "pichhe kyun?"
+    }
+   ]
+  },
+  {
+   "color": "cyan",
+   "kicker": "Pehle yeh samjho",
+   "headline": "Gadgadahat = *hawa ka dhamaka*",
+   "sub": "Bijli hawa ko itna garam karti hai ki hawa ek jhatke mein phailti hai.",
+   "visual": {
+    "type": "number",
+    "from": 0,
+    "to": 30000,
+    "suffix": "°C",
+    "decimals": 0,
+    "label": "Bijli ke aas-paas ki hawa",
+    "color": "cyan",
+    "step": 0,
+    "tag": "approx. (NOAA)"
+   },
+   "beats": [
+    {
+     "say": "बिजली हवा को लगभग तीस हज़ार डिग्री तक गरम कर देती है, यानी सूरज की सतह से लगभग पाँच गुना!",
+     "pose": "shock",
+     "bubble": "suraj se 5x garam!"
+    },
+    {
+     "say": "गरम हवा धमाके से फैलती है। यही धमाका है गड़गड़ाहट।",
+     "pose": "point"
+    }
+   ]
+  },
+  {
+   "color": "pink",
+   "kicker": "Asli race",
+   "headline": "Roshni vs awaaz: *race*",
+   "visual": {
+    "type": "svg",
+    "tag": "approx. speeds",
+    "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><line x1='30' y1='505' x2='930' y2='505' stroke='#dfe4ee' stroke-width='5' opacity='.35'/><g data-loop='float'><ellipse cx='150' cy='105' rx='120' ry='52' fill='#5a6178'/><ellipse cx='95' cy='92' rx='62' ry='46' fill='#6b7390'/><ellipse cx='205' cy='80' rx='72' ry='52' fill='#6b7390'/></g><g data-loop='blink'><polyline points='165,150 128,270 180,270 140,410' fill='none' stroke='#ffb020' stroke-width='11' stroke-linejoin='round' stroke-linecap='round'/></g><text x='862' y='478' text-anchor='middle' font-size='130'>🧍</text><path d='M250 290 H750' stroke='#ffb020' stroke-width='9' fill='none' stroke-linecap='round' data-step='0' data-anim='draw' data-dur='0.35' data-delay='0.3'/><g data-step='0' data-anim='pop' data-delay='.65'><path d='M752 290 l-24 -16 M752 290 l-24 16' stroke='#ffb020' stroke-width='9' fill='none' stroke-linecap='round'/></g><g data-step='0' data-anim='fade' data-delay='.8'><text x='500' y='255' text-anchor='middle' class='t-mid' style='fill:#ffb020'>Roshni: 3 lakh km/s</text></g><g data-step='1' data-anim='fade'><g data-loop='pulse'><path d='M190 372 Q210 405 190 438' stroke='#ff5c8a' stroke-width='7' fill='none' stroke-linecap='round'/><path d='M212 355 Q240 405 212 455' stroke='#ff5c8a' stroke-width='7' fill='none' stroke-linecap='round'/></g></g><path d='M250 405 H750' stroke='#ff5c8a' stroke-width='9' fill='none' stroke-linecap='round' data-step='1' data-anim='draw' data-dur='5'/><g data-step='1' data-anim='fade' data-delay='.4'><text x='500' y='462' text-anchor='middle' class='t-mid' style='fill:#ff5c8a'>Awaaz: ~0.34 km/s</text></g></svg>"
+   },
+   "beats": [
+    {
+     "say": "अब रेस। रोशनी एक सेकंड में लगभग तीन लाख किलोमीटर चलती है।",
+     "pose": "point",
+     "bubble": "zoom!"
+    },
+    {
+     "say": "और आवाज़? सिर्फ़ लगभग एक तिहाई किलोमीटर!",
+     "pose": "shock",
+     "bubble": "itni dheemi!"
+    }
+   ]
+  },
+  {
+   "color": "green",
+   "kicker": "Exam wala fact",
+   "headline": "*3 second* = lagbhag 1 km",
+   "visual": {
+    "type": "cards",
+    "tag": "approx. rule (Environment Canada)",
+    "items": [
+     {
+      "icon": "⏱️",
+      "label": "3 sec",
+      "value": "≈ 1 km",
+      "color": "cyan",
+      "step": 0
+     },
+     {
+      "icon": "⏱️",
+      "label": "6 sec",
+      "value": "≈ 2 km",
+      "color": "amber",
+      "step": 0
+     },
+     {
+      "icon": "⏱️",
+      "label": "15 sec",
+      "value": "≈ 5 km",
+      "color": "green",
+      "step": 1,
+      "on": true
+     }
+    ]
+   },
+   "beats": [
+    {
+     "say": "इसलिए आवाज़ को हर किलोमीटर के लिए लगभग तीन सेकंड लगते हैं।",
+     "pose": "point",
+     "bubble": "Ye exam mein aayega!"
+    },
+    {
+     "say": "सेकंड गिनो, तीन से भाग दो। पंद्रह सेकंड, यानी बिजली लगभग पाँच किलोमीटर दूर।",
+     "caption": "सेकंड गिनो, 3 से भाग दो। 15 सेकंड, यानी बिजली लगभग 5 km दूर।",
+     "pose": "happy",
+     "bubble": "Shabaash!"
+    }
+   ]
+  },
+  {
+   "color": "violet",
+   "kicker": "Galatfehmi",
+   "headline": "Baadal *takraate* nahi!",
+   "visual": {
+    "type": "compare",
+    "vs": false,
+    "left": {
+     "icon": "❌",
+     "title": "Myth",
+     "lines": [
+      "Baadal takraaye"
+     ],
+     "color": "pink",
+     "step": 0
+    },
+    "right": {
+     "icon": "✅",
+     "title": "Fact",
+     "lines": [
+      "Hawa ka dhamaka"
+     ],
+     "color": "green",
+     "step": 0
+    }
+   },
+   "beats": [
+    {
+     "say": "कई लोग सोचते हैं, बादल टकराने से आवाज़ आती है।",
+     "pose": "shrug",
+     "friend": "baadal takraaye?",
+     "friendPose": "think"
+    },
+    {
+     "say": "बिल्कुल ग़लत! आवाज़ बिजली ख़ुद बनाती है।",
+     "pose": "point",
+     "bubble": "Bilkul galat, beta!",
+     "friend": "ohh!",
+     "friendPose": "shock"
+    }
+   ]
+  },
+  {
+   "color": "amber",
+   "kicker": "Yaad rakho",
+   "headline": "Roshni *tez*, awaaz dheemi",
+   "visual": {
+    "type": "cards",
+    "items": [
+     {
+      "icon": "⚡",
+      "label": "Roshni",
+      "value": "Turant",
+      "color": "amber",
+      "step": 0
+     },
+     {
+      "icon": "🔊",
+      "label": "Awaaz",
+      "value": "~3 sec/km",
+      "color": "pink",
+      "step": 0
+     },
+     {
+      "icon": "🧮",
+      "label": "Formula",
+      "value": "sec ÷ 3 = km",
+      "color": "green",
+      "step": 0,
+      "on": true
+     }
+    ]
+   },
+   "beats": [
+    {
+     "say": "तो याद रखो: रोशनी तेज़, आवाज़ धीमी।",
+     "pose": "happy"
+    },
+    {
+     "say": "ऐसे ही साइंस के लिए फ़ॉलो करो, और कमेंट में प्रेज़ेंट लगाओ!",
+     "pose": "wave",
+     "bubble": "Comment mein Present!"
+    }
+   ]
+  }
+ ]
+}

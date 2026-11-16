@@ -43,6 +43,11 @@ for i in $(seq 1 40); do
     sleep 30   # let the CDN pick it up
     echo "PUBLIC_URL $URL"; echo "COVER_URL $BASE/$SLUG.jpg"; exit 0
   fi
+  # 3) neither check reachable from this sandbox: wait for the usual Pages build time
+  if [ "$i" -eq 1 ] && ! curl -s -o /dev/null --max-time 15 "$BASE/" 2>/dev/null && [ -z "$st" ]; then
+    sleep 120
+    echo "PUBLIC_URL $URL"; echo "COVER_URL $BASE/$SLUG.jpg"; echo "UNVERIFIED (github.io not reachable from here; waited 120 s)"; exit 0
+  fi
   sleep 15
 done
 echo "ERROR: $URL was not live after 10 minutes (is GitHub Pages enabled for the gh-pages branch?)" >&2

@@ -6,6 +6,9 @@ session with no memory of earlier runs; everything it needs is in this repo.
 Channel: **@bablu.masterji** (Instagram Reels; YouTube Shorts posted by hand for now).
 Language: Hindi narration, Hinglish on-screen text. Mascot: Bablu Masterji.
 
+**Test runs:** if the task prompt says TEST RUN, do everything except step 4 (no gh-pages
+push, no Instagram post), log nothing, and send the user the video and post text.
+
 ## 0. Setup
 
 1. Attach and clone this repo with push access: `dg0975/bablu-masterji-shorts`.
@@ -53,8 +56,9 @@ video (if any) plus one line saying which gate failed.
    "Present" + 8-10 hashtags, `share_to_feed` = true,
    `thumb_offset` = milliseconds of the hook frame (first beat's audio end from
    `work/timeline.json`, times 1000).
-3. If Windsor returns an error (expired trial, disconnected account, rejected video), do not
-   retry more than once. Log status `post_failed` and send the user the video and the error.
+3. If the script printed `UNVERIFIED` and Windsor says the video URL could not be fetched,
+   wait 3 minutes and call it once more. For any other Windsor error (expired trial,
+   disconnected account, rejected video), do not retry more than once. Log status `post_failed` and send the user the video and the error.
 
 ## 5. Log and report
 

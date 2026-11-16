@@ -1,0 +1,43 @@
+name: voice
+# Makes the Sarvam AI voice clips for a storyboard and publishes them on the `voice` branch.
+on:
+  push:
+    branches: [main]
+    paths: ["storyboards/**.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: voice
+  cancel-in-progress: false
+
+jobs:
+  tts:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 5
+
+      - name: Previous clips (reused when a line did not change)
+        run: |
+          if git ls-remote --exit-code origin voice >/dev/null 2>&1; then
+            git fetch --depth 1 origin voice
+            git worktree add voiceprev FETCH_HEAD
+          fi
+
+      - name: Generate voice
+        env:
+          SARVAM_API_KEY: ${{ secrets.SARVAM_API_KEY }}
+        run: python3 scripts/voice_job.py
+
+      - name: Publish voice branch
+        run: |
+          cd voiceout
+          git init -q -b voice
+          git add -A
+          git -c user.name="Bablu Masterji bot" -c user.email="bot@users.noreply.github.com" commit -q -m "voice for ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" voice:voice

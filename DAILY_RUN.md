@@ -16,9 +16,12 @@ push, no Instagram post), log nothing, and send the user the video and post text
    `engine/examples/pressure_cooker.json`. Follow SKILL.md for the video; this file adds the
    topic choice, quality gates, posting and logging. Work from a copy of `engine/` in the
    working directory, not inside the repo checkout.
-3. Network check: the voice needs `speech.platform.bing.com` (or `translate.google.com`).
-   If neither is reachable, stop here and send the user a message saying the voice domains
-   are blocked. Never make or post a silent video.
+3. Voice: the channel voice is **Sarvam AI, speaker `girish_hi_devotional`** (model
+   `bulbul:v4-flash`). The API key lives only in the repo's GitHub secret, so the clips are made
+   by the GitHub workflow `.github/workflows/voice.yml` whenever a storyboard is pushed, and
+   published on the `voice` branch. Never ask for or handle the key yourself.
+   Backup voice, only if Sarvam fails: Microsoft `hi-IN-MadhurNeural` through edge-tts, which
+   needs `speech.platform.bing.com`. Never make or post a silent video.
 
 ## 1. Pick today's topic
 
@@ -32,9 +35,23 @@ push, no Instagram post), log nothing, and send the user the video and post text
 
 ## 2. Make the video
 
-Follow `engine/SKILL.md` steps 1-4 (storyboard, `--check`, fix, full render).
-Save the storyboard to `storyboards/<YYYY-MM-DD>-<slug>.json` in the repo.
-`"handle": "@bablu.masterji"` in every storyboard.
+Follow `engine/SKILL.md` steps 1-4 (storyboard, `--check`, fix, full render), with the voice
+made like this:
+
+1. Save the storyboard to `storyboards/<YYYY-MM-DD>-<slug>.json` with
+   `"handle": "@bablu.masterji"` and `"tts": "sarvam"`. Commit and push it to `main`
+   (message `storyboard: <date> <slug>`).
+2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice` waits (up to 8 min) for the
+   GitHub voice job and copies the clips.
+3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice`
+   then the full render the same way (detached, as SKILL.md says).
+4. Every time you change any `say` text, commit and push the storyboard again and rerun
+   `get_voice.sh` before rendering; changed lines get new clips, unchanged ones are reused.
+5. If `get_voice.sh` exits with `VOICE ERROR` or `VOICE TIMEOUT`, use the backup voice:
+   render with `--tts edge` (Microsoft Madhur) and mention it in the report. If edge is not
+   reachable either, stop: no video today, and tell the user why.
+
+Sarvam reads numbers well, but still spell key numbers as words in `say` for consistency.
 
 ## 3. Quality gates (all must pass to post automatically)
 
@@ -42,8 +59,8 @@ Save the storyboard to `storyboards/<YYYY-MM-DD>-<slug>.json` in the repo.
 - You viewed the preview sheet and it looks right (no clipped text, visual not empty).
 - Every stated number was confirmed by a source; rounded ones say लगभग and carry a tag.
 - The final MP4 exists, is 1080x1920, has an audio stream (check with ffprobe).
-- The voice engine was `edge` (Microsoft neural). If it fell back to `gtts` (Google basic voice,
-  very robotic), do not post: hold it and tell the user.
+- The voice engine was `sarvam` (or `edge` as backup). If it fell back to `gtts` (Google basic
+  voice, very robotic), do not post: hold it and tell the user.
 
 If any gate fails: do not post. Log the topic with status `held` and send the user the
 video (if any) plus one line saying which gate failed.

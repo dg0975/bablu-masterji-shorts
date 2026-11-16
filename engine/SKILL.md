@@ -163,6 +163,11 @@ again the same way. Voice clips are cached in `work/tts`, so the render reuses t
 
 ## Options
 
+Voice engines: `"tts": "sarvam"` uses Sarvam AI (Bulbul) with `sarvam_speaker` (default
+`girish_hi_devotional`), `sarvam_model` (default `bulbul:v4-flash`) and `sarvam_pace` (default 1.05);
+its clips come from `--voice-dir` (see the channel repo's DAILY_RUN.md) or from the API directly if
+`SARVAM_API_KEY` is set in the environment. Otherwise the Microsoft voice is used.
+
 Top-level storyboard fields: `voice` (`hi-IN-MadhurNeural` male, `hi-IN-SwaraNeural` female),
 `rate` (default `"-2%"`), `pitch` (default `"-3Hz"`, Microsoft voice only), `music` (volume of the soft code-generated background pad, default
 `0.05`, `0` for none), `captions` (`false` hides Hindi captions), `handle` (`@bablu.masterji`),

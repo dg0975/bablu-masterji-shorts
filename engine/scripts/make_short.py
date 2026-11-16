@@ -125,7 +125,33 @@ def load_pcm(path, tempo=1.0):
     return a
 
 
-def synth_all(sb, out, pref):
+def synth_sarvam(sb, voice_dir):
+    """Sarvam AI voice: clips made by the GitHub voice job (or directly if SARVAM_API_KEY is set)"""
+    sys.path.insert(0, str(HERE))
+    import sarvam_tts as st
+    cfg = st.settings(sb)
+    api_key = os.environ.get("SARVAM_API_KEY", "").strip()
+    cdir = Path(voice_dir) / "clips"
+    cdir.mkdir(parents=True, exist_ok=True)
+    clips, missing = {}, []
+    for i, j, text in st.lines(sb):
+        f = cdir / f"{st.clip_key(cfg, text)}.wav"
+        if not f.exists() and api_key:
+            st.synth(text, cfg, api_key, str(f))
+        if f.exists():
+            clips[(i, j)] = load_pcm(f)
+        else:
+            missing.append(f"scene {i} beat {j}")
+    if missing:
+        sys.exit("ERROR: Sarvam clips missing for " + ", ".join(missing) +
+                 ". Push the storyboard and run scripts/get_voice.sh first (or set SARVAM_API_KEY).")
+    print(f"  [tts] engine: sarvam  speaker: {cfg['speaker']}  model: {cfg['model']}  pace: {cfg['pace']}")
+    return clips, "sarvam"
+
+
+def synth_all(sb, out, pref, voice_dir=None):
+    if pref == "sarvam" or (pref == "auto" and sb.get("tts") == "sarvam"):
+        return synth_sarvam(sb, voice_dir or (out / "voice"))
     cache = out / "tts"
     cache.mkdir(parents=True, exist_ok=True)
     voice, rate, pitch = sb.get("voice", "hi-IN-MadhurNeural"), sb.get("rate", "-2%"), sb.get("pitch", "-3Hz")
@@ -330,8 +356,9 @@ def main():
     ap.add_argument("--out", default="out")
     ap.add_argument("--check", action="store_true", help="voice + timing + preview sheet only (no video)")
     ap.add_argument("--fps", type=int, default=30)
-    ap.add_argument("--tts", default="auto", choices=["auto", "edge", "gtts", "silent"],
+    ap.add_argument("--tts", default="auto", choices=["auto", "sarvam", "edge", "gtts", "silent"],
                     help="silent = layout preview with estimated timing; only allowed with --check")
+    ap.add_argument("--voice-dir", default=None, help="folder holding clips/ from scripts/get_voice.sh (Sarvam voice)")
     ap.add_argument("--min", type=float, default=50, help="target minimum seconds")
     ap.add_argument("--max", type=float, default=68, help="target maximum seconds")
     a = ap.parse_args()
@@ -348,7 +375,7 @@ def main():
     out.mkdir(parents=True, exist_ok=True)
 
     print("[1/4] Hindi voiceover")
-    clips, eng = synth_all(sb, out, a.tts)
+    clips, eng = synth_all(sb, out, a.tts, a.voice_dir)
     tl = build_timeline(sb, clips)
     (out / "timeline.json").write_text(json.dumps(tl, indent=1))
     for i, s in enumerate(tl["scenes"]):

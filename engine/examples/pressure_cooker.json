@@ -1,0 +1,217 @@
+{
+  "title": "Cooker mein khaana jaldi kyun pakta hai?",
+  "handle": "@bablu.masterji",
+  "voice": "hi-IN-MadhurNeural",
+  "rate": "+6%",
+  "scenes": [
+    {
+      "color": "amber",
+      "kicker": "Roz ka science",
+      "headline": "Cooker mein khaana *jaldi* kyun pakta hai?",
+      "visual": {
+        "type": "compare",
+        "left": {
+          "icon": "🍲",
+          "title": "Khula bartan",
+          "lines": [
+            "Dal: ~40 min"
+          ],
+          "color": "cyan",
+          "step": 0
+        },
+        "right": {
+          "icon": "⏱️",
+          "title": "Pressure cooker",
+          "lines": [
+            "Dal: ~10 min"
+          ],
+          "color": "amber",
+          "step": 0
+        },
+        "tag": "illustrative timings"
+      },
+      "beats": [
+        {
+          "say": "एक ही दाल, एक ही आँच। खुले बर्तन में चालीस मिनट, और कुकर में सिर्फ़ दस!",
+          "pose": "point",
+          "bubble": "same dal, same gas!"
+        },
+        {
+          "say": "आख़िर कुकर के अंदर ऐसा क्या होता है?",
+          "pose": "think",
+          "bubble": "andar kya hai?"
+        }
+      ]
+    },
+    {
+      "color": "cyan",
+      "kicker": "Pehle yeh samjho",
+      "headline": "Paani *100°C* par ruk jaata hai",
+      "sub": "Khule bartan mein aanch badhao, paani aur garam nahi hota. Bas bhaap banta hai.",
+      "visual": {
+        "type": "number",
+        "from": 25,
+        "to": 100,
+        "suffix": "°C",
+        "label": "Khule bartan mein paani ki limit",
+        "color": "cyan",
+        "step": 0,
+        "tag": "at sea level"
+      },
+      "beats": [
+        {
+          "say": "खुले बर्तन में पानी सौ डिग्री पर उबलने लगता है।",
+          "pose": "point"
+        },
+        {
+          "say": "इसके बाद आँच कितनी भी बढ़ाओ, पानी और गरम नहीं होता। वो बस भाप बनकर उड़ जाता है।",
+          "pose": "shrug",
+          "bubble": "bas 100 tak?"
+        }
+      ]
+    },
+    {
+      "color": "pink",
+      "kicker": "Cooker ka trick",
+      "headline": "Bhaap ko *band* kar do",
+      "sub": "Dhakkan seal hai. Bhaap bahar nahi ja sakti, to andar pressure badhta hai.",
+      "visual": {
+        "type": "svg",
+        "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><g data-loop='pulse'><path d='M440 500 Q455 455 480 440 Q505 455 520 500 Z' fill='#ffb020'/><path d='M380 500 Q392 468 410 458 Q428 468 440 500 Z' fill='#ff8a3d'/><path d='M520 500 Q532 468 550 458 Q568 468 580 500 Z' fill='#ff8a3d'/></g><rect x='300' y='190' width='360' height='250' rx='44' fill='rgba(255,255,255,.06)' stroke='#dfe4ee' stroke-width='6'/><path d='M306 350 H654 V396 Q654 434 616 434 H344 Q306 434 306 396 Z' fill='#35d6ed' opacity='.45'/><rect x='278' y='160' width='404' height='44' rx='22' fill='#1a2036' stroke='#ff5c8a' stroke-width='6'/><rect x='464' y='112' width='32' height='52' rx='10' fill='#dfe4ee'/><rect x='660' y='250' width='170' height='32' rx='16' fill='#2a3148' stroke='#dfe4ee' stroke-width='5'/><g data-step='0' data-anim='fade'><circle cx='360' cy='330' r='11' fill='#fff' opacity='.85' data-loop='rise' data-phase='0' data-dist='100'/><circle cx='430' cy='335' r='9' fill='#fff' opacity='.85' data-loop='rise' data-phase='.35' data-dist='110'/><circle cx='500' cy='330' r='12' fill='#fff' opacity='.85' data-loop='rise' data-phase='.6' data-dist='100'/><circle cx='565' cy='335' r='9' fill='#fff' opacity='.85' data-loop='rise' data-phase='.15' data-dist='110'/><circle cx='615' cy='330' r='10' fill='#fff' opacity='.85' data-loop='rise' data-phase='.8' data-dist='95'/></g><g data-step='0' data-anim='pop' data-delay='.5'><rect x='74' y='148' width='168' height='62' rx='16' fill='rgba(255,92,138,.14)' stroke='#ff5c8a' stroke-width='4'/><text x='158' y='190' text-anchor='middle' class='lbl' style='fill:#ff5c8a'>SEALED</text></g><g data-step='1' data-anim='pop'><g data-loop='pulse'><path d='M372 270 H326 M326 270 l16 -12 M326 270 l16 12' stroke='#ff5c8a' stroke-width='8' fill='none' stroke-linecap='round'/><path d='M588 270 H634 M634 270 l-16 -12 M634 270 l-16 12' stroke='#ff5c8a' stroke-width='8' fill='none' stroke-linecap='round'/><path d='M480 262 V224 M480 224 l-12 16 M480 224 l12 16' stroke='#ff5c8a' stroke-width='8' fill='none' stroke-linecap='round'/></g></g><g data-step='1' data-anim='pop' data-delay='.3'><text x='158' y='300' text-anchor='middle' class='t-big' style='fill:#ff5c8a'>≈ 2×</text><text x='158' y='340' text-anchor='middle' class='lbl'>PRESSURE</text></g></svg>"
+      },
+      "beats": [
+        {
+          "say": "कुकर का ढक्कन भाप को बाहर नहीं जाने देता।",
+          "pose": "point"
+        },
+        {
+          "say": "भाप अंदर जमा होती जाती है, और दबाव बढ़कर लगभग दोगुना हो जाता है।",
+          "pose": "shock",
+          "bubble": "pressure double!"
+        }
+      ]
+    },
+    {
+      "color": "amber",
+      "kicker": "Asli jaadu",
+      "headline": "Zyada pressure = *zyada garam* paani",
+      "sub": "Ab paani 100 par nahi, lagbhag 120°C par ubalta hai.",
+      "visual": {
+        "type": "bars",
+        "unit": "°C",
+        "max": 130,
+        "items": [
+          {
+            "label": "Khula bartan",
+            "value": 100,
+            "color": "cyan",
+            "step": 0
+          },
+          {
+            "label": "Pressure cooker",
+            "value": 120,
+            "color": "amber",
+            "step": 0
+          }
+        ],
+        "tag": "approx. boiling point"
+      },
+      "beats": [
+        {
+          "say": "ज़्यादा दबाव में पानी सौ पर नहीं, लगभग एक सौ बीस डिग्री पर उबलता है।",
+          "pose": "point"
+        },
+        {
+          "say": "बीस डिग्री ज़्यादा गरम पानी, यानी खाना बहुत तेज़ी से पकता है।",
+          "pose": "happy",
+          "bubble": "isliye jaldi!"
+        }
+      ]
+    },
+    {
+      "color": "violet",
+      "kicker": "Aur seeti?",
+      "headline": "Seeti hai *safety valve*",
+      "visual": {
+        "type": "compare",
+        "vs": false,
+        "left": {
+          "icon": "❌",
+          "title": "Alarm nahi",
+          "lines": [
+            "Seeti ka matlab khaana ready, yeh zaroori nahi"
+          ],
+          "color": "pink",
+          "step": 0
+        },
+        "right": {
+          "icon": "✅",
+          "title": "Safety valve",
+          "lines": [
+            "Extra bhaap bahar, pressure wapas safe"
+          ],
+          "color": "green",
+          "step": 1
+        }
+      },
+      "beats": [
+        {
+          "say": "और सीटी? वो खाना पकने का अलार्म नहीं है।",
+          "pose": "shrug",
+          "friend": "seeti = alarm?",
+          "friendPose": "think"
+        },
+        {
+          "say": "जब दबाव ज़रूरत से ज़्यादा हो जाता है, सीटी उठकर फ़ालतू भाप निकाल देती है। यानी वो एक सेफ़्टी वाल्व है।",
+          "pose": "point",
+          "bubble": "safety valve hai!",
+          "friend": "ohh!",
+          "friendPose": "shock"
+        }
+      ]
+    },
+    {
+      "color": "green",
+      "kicker": "Yaad rakho",
+      "headline": "Band dhakkan → pressure → *120°C*",
+      "visual": {
+        "type": "cards",
+        "items": [
+          {
+            "icon": "🔒",
+            "label": "Step 1",
+            "value": "Bhaap band",
+            "color": "pink",
+            "step": 0
+          },
+          {
+            "icon": "📈",
+            "label": "Step 2",
+            "value": "Pressure 2×",
+            "color": "amber",
+            "step": 0
+          },
+          {
+            "icon": "🔥",
+            "label": "Step 3",
+            "value": "120°C",
+            "color": "green",
+            "step": 0,
+            "on": true
+          }
+        ]
+      },
+      "beats": [
+        {
+          "say": "तो याद रखो: बंद ढक्कन, ज़्यादा दबाव, ज़्यादा गरम पानी, और झटपट खाना।",
+          "pose": "happy"
+        },
+        {
+          "say": "ऐसे ही रोज़ का साइंस जानने के लिए फ़ॉलो करो!",
+          "pose": "wave",
+          "bubble": "follow karo!"
+        }
+      ]
+    }
+  ]
+}

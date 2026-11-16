@@ -2,7 +2,8 @@
   "title": "Cooker mein khaana jaldi kyun pakta hai?",
   "handle": "@bablu.masterji",
   "voice": "hi-IN-MadhurNeural",
-  "rate": "+6%",
+  "rate": "-2%",
+  "pitch": "-3Hz",
   "scenes": [
     {
       "color": "amber",

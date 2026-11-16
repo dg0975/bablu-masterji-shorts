@@ -42,6 +42,8 @@ Save the storyboard to `storyboards/<YYYY-MM-DD>-<slug>.json` in the repo.
 - You viewed the preview sheet and it looks right (no clipped text, visual not empty).
 - Every stated number was confirmed by a source; rounded ones say लगभग and carry a tag.
 - The final MP4 exists, is 1080x1920, has an audio stream (check with ffprobe).
+- The voice engine was `edge` (Microsoft neural). If it fell back to `gtts` (Google basic voice,
+  very robotic), do not post: hold it and tell the user.
 
 If any gate fails: do not post. Log the topic with status `held` and send the user the
 video (if any) plus one line saying which gate failed.

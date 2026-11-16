@@ -105,6 +105,22 @@ to use sparingly (one or two per video, never the same line every day):
 beat "Comment mein Present lagao!" as the running attendance gag.
 The purple friend (`friend` field) is still a robot; use it for the student who asks the wrong idea.
 
+## Make it sound like a real masterji, not a robot
+
+Text-to-speech sounds robotic mostly because of the writing. Write the narration the way a
+government-school teacher actually talks to his class:
+- Talk to the viewer: "बच्चों", "देखो", "सोचो ज़रा", "अब ध्यान से सुनो". One such phrase per scene at
+  most, varied, never the same opener twice in a video.
+- Ask, then answer: "पानी सौ डिग्री पर क्यों रुक जाता है? क्योंकि..." Questions make the voice rise
+  and fall naturally.
+- Short spoken sentences, 4-10 words, with commas where a person would breathe. No written-style
+  Hindi (avoid "अतः", "तथा", "किंतु"; use "तो", "और", "लेकिन").
+- Everyday Hinglish words in Devanagari exactly as people say them (प्रेशर, टेंपरेचर, एक्ज़ाम).
+- Add `"pause": 0.4` after a question or before the key fact, so it lands like a teacher's pause.
+- One small joke or teacher-ism per video ("ये एक्ज़ाम में आएगा!") in the narration, not only in bubbles.
+Default voice settings (top level of the storyboard): `"voice": "hi-IN-MadhurNeural"`,
+`"rate": "-2%"`, `"pitch": "-3Hz"` (slightly slower and deeper, an older man's voice).
+
 ## 3. Check before the long render
 
 ```bash
@@ -148,7 +164,7 @@ again the same way. Voice clips are cached in `work/tts`, so the render reuses t
 ## Options
 
 Top-level storyboard fields: `voice` (`hi-IN-MadhurNeural` male, `hi-IN-SwaraNeural` female),
-`rate` (default `"+6%"`), `music` (volume of the soft code-generated background pad, default
+`rate` (default `"-2%"`), `pitch` (default `"-3Hz"`, Microsoft voice only), `music` (volume of the soft code-generated background pad, default
 `0.05`, `0` for none), `captions` (`false` hides Hindi captions), `handle` (`@bablu.masterji`),
 `mascot` (`masterji` default, `robot` for the old robot).
 

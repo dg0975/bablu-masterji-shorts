@@ -72,11 +72,11 @@ def _trust_system_certs():
         pass
 
 
-def _edge_tts(text, voice, rate, path):
+def _edge_tts(text, voice, rate, path, pitch="+0Hz"):
     import edge_tts
 
     async def run():
-        com = edge_tts.Communicate(text, voice, rate=rate)
+        com = edge_tts.Communicate(text, voice, rate=rate, pitch=pitch)
         with open(path, "wb") as f:
             async for ch in com.stream():
                 if ch["type"] == "audio":
@@ -128,7 +128,7 @@ def load_pcm(path, tempo=1.0):
 def synth_all(sb, out, pref):
     cache = out / "tts"
     cache.mkdir(parents=True, exist_ok=True)
-    voice, rate = sb.get("voice", "hi-IN-MadhurNeural"), sb.get("rate", "+6%")
+    voice, rate, pitch = sb.get("voice", "hi-IN-MadhurNeural"), sb.get("rate", "-2%"), sb.get("pitch", "-3Hz")
     eng = None
     clips = {}
     if pref == "silent":  # layout preview only: timing estimated from word count, no audio
@@ -147,13 +147,13 @@ def synth_all(sb, out, pref):
                 continue
             if eng is None:
                 eng = pick_engine(pref)
-                print(f"  [tts] engine: {eng}" + (f"  voice: {voice}  rate: {rate}" if eng == "edge" else "  (fallback Google voice, sped up)"))
-            key = hashlib.md5(f"{eng}|{voice}|{rate}|{text}".encode()).hexdigest()[:16]
+                print(f"  [tts] engine: {eng}" + (f"  voice: {voice}  rate: {rate}  pitch: {pitch}" if eng == "edge" else "  (fallback Google voice, sped up)"))
+            key = hashlib.md5(f"{eng}|{voice}|{rate}|{pitch}|{text}".encode()).hexdigest()[:16]
             mp3 = cache / f"{key}.mp3"
             if not mp3.exists():
                 for attempt in range(3):
                     try:
-                        _edge_tts(text, voice, rate, str(mp3)) if eng == "edge" else _gtts(text, str(mp3))
+                        _edge_tts(text, voice, rate, str(mp3), pitch) if eng == "edge" else _gtts(text, str(mp3))
                         break
                     except Exception as e:  # noqa
                         if mp3.exists():

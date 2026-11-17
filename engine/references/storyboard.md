@@ -181,6 +181,61 @@ Rules that avoid surprises:
 - To combine an entrance with a loop, nest them: `<g data-step='1' data-anim='pop'><g data-loop='pulse'>…</g></g>`.
 - `draw` needs a `<path>`, `<line>` or `<polyline>` with a stroke and `fill='none'`.
 
+## 6b. 3D visuals (three.js)
+
+`{"type":"3d", ...}` fills the 960 x 530 visual box with a real-time 3D scene (WebGL, rendered
+in the same headless browser). Use it for the 1-2 scenes where depth helps most: planets, orbits,
+molecules, waves, a rotating object. Keep the other scenes 2D (they render faster and carry text).
+Text stays in the headline/sub/captions; 3D labels are short (2-4 words).
+
+Presets (all options optional; arrays are per beat, eased between beats):
+```json
+{"type":"3d","preset":"earth","rays":true,"scatterStep":1,"sunsetStep":null,"spin":0.22,
+ "atmosphere":"#5fb4ff","labels":[{"text":"Neeli roshni","at":[-1.2,2.0,0],"color":"cyan","step":1}]}
+{"type":"3d","preset":"molecules","speeds":[0.6,2.4],"colors":["#4aa8ff","#ff5a4e"],"count":46,
+ "escapeStep":1,"escapeFraction":0.3}
+{"type":"3d","preset":"orbit","focusStep":1,"earthSpeed":0.25,"moonSpeed":1.4,
+ "names":{"Sun":"Suraj","Earth":"Dharti","Moon":"Chaand"}}
+{"type":"3d","preset":"atom","shells":3,"nucleons":12,"speeds":[1.6]}
+{"type":"3d","preset":"waves","amplitude":[0.15,0.35],"speeds":[3],"source":"point","color":"#22d3ee"}
+```
+- earth: Earth with clouds and glowing atmosphere; `rays` sends sunlight in from the left and,
+  from `scatterStep`, part of it turns blue and scatters (sky colour); `sunsetStep` turns the
+  atmosphere orange (sunsets).
+- molecules: particles in a box; `speeds`/`colors` per beat show heating; `escapeStep` lets some
+  fly out of the top (boiling, evaporation).
+- orbit: Sun, Earth and Moon on their orbits; `focusStep` flies the camera to Earth and Moon
+  (moon phases, eclipses, day/night). Labels fade during the fly-in.
+- atom: nucleus with electrons on tilted orbits. waves: rippling surface (sound, water,
+  vibration); `source: "line"` for straight wavefronts.
+- 3D labels: keep `at` x between -2 and 2 so text is not cut off.
+
+Custom 3D (`"code"`): a JS function body that builds the scene and returns
+`(t, step, sp, lt) => {...}`, called every frame (t = video time, lt = scene time, step = beat
+index, sp = seconds into the beat). Everything must depend only on these times (no
+`Math.random`, no `Date`), so frames are repeatable. Available: `THREE` (r159), `scene`,
+`camera`, `v` (the visual object), `H` helpers: `H.lights()`, `H.env(renderer)` (already on for
+custom scenes, makes metal/plastic look real), `H.stars(n)`, `H.glow(color,size,opacity)`,
+`H.label(text,{color,size})`, `H.rim(radius,color)` (atmosphere glow), `H.planetTex({seed})`,
+`H.ring(radius,color)`, `H.canvasTex(w,h,draw)`, `H.stepVal(array,step,sp)`,
+`H.phase(lt,speedsPerBeat)` (smooth motion whose speed changes per beat), `H.rng(seed)`,
+`H.lerp`, `H.eIO`, `H.clamp`. Build shapes from three.js primitives (Cylinder, Sphere, Box,
+Torus, Lathe for vessels); no external models or textures load. Example (a cooker whose weight
+dances and lets out steam from beat 1):
+```js
+H.lights(); camera.position.set(0,1.5,6); camera.lookAt(0,0,0);
+const body=new THREE.Mesh(new THREE.CylinderGeometry(1.3,1.2,1.6,64), new THREE.MeshStandardMaterial({color:0xb8c0cc,metalness:.85,roughness:.25}));
+const lid=new THREE.Mesh(new THREE.CylinderGeometry(1.36,1.36,.18,64), new THREE.MeshStandardMaterial({color:0x8d96a3,metalness:.9,roughness:.3})); lid.position.y=.9;
+const w=new THREE.Mesh(new THREE.CylinderGeometry(.12,.16,.35,24), new THREE.MeshStandardMaterial({color:0x222222})); w.position.y=1.15;
+const g=new THREE.Group(); g.add(body,lid,w); scene.add(g);
+const steam=[]; for(let i=0;i<14;i++){const s=H.glow('#ffffff',.6,.5); scene.add(s); steam.push(s);}
+return (t,step,sp,lt)=>{ g.rotation.y=lt*.4; w.position.y=1.15+(step>=1?Math.abs(Math.sin(lt*14))*.06:0);
+  steam.forEach((s,i)=>{const p=((lt*.6+i/14)%1); s.position.set(Math.sin(i*2.1+lt)*.2*p,1.3+p*2.2,0);
+    s.material.opacity=step>=1?(1-p)*.6:0; s.scale.setScalar(.4+p*1.2);}); };
+```
+If the code throws, the check prints `PAGE ERROR`; fix it before rendering. A 3D video takes
+about 6-8 minutes to render instead of 2-3.
+
 ## 7. Troubleshooting
 
 | Symptom | Fix |

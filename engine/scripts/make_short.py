@@ -16,7 +16,7 @@ ASSETS = HERE.parent / "assets"
 SR = 44100
 W, H = 1080, 1920
 POSES = {"idle", "point", "think", "shock", "happy", "sad", "shrug", "wave"}
-VTYPES = {"svg", "html", "cards", "bars", "list", "number", "compare"}
+VTYPES = {"svg", "html", "cards", "bars", "list", "number", "compare", "3d"}
 
 
 def sh(cmd, **kw):
@@ -284,7 +284,11 @@ def write_page(sb, tl, out):
     if (fdir / "Kalam-Bold.ttf").exists():
         faces += f"@font-face{{font-family:'Kalam';font-weight:700;src:url('file://{fdir}/Kalam-Bold.ttf')}}\n"
     data = "const SB=" + json.dumps(sb, ensure_ascii=False).replace("</", "<\\/") + ";\nconst TL=" + json.dumps(tl) + ";"
-    html = html.replace("/*FONTS*/", faces).replace("/*DATA*/", data)
+    libs = ""
+    if any((sc.get("visual") or {}).get("type") == "3d" for sc in sb["scenes"]):
+        for js in (ASSETS / "vendor" / "three.min.js", ASSETS / "g3d.js"):
+            libs += f'<script src="file://{js.resolve()}"></script>\n'
+    html = html.replace("/*FONTS*/", faces).replace("<script>\n/*DATA*/", libs + "<script>\n/*DATA*/", 1).replace("/*DATA*/", data)
     page = out / "_page.html"
     page.write_text(html, encoding="utf-8")
     return page
@@ -292,7 +296,8 @@ def write_page(sb, tl, out):
 
 def open_page(pw, page_path):
     try:
-        browser = pw.chromium.launch(args=["--force-color-profile=srgb", "--font-render-hinting=none", "--disable-lcd-text"])
+        browser = pw.chromium.launch(args=["--force-color-profile=srgb", "--font-render-hinting=none", "--disable-lcd-text",
+                                          "--use-angle=swiftshader", "--enable-unsafe-swiftshader", "--ignore-gpu-blocklist"])
     except Exception:
         subprocess.run([sys.executable, "-m", "playwright", "install", "chromium"], check=False)
         browser = pw.chromium.launch(args=["--force-color-profile=srgb"])

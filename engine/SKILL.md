@@ -131,6 +131,12 @@ Every short has a funny hook, 2-3 funny lines from Masterji's character (at leas
 and a funny comment question at the end. Jokes never change the fact. Family-friendly only;
 roast situations, never groups or real people. (Details: the channel repo's DAILY_RUN.md, step 2b.)
 
+## 3D
+
+Use a `"type":"3d"` visual (three.js) for the one or two scenes where depth explains best:
+presets `earth`, `molecules`, `orbit`, `atom`, `waves`, or custom `code` built from three.js
+primitives. Details and an example in `references/storyboard.md` ("3D visuals").
+
 ## 3. Check before the long render
 
 ```bash

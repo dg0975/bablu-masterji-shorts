@@ -91,6 +91,15 @@ must add the rest (details: "Living scenes" in `engine/references/storyboard.md`
   `data-move`, a sky turning orange with a slow `fade` of a second gradient.
 - Look at the preview sheet for a busy or muddy frame; motion must never cover the text.
 
+## 2e. 3D scene (one or two per video)
+
+Every video uses a **3D visual** (`"type":"3d"`, see "3D visuals" in
+`engine/references/storyboard.md`) for the scene where depth explains best, usually the
+mechanism or the hook: a preset (`earth`, `molecules`, `orbit`, `atom`, `waves`) when it fits
+the topic, otherwise a custom `code` scene built from three.js primitives (a cooker, a fridge, a
+bulb, a prism, a magnet). At most two 3D scenes per video; the rest stay 2D. Check the 3D frame
+on the preview sheet: object centred, not too dark, labels not cut off.
+
 ## 2d. Title and caption keywords (reach)
 
 The title decides whether people find and tap the video. Write it for search first, curiosity second.
@@ -118,6 +127,7 @@ The title decides whether people find and tap the video. Write it for search fir
 ## 3. Quality gates (all must pass to post automatically)
 
 - The hook and mechanism scenes are living SVG scenes (3+ moving parts each, step 2c).
+- The video has at least one 3D scene that renders (no `PAGE ERROR`).
 - The script has a funny hook, at least 2 more funny lines (one in the narration) and a funny
   comment question at the end.
 - Total length 50-68 s; no `LAYOUT:` or `PAGE ERROR:` lines left after fixes.

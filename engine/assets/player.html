@@ -127,6 +127,7 @@ function buildVisual(v){
 function buildInner(v){
   const T=v.type;
   if(T==='svg'||T==='html') return (v.svg||v.html||'');
+  if(T==='3d') return `<canvas class="g3d" width="960" height="530" style="width:960px;height:530px;display:block"></canvas>`;
   if(T==='cards') return `<div class="c-fill cards">`+v.items.map((it,i)=>
     `<div class="card${it.on?' on':''}" style="--c:${col(it.color)}" ${A(it.step,'pop',it.step?0:i*.12)}${it.hide!=null?` data-hide="${it.hide}"`:''}${it.dim!=null?` data-dim="${it.dim}"`:''}>
       ${it.icon?`<div class="ic">${esc(it.icon)}</div>`:''}${it.label?`<div class="lb">${esc(it.label)}</div>`:''}${it.value?`<div class="vl">${esc(it.value)}</div>`:''}</div>`).join('')+`</div>`;
@@ -409,6 +410,7 @@ function build(){
     $$('[data-origin]',sc).forEach(el=>{el.style.transformBox='fill-box'; el.style.transformOrigin=el.dataset.origin});
     $$('[data-loop]',sc).forEach(el=>{if(el instanceof SVGElement&&!el.style.transformBox){el.style.transformBox='fill-box';el.style.transformOrigin='50% 50%'}});
     $$('[data-loop="flow"]',sc).forEach(el=>{if(!el.getAttribute('stroke-dasharray')) el.style.strokeDasharray='18 22'});
+    if(s.visual&&s.visual.type==='3d'){ s._g3d=G3D.create($('canvas.g3d',sc), s.visual, s); }
     sc.style.display='none';
   });
 }
@@ -444,6 +446,7 @@ function renderAt(t){
     if(!last) z+=.03*clamp(1-(T.end-t)/.25);
     if(window.NOCAM){z=1;dx=dy=0}
     cam.style.transform=`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) scale(${z.toFixed(4)})`;}
+  if(s._g3d){ let bk=0; T.beats.forEach((B,k)=>{if(t>=B.start) bk=k}); s._g3d.frame(t, lt, bk, Math.max(0,t-T.beats[bk].start)); }
   // light sweep across the frame at every scene change
   const sw=$('#sweep'); let swp=-1;
   for(let i=1;i<S.length;i++){const d=t-(TL.scenes[i].start-.12); if(d>=0&&d<.55) swp=d/.55}

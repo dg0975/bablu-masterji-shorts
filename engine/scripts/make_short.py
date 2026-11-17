@@ -303,6 +303,105 @@ def music_lively(n, seed=1, bpm=None):
     return np.tanh(out * 1.6) / 1.6                                    # soft limiter keeps the kick from spiking
 
 
+def _synth_kit(R, n):
+    """shared helpers for the code-made background tunes"""
+    import numpy as np
+    out = np.zeros(n + SR * 2, dtype=np.float32)
+    noise = R.standard_normal(SR).astype(np.float32)
+    K = {}
+    def put(sig, t, gain):
+        a = int(t * SR); b = min(len(out), a + len(sig))
+        if 0 <= a < len(out): out[a:b] += sig[: b - a] * gain
+    def tt(L): return np.arange(int(L * SR)) / SR
+    def kick(soft=False):
+        t = tt(.25); return np.sin(2 * np.pi * np.cumsum(48 + (60 if soft else 90) * np.exp(-t * 30)) / SR) * np.exp(-t * (10 if soft else 14))
+    def snare(L=.16, tone=190):
+        t = tt(L); x = noise[: len(t)] * np.exp(-t / (L / 4)); x = np.convolve(x, np.ones(4) / 4, 'same')
+        return .7 * x + .4 * np.sin(2 * np.pi * tone * t) * np.exp(-t * 30)
+    def hat(L=.035, g=1.0):
+        x = np.diff(noise[: int(L * SR)], prepend=0); return x * np.exp(-tt(L) / (L / 4)) * g
+    def epiano(freq, L=1.6):
+        t = tt(L); trem = 1 + .25 * np.sin(2 * np.pi * 5 * t)
+        sig = np.sin(2 * np.pi * freq * t + .8 * np.exp(-t * 3) * np.sin(2 * np.pi * freq * 2 * t))
+        return sig * np.exp(-t * 1.6) * np.minimum(t / .01, 1) * trem
+    def marimba(freq, L=.35):
+        t = tt(L); return (np.sin(2 * np.pi * freq * t) + .3 * np.sin(2 * np.pi * freq * 3.9 * t) * np.exp(-t * 40)) * np.exp(-t * 11) * np.minimum(t / .002, 1)
+    def whistle(freq, L=.3):
+        t = tt(L); ph = 2 * np.pi * np.cumsum(freq * (1 + .012 * np.sin(2 * np.pi * 6 * t))) / SR
+        return np.sin(ph) * np.minimum(t / .03, 1) * np.minimum((L - t) / .05, 1)
+    def bass(freq, L=.3, bright=.6):
+        t = tt(L); ph = 2 * np.pi * freq * t
+        return sum((1 / k) * np.exp(-t * (3 + k * 2.2 / bright)) * np.sin(k * ph) for k in range(1, 6)) * np.minimum(t / .004, 1)
+    K.update(put=put, kick=kick, snare=snare, hat=hat, epiano=epiano, marimba=marimba, whistle=whistle, bass=bass, noise=noise)
+    return out, K
+
+
+def music_lofi(n, seed=1):
+    """calm lo-fi: lazy swung drums, warm electric-piano 7th chords, soft melody, vinyl crackle"""
+    import numpy as np
+    R = np.random.default_rng(seed); out, K = _synth_kit(R, n); put = K["put"]
+    bpm = int(R.choice([80, 84, 88])); beat = 60 / bpm; key = float(R.choice([0, 2, 5, -3, -5]))
+    f = lambda s: 261.63 * 2 ** ((s + key) / 12)
+    prog = [(0, 4, 7, 11), (9, 12, 16, 19), (2, 5, 9, 12), (7, 11, 14, 17)]     # Imaj7 vi7 ii7 V7
+    scale = [0, 2, 4, 7, 9, 12, 14]; motif = [int(x) for x in R.choice(len(scale), 6)]
+    bar = beat * 4
+    for b in range(int(np.ceil(n / SR / bar)) + 1):
+        t0 = b * bar; ch = prog[b % 4]
+        for q in range(4):
+            if q in (0,) or (q == 2 and b % 2): put(K["kick"](soft=True), t0 + q * beat + (beat * .05 if q else 0), .8)
+            if q in (1, 3): put(K["snare"](.2, 170), t0 + q * beat + beat * .03, .28)
+        for e in range(8): put(K["hat"](.03, .7), t0 + e * beat / 2 + (beat / 6 if e % 2 else 0), .08 if e % 2 else .05)
+        for v in ch: put(K["epiano"](f(v), bar * .95), t0 + .02 * (v % 3), .11)
+        put(K["bass"](f(ch[0] - 24), beat * 1.6), t0, .6); put(K["bass"](f(ch[2] - 24), beat * 1.2), t0 + beat * 2.5, .45)
+        if (b // 4) % 2 == 1:
+            for i, pos in enumerate([0, 1.5, 2, 3, 3.5, 5][: len(motif)]):
+                put(K["epiano"](f(scale[motif[i]] + 12), .7), t0 + pos * beat / 1.5, .12)
+    crackle = (np.abs(R.standard_normal(len(out))) > 3.6) * R.standard_normal(len(out)) * .25
+    out += crackle.astype(np.float32) * .15
+    out = out[:n]; out = out / max(1e-6, np.sqrt((out ** 2).mean())) * 0.25
+    return np.tanh(out * 1.6) / 1.6
+
+
+def music_funky(n, seed=1):
+    """playful quiz-show groove: tight claps, walking bass, marimba riff, whistle hook"""
+    import numpy as np
+    R = np.random.default_rng(seed); out, K = _synth_kit(R, n); put = K["put"]
+    bpm = int(R.choice([116, 120, 124])); beat = 60 / bpm; key = float(R.choice([0, 2, 5, 7]))
+    f = lambda s: 261.63 * 2 ** ((s + key) / 12)
+    prog = [(0, 4, 7), (5, 9, 12), (7, 11, 14), (5, 9, 12)]                       # I IV V IV
+    walk = [0, 4, 7, 9]; riff = [0, 7, 4, 9, 7, 12, 9, 7]; hook = [int(x) for x in R.choice([0, 2, 4, 7, 9, 12], 5)]
+    bar = beat * 4
+    for b in range(int(np.ceil(n / SR / bar)) + 1):
+        t0 = b * bar; root = prog[b % 4][0]; sec = (b // 4) % 3
+        for q in range(4):
+            put(K["kick"](), t0 + q * beat, .7 if q in (0, 2) else .35)
+            if q in (1, 3): put(K["snare"](.12, 220), t0 + q * beat, .3)
+        for e in range(16):
+            if e % 2 or sec: put(K["hat"](.02, 1), t0 + e * beat / 4, .07)
+        for e, w in enumerate(walk): put(K["bass"](f(root + w - 24), beat * .9, .9), t0 + e * beat, .55)
+        for e, r in enumerate(riff): put(K["marimba"](f(root + r)), t0 + e * beat / 2 + (beat / 4 if e % 3 == 2 else 0), .16)
+        if sec == 1:
+            for i, h in enumerate(hook): put(K["whistle"](f(h + 12), beat * .45), t0 + i * beat * .75, .1)
+    out = out[:n]; out = out / max(1e-6, np.sqrt((out ** 2).mean())) * 0.25
+    return np.tanh(out * 1.6) / 1.6
+
+
+MUSIC_STYLES = ["desi", "lofi", "funky"]
+
+
+def music_for(sb, n):
+    """pick today's tune: storyboard music_style (desi | lofi | funky | rotate), rotate = by date"""
+    import datetime, zlib
+    style = sb.get("music_style", "rotate")
+    if style in ("rotate", "lively"):
+        if style == "lively": style = "desi"
+        else: style = MUSIC_STYLES[datetime.date.today().toordinal() % len(MUSIC_STYLES)]
+    seed = zlib.crc32((sb.get("title") or "x").encode())
+    fn = {"desi": music_lively, "lofi": music_lofi, "funky": music_funky}[style]
+    print(f"  [music] style: {style}")
+    return fn(n, seed=seed), style
+
+
 def duck_curve(voice, depth=0.5):
     """gain curve that lowers the music while the voice speaks (smooth attack/release)"""
     import numpy as np
@@ -351,16 +450,16 @@ def write_audio(sb, clips, tl, path):
     env = voice_envelope(mix)
     if env:
         tl["env"], tl["envFps"] = env, ENV_FPS
-    style = sb.get("music_style", "lively")
-    vol = sb.get("music", 0.2 if style == "lively" else 0.05)
+    style = sb.get("music_style", "rotate")
+    vol = sb.get("music", 0.05 if style == "pad" else 0.2)
     if vol:
-        vol = float(vol if vol is not True else (0.2 if style == "lively" else 0.05))
-        if style == "lively":
-            import zlib
-            seed = zlib.crc32((sb.get("title") or "x").encode())
-            bed = music_lively(n, seed=seed) * vol * duck_curve(mix)
-        else:
+        vol = float(vol if vol is not True else (0.05 if style == "pad" else 0.2))
+        if style == "pad":
             bed = music_bed(n) * vol
+        else:
+            tune, style = music_for(sb, n)
+            bed = tune * vol * duck_curve(mix)
+        tl["music_style"] = style
         fade = int(.8 * SR)
         bed[:fade] *= np.linspace(0, 1, fade)
         bed[-fade:] *= np.linspace(1, 0, fade)

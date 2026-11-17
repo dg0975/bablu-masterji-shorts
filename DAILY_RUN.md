@@ -134,6 +134,10 @@ The title decides whether people find and tap the video. Write it for search fir
   (e.g. "aasmaan neela kyun", "why is sky blue in hindi", "science facts hindi").
 - Save the final title in the storyboard as `"post_title"` so tomorrow's run can see recent titles.
 
+**Background music:** leave `music_style` out (it rotates daily between desi, lofi and funky).
+Override only if the topic clearly suits another style (e.g. `lofi` for a calm night-sky topic),
+and mention the style used in the report.
+
 ## 3. Quality gates (all must pass to post automatically)
 
 - The hook and mechanism scenes are living SVG scenes (3+ moving parts each, step 2c).

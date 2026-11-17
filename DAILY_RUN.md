@@ -91,6 +91,30 @@ must add the rest (details: "Living scenes" in `engine/references/storyboard.md`
   `data-move`, a sky turning orange with a slow `fade` of a second gradient.
 - Look at the preview sheet for a busy or muddy frame; motion must never cover the text.
 
+## 2d. Title and caption keywords (reach)
+
+The title decides whether people find and tap the video. Write it for search first, curiosity second.
+- **Keyword first:** start with the exact words people type when they wonder about this, in
+  Roman-script Hinglish, e.g. "Aasmaan neela kyun hota hai?", "Pressure cooker mein khana jaldi
+  kaise pakta hai?". Put the main keyword in the first 40 characters (that is all the Shorts feed
+  shows). Use search words: kyun, kaise, kya hai, sach ya jhooth, plus the topic noun.
+- **Then a curiosity hook:** a short tease of the surprise or payoff, e.g. "| Asli wajah hairaan
+  kar degi", "| 99% log galat sochte hain" (only if the video really shows that people get it
+  wrong). Never promise something the video does not deliver; no fake numbers.
+- **Then a broad keyword + #shorts:** e.g. "Science in Hindi #shorts". Whole title under 70
+  characters; at most one or one emoji; no ALL CAPS sentences.
+- **Before writing,** do one web search for the topic phrased as a question to see how people
+  word it (e.g. Hindi/Hinglish search results, Quora-style questions) and match that wording.
+- **Vary the pattern** day to day; check the last 7 titles in `topics/used.csv`/storyboards so
+  titles do not all look the same.
+- **Description / caption:** first line repeats the keyword title (Instagram search reads the
+  caption), then 2-3 Hinglish lines with one related keyword phrase (e.g. "rayleigh scattering
+  hindi"), the comment question, and 4-6 hashtags: `#shorts` (YouTube only), `#science`,
+  `#scienceinhindi`, `#hindifacts`, plus 1-2 topic tags. Avoid huge irrelevant hashtag lists.
+- **YouTube tags:** 6-10 tags mixing Hindi and English search phrases for the topic
+  (e.g. "aasmaan neela kyun", "why is sky blue in hindi", "science facts hindi").
+- Save the final title in the storyboard as `"post_title"` so tomorrow's run can see recent titles.
+
 ## 3. Quality gates (all must pass to post automatically)
 
 - The hook and mechanism scenes are living SVG scenes (3+ moving parts each, step 2c).
@@ -112,8 +136,8 @@ video (if any) plus one line saying which gate failed.
    prints `PUBLIC_URL` once the video is live on GitHub Pages.
 2. Windsor tools: `get_connectors` (connector `instagram`, account `bablu.masterji`), then
    `execute_action` with action `create_video_post`, params:
-   `video_url` = PUBLIC_URL, `caption` = Hinglish caption (2-3 lines) + call to comment
-   "Present" + 8-10 hashtags, `share_to_feed` = true,
+   `video_url` = PUBLIC_URL, `caption` = keyword title as the first line, then the caption
+   built by step 2d (comment question + "Present" + 4-6 hashtags), `share_to_feed` = true,
    `thumb_offset` = milliseconds of the hook frame (first beat's audio end from
    `work/timeline.json`, times 1000).
 3. If the script printed `UNVERIFIED` and Windsor says the video URL could not be fetched,
@@ -130,10 +154,11 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
 2. `createScheduledPost` with `blogId` 8158859, `date` = now + 6 minutes (IST, ISO 8601 with
    +05:30), and `info`:
    - `providers` `[{"network":"youtube"}]`, `media` `[PUBLIC_URL]`, `autoPublish` true
-   - `text` = the YouTube description (2-3 Hinglish lines + 8-10 hashtags starting `#shorts`)
-   - `youtubeData`: `title` under 60 characters ending in `#shorts`, `type` `short`,
+   - `text` = the YouTube description built by step 2d (keyword first line, 2-3 Hinglish lines,
+     hashtags starting `#shorts`)
+   - `youtubeData`: `title` = the keyword title from step 2d (under 70 characters, ends with `#shorts`), `type` `short`,
      `privacy` `public`, `category` `EDUCATION`, `madeForKids` **false** (user's choice),
-     `isAiGeneratedContent` false (animated cartoon, not realistic), 5-8 `tags`
+     `isAiGeneratedContent` false (animated cartoon, not realistic), the 6-10 `tags` from step 2d
    - `publicationDate` `{dateTime, timezone: "Asia/Calcutta"}` matching `date`
 3. Wait about 7 minutes, then `getScheduledPosts` for today: the YouTube provider should show
    `status` `PUBLISHED` with a `publicUrl`. If it shows an error, do not retry more than once;

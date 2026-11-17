@@ -165,8 +165,15 @@ again the same way. Voice clips are cached in `work/tts`, so the render reuses t
 - Copy `work/short.mp4` to `<topic-slug>.mp4` and `work/cover.jpg` to `<topic-slug>-cover.jpg`,
   then send both to the user with the file-sending tool (SendUserFile, or `present_files` where
   that is the tool).
-- In the reply, give ready-to-paste post text: a title (under 60 characters), a 2-3 line caption
-  in Hinglish, and 8-10 hashtags. Mention any number that is approximate so the user can
+- In the reply, give ready-to-paste post text, written for reach:
+  - **Title:** search keyword first, exactly as people type it in Roman Hinglish ("Aasmaan neela
+    kyun hota hai?"), main keyword in the first 40 characters, then a short honest curiosity hook
+    ("| Asli wajah hairaan kar degi") and "Science in Hindi #shorts"; under 70 characters. Check
+    the usual wording with one web search; never promise what the video does not show.
+  - **Caption/description:** keyword title as the first line, 2-3 Hinglish lines with one related
+    keyword phrase, the comment question, and 4-6 relevant hashtags (#science #scienceinhindi
+    #hindifacts + topic tags; #shorts on YouTube).
+  - **YouTube tags:** 6-10 Hindi and English search phrases for the topic. Mention any number that is approximate so the user can
   double-check it before posting.
 - You cannot hear the audio. Say so once and ask the user to listen for mispronounced words; fix
   those by respelling the word in `say` (keep the right spelling in `caption`) and rendering again.

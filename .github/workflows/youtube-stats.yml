@@ -1,0 +1,30 @@
+name: youtube-stats
+# Reads public channel/video stats with the YOUTUBE_API_KEY secret and publishes them on the `stats` branch.
+on:
+  schedule:
+    - cron: "45 2 * * *"        # 08:15 IST daily, before the 8:36 daily short run
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["stats-request.txt"]
+
+permissions:
+  contents: write
+
+jobs:
+  stats:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read YouTube stats
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python3 scripts/youtube_stats.py
+      - name: Publish stats branch
+        run: |
+          cd out
+          git init -q -b stats
+          git add -A
+          git -c user.name="Bablu Masterji bot" -c user.email="bot@users.noreply.github.com" commit -q -m "stats ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" stats:stats

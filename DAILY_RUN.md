@@ -102,7 +102,7 @@ The title decides whether people find and tap the video. Write it for search fir
   kar degi", "| 99% log galat sochte hain" (only if the video really shows that people get it
   wrong). Never promise something the video does not deliver; no fake numbers.
 - **Then a broad keyword + #shorts:** e.g. "Science in Hindi #shorts". Whole title under 70
-  characters; at most one or one emoji; no ALL CAPS sentences.
+  characters; at most one emoji; no ALL CAPS sentences.
 - **Before writing,** do one web search for the topic phrased as a question to see how people
   word it (e.g. Hindi/Hinglish search results, Quora-style questions) and match that wording.
 - **Vary the pattern** day to day; check the last 7 titles in `topics/used.csv`/storyboards so

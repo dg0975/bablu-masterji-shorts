@@ -220,5 +220,11 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
 2. Send the user (SendUserMessage + SendUserFile) the MP4 and cover, with:
    - whether it went live on Instagram and YouTube (with the YouTube Shorts link),
    - any approximate number to double-check, and a note that you cannot hear the audio.
+   - **Channel performance** (from the `stats` branch, refreshed daily at 08:15 IST by the
+     `youtube-stats` workflow with the read-only `YOUTUBE_API_KEY` secret):
+     `git fetch --depth 1 origin stats && git show FETCH_HEAD:stats.json`. Report yesterday's
+     Short (views, likes, comments) and the best Short of the last 7 days, in 2-3 short lines.
+     Channel totals can lag on YouTube; trust the per-video numbers. If `ok` is false or the
+     branch is missing, skip this part and mention it in one line.
 
 Keep the report short: the user reads it on a phone.

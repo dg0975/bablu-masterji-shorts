@@ -20,7 +20,7 @@ A storyboard is one JSON file. `examples/pressure_cooker.json` is a complete exa
   "mascot": "masterji",             // default; "robot" = old robot mascot
   "voice": "hi-IN-MadhurNeural",    // or hi-IN-SwaraNeural
   "rate": "+6%",                    // speaking speed
-  "music_style": "rotate",          // default: rotates daily between three original tunes made in code: "desi" (tabla taps + sitar-like hook), "lofi" (calm electric piano), "funky" (quiz-show marimba + whistle); or set one of them; "pad" = old soft pad. All duck under the voice.
+  "music_style": "funky",           // channel tune (default): playful quiz-show groove (marimba, whistle, claps), new tempo/key/hook per video; other options "desi", "lofi", "rotate" (daily by date), "pad" (old soft pad). Always ducks under the voice.
   "music": 0.2,                     // music volume (0.2 default, pad 0.05), 0 = off
   "captions": true,                 // Hindi captions under the visual
   "scenes": [ ... ]                 // 5-7 scenes

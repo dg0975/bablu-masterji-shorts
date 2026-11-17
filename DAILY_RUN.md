@@ -134,9 +134,9 @@ The title decides whether people find and tap the video. Write it for search fir
   (e.g. "aasmaan neela kyun", "why is sky blue in hindi", "science facts hindi").
 - Save the final title in the storyboard as `"post_title"` so tomorrow's run can see recent titles.
 
-**Background music:** leave `music_style` out (it rotates daily between desi, lofi and funky).
-Override only if the topic clearly suits another style (e.g. `lofi` for a calm night-sky topic),
-and mention the style used in the report.
+**Background music:** the channel tune is `funky` (the user's choice; it is the default, so leave
+`music_style` out). Each video automatically gets its own tempo, key and hook. Do not switch to
+another style unless the user asks.
 
 ## 3. Quality gates (all must pass to post automatically)
 

@@ -390,9 +390,9 @@ MUSIC_STYLES = ["desi", "lofi", "funky"]
 
 
 def music_for(sb, n):
-    """pick today's tune: storyboard music_style (desi | lofi | funky | rotate), rotate = by date"""
+    """pick the tune: storyboard music_style (funky default | desi | lofi | rotate = by date)"""
     import datetime, zlib
-    style = sb.get("music_style", "rotate")
+    style = sb.get("music_style", "funky")
     if style in ("rotate", "lively"):
         if style == "lively": style = "desi"
         else: style = MUSIC_STYLES[datetime.date.today().toordinal() % len(MUSIC_STYLES)]
@@ -450,7 +450,7 @@ def write_audio(sb, clips, tl, path):
     env = voice_envelope(mix)
     if env:
         tl["env"], tl["envFps"] = env, ENV_FPS
-    style = sb.get("music_style", "rotate")
+    style = sb.get("music_style", "funky")
     vol = sb.get("music", 0.05 if style == "pad" else 0.2)
     if vol:
         vol = float(vol if vol is not True else (0.05 if style == "pad" else 0.2))

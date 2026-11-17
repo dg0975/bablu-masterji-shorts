@@ -1,0 +1,224 @@
+{
+ "title": "Aasmaan neela kyun, shaam ko laal kyun?",
+ "handle": "@bablu.masterji",
+ "mascot": "masterji",
+ "tts": "sarvam",
+ "voice": "hi-IN-MadhurNeural",
+ "rate": "-2%",
+ "pitch": "-3Hz",
+ "scenes": [
+  {
+   "color": "amber",
+   "kicker": "Roz ka science",
+   "headline": "Aasmaan *neela*, shaam ko *laal* kyun?",
+   "visual": {
+    "type": "compare",
+    "vs": true,
+    "left": {
+     "icon": "🌤️",
+     "title": "Dopahar",
+     "lines": [
+      "Neela aasmaan"
+     ],
+     "color": "cyan",
+     "step": 0
+    },
+    "right": {
+     "icon": "🌇",
+     "title": "Shaam",
+     "lines": [
+      "Laal-narangi"
+     ],
+     "color": "amber",
+     "step": 0
+    }
+   },
+   "beats": [
+    {
+     "say": "दिन में आसमान नीला, शाम को नारंगी! कोई फ़्री में पुताई कर रहा है क्या?",
+     "pose": "shock",
+     "bubble": "free mein putai?!"
+    },
+    {
+     "say": "आज इसका राज़ खोलते हैं।",
+     "pose": "think",
+     "bubble": "raaz kya hai?",
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "color": "cyan",
+   "kicker": "Pehle yeh samjho",
+   "headline": "Dhoop mein *saare rang* chhupe hain",
+   "sub": "Safed roshni = laal se bangni tak saare rang.",
+   "visual": {
+    "type": "cards",
+    "items": [
+     {
+      "icon": "🔴",
+      "label": "Laal",
+      "value": "Lambi lehar",
+      "color": "pink",
+      "step": 0
+     },
+     {
+      "icon": "🟢",
+      "label": "Hara",
+      "value": "Beech wali",
+      "color": "green",
+      "step": 0
+     },
+     {
+      "icon": "🔵",
+      "label": "Neela",
+      "value": "Chhoti lehar",
+      "color": "cyan",
+      "step": 1,
+      "on": true
+     }
+    ]
+   },
+   "beats": [
+    {
+     "say": "सूरज की सफ़ेद रोशनी में सारे रंग छुपे होते हैं।",
+     "pose": "point"
+    },
+    {
+     "say": "लाल रंग की लहरें लंबी होती हैं, और नीले की छोटी।",
+     "pose": "point",
+     "bubble": "Ye exam mein aayega!"
+    }
+   ]
+  },
+  {
+   "color": "pink",
+   "kicker": "Asli raaz",
+   "headline": "Hawa *neela* rang bikher deti hai",
+   "visual": {
+    "type": "svg",
+    "tag": "blue scatters ~4-10x more than red (depends on colours compared)",
+    "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><g data-loop='pulse'><circle cx='110' cy='265' r='72' fill='#ffb020'/></g><text x='110' y='380' text-anchor='middle' class='lbl'>SURAJ</text><path d='M190 265 H900' stroke='#dfe4ee' stroke-width='10' fill='none' stroke-linecap='round' data-step='0' data-anim='draw' data-dur='0.8'/><g data-step='0' data-anim='fade' data-delay='.6'><circle cx='360' cy='265' r='22' fill='#a78bfa'/><circle cx='520' cy='265' r='22' fill='#a78bfa'/><circle cx='680' cy='265' r='22' fill='#a78bfa'/><circle cx='440' cy='170' r='16' fill='#a78bfa' opacity='.7'/><circle cx='600' cy='370' r='16' fill='#a78bfa' opacity='.7'/><circle cx='300' cy='390' r='14' fill='#a78bfa' opacity='.7'/><circle cx='760' cy='160' r='14' fill='#a78bfa' opacity='.7'/><text x='520' y='470' text-anchor='middle' class='t-sm' style='fill:#a78bfa'>Hawa ke kan</text></g><g data-step='1' data-anim='pop'><g data-loop='pulse'><path d='M360 240 L320 150 M360 290 L320 380 M520 240 L560 130 M520 290 L480 400 M680 240 L640 140 M680 290 L730 390' stroke='#35d6ed' stroke-width='8' fill='none' stroke-linecap='round'/></g></g><g data-step='1' data-anim='fade' data-delay='.3'><text x='200' y='110' class='t-mid' style='fill:#35d6ed'>Neela: chaaron taraf!</text></g><g data-step='1' data-anim='right' data-delay='.6'><path d='M720 265 H900' stroke='#ff5c8a' stroke-width='12' fill='none' stroke-linecap='round'/><text x='810' y='235' text-anchor='middle' class='t-sm' style='fill:#ff5c8a'>Laal: seedha</text></g></svg>"
+   },
+   "beats": [
+    {
+     "say": "हवा के छोटे छोटे कण, इस रोशनी से टकराते हैं।",
+     "pose": "point"
+    },
+    {
+     "say": "नीला रंग, लाल से कई गुना ज़्यादा बिखरता है। इसलिए जहाँ देखो, नीला!",
+     "pose": "shock",
+     "bubble": "neela hi neela!"
+    }
+   ]
+  },
+  {
+   "color": "amber",
+   "kicker": "Shaam ka jaadu",
+   "headline": "Shaam ko roshni ka *lamba safar*",
+   "visual": {
+    "type": "svg",
+    "tag": "not to scale; path ~10x or more near horizon",
+    "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><path d='M0 400 Q480 270 960 400 L960 470 Q480 330 0 470 Z' fill='#35d6ed' opacity='.16'/><path d='M0 400 Q480 270 960 400' stroke='#35d6ed' stroke-width='3' fill='none' opacity='.6'/><path d='M0 470 Q480 330 960 470 L960 530 L0 530 Z' fill='#1f3a2c' stroke='#43e08c' stroke-width='6'/><text x='900' y='392' text-anchor='end' class='lbl' style='fill:#35d6ed'>HAWA</text><text x='480' y='408' text-anchor='middle' font-size='80'>🧍</text><g data-step='0' data-anim='fade'><circle cx='480' cy='60' r='40' fill='#ffb020'/><path d='M480 105 V325' stroke='#ffb020' stroke-width='8' fill='none' stroke-linecap='round' stroke-dasharray='14 12'/><text x='540' y='70' class='t-sm' style='fill:#ffb020'>Dopahar: chhota raasta</text></g><g data-step='0' data-anim='fade' data-delay='1.2'><circle cx='60' cy='380' r='40' fill='#ff8a3d'/></g><path d='M105 380 H440' stroke='#ff8a3d' stroke-width='10' fill='none' stroke-linecap='round' data-step='0' data-anim='draw' data-dur='1.6' data-delay='1.4'/><g data-step='0' data-anim='fade' data-delay='2.2'><text x='40' y='300' class='t-sm' style='fill:#ff8a3d'>Shaam: bahut lamba raasta</text></g><g data-step='1' data-anim='pop'><text x='250' y='200' text-anchor='middle' class='t-big' style='fill:#ff5c8a'>10x+ lamba</text></g></svg>"
+   },
+   "beats": [
+    {
+     "say": "शाम को सूरज नीचे होता है, तो रोशनी को हवा में दस गुना से भी लंबा रास्ता चलना पड़ता है।",
+     "pose": "point",
+     "bubble": "meri school bus se lamba!"
+    },
+    {
+     "say": "रास्ते में सारा नीला बिखर जाता है। बचता है सिर्फ़ लाल और नारंगी!",
+     "pose": "happy",
+     "bubble": "Shabaash!",
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "color": "violet",
+   "kicker": "Galatfehmi",
+   "headline": "Aasmaan samundar ki *copy* nahi!",
+   "visual": {
+    "type": "compare",
+    "vs": false,
+    "left": {
+     "icon": "❌",
+     "title": "Myth",
+     "lines": [
+      "Samundar ki copy"
+     ],
+     "color": "pink",
+     "step": 0
+    },
+    "right": {
+     "icon": "✅",
+     "title": "Fact",
+     "lines": [
+      "Registan mein bhi"
+     ],
+     "color": "green",
+     "step": 0
+    }
+   },
+   "beats": [
+    {
+     "say": "पीछे बैठा चिंटू बोला, आसमान तो समंदर की कॉपी करता है!",
+     "pose": "think",
+     "friend": "samundar ki copy!",
+     "friendPose": "happy"
+    },
+    {
+     "say": "बिल्कुल ग़लत! रेगिस्तान में भी आसमान नीला होता है। और मेरी क्लास में कॉपी करना मना है!",
+     "pose": "point",
+     "bubble": "Copy karna mana hai!",
+     "friend": "oops!",
+     "friendPose": "shock"
+    }
+   ]
+  },
+  {
+   "color": "green",
+   "kicker": "Yaad rakho",
+   "headline": "Din mein neela bikhra, shaam ko *laal bacha*",
+   "visual": {
+    "type": "cards",
+    "items": [
+     {
+      "icon": "🌤️",
+      "label": "Din",
+      "value": "Neela bikhra",
+      "color": "cyan",
+      "step": 0
+     },
+     {
+      "icon": "🛣️",
+      "label": "Shaam",
+      "value": "Lamba raasta",
+      "color": "amber",
+      "step": 0
+     },
+     {
+      "icon": "🌇",
+      "label": "Bacha",
+      "value": "Laal-narangi",
+      "color": "pink",
+      "step": 0,
+      "on": true
+     }
+    ]
+   },
+   "beats": [
+    {
+     "say": "तो याद रखो: दिन में नीला बिखरता है, और शाम को लाल बचता है।",
+     "pose": "happy"
+    },
+    {
+     "say": "कमेंट में बताओ, शाम का आसमान देखकर चाय याद आती है, या होमवर्क? प्रेज़ेंट लगाओ!",
+     "pose": "wave",
+     "bubble": "Comment mein Present!"
+    }
+   ]
+  }
+ ]
+}

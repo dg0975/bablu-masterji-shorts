@@ -149,11 +149,35 @@ clock, so CSS animations and `<animate>` tags will not work; use these instead.
 | `data-dim='n'` | drop to low opacity when beat n starts |
 | `data-count='from,to,decimals'` | text counts between two numbers; add `data-prefix`, `data-suffix` |
 | `data-loop='…'` | continuous motion: `pulse`, `float`, `spin`, `shake`, `blink`, `rise` (drifts up and fades, repeat; set `data-phase='0..1'` and `data-dist='120'` to stagger particles) |
+| more loops | `drift` (slow side-to-side, clouds; `data-dist` px, default 40), `sway` (rocks by `data-dist` degrees, trees, pendulum), `twinkle` (stars, sparkles), `breathe` (slow glow-scale, suns, hearts; `data-dist` = 0.04), `bob` (small up-down, birds, boats), `orbit` (circles `data-dist` px, molecules, electrons), `flow` (dashes stream along a stroked path: light rays, current, wind, water; give the path a `stroke-dasharray`), `glow` (soft opacity pulse) |
+| `data-speed='1.5'` | speed multiplier for any loop |
+| `data-phase='0.3'` | offset a loop so neighbours do not move in sync |
+| `data-move='dx,dy'` | glide by dx,dy px (eased), e.g. a sun setting `data-move='0,240'`; `data-move-at` (beat, default `data-step`), `data-move-delay`, `data-move-dur` (default: to scene end) |
+| `data-origin='50% 100%'` | pivot for `sway`/`spin`/`pulse` (e.g. a tree sways from its base) |
+
+### Living scenes (the channel style since 2026-11-17)
+
+The engine adds a drifting colour background, floating dust, a slow camera push-in with a small
+punch on every beat, a light sweep between scenes, and audio-driven lip-sync and gestures for
+Masterji, automatically. Your job is to make the **visual itself** feel alive:
+
+- Draw the real thing as a small scene, not a diagram on black: a sky gradient, a sun with
+  slowly spinning rays (`spin` + `data-speed='.3'`), drifting clouds, a horizon, water, a kitchen.
+  Use `<linearGradient>`/`<radialGradient>` in `<defs>` for skies, glows and metal.
+- **Every custom SVG has at least three things moving all the time** (loops), plus one change per
+  beat (`data-step`, `data-move`, `data-hide`). Light, heat, sound, current and air are drawn as
+  `flow` dashes; particles as `orbit`/`rise`; the subject breathes or bobs.
+- Show change over time with `data-move` and cross-fades: a second gradient `<rect>` with
+  `data-anim='fade' data-dur='3'` turns a blue sky orange; `data-hide` removes the old state.
+- Keep labels at least 40 px inside the box: the camera zooms in about 4%.
+- Storyboard switches: `"ambient": false` turns off background clouds and dust, `"sweep": false`
+  turns off the scene-change light sweep. Leave both on for the channel.
 
 Rules that avoid surprises:
 - An element with `data-step`, `data-anim` or `data-loop` has its CSS transform controlled by the
   engine, so do not also give that element a `transform` attribute. Wrap it: put the `transform`
   on an outer `<g>` and the data attributes on an inner one.
+- Loops and `data-move` also set the transform, so the same wrapping rule applies to them.
 - To combine an entrance with a loop, nest them: `<g data-step='1' data-anim='pop'><g data-loop='pulse'>…</g></g>`.
 - `draw` needs a `<path>`, `<line>` or `<polyline>` with a stroke and `fill='none'`.
 

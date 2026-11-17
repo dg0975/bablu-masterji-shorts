@@ -13,8 +13,9 @@ post text.
 ## 0. Setup
 
 1. Attach and clone this repo with push access: `dg0975/bablu-masterji-shorts`.
-2. Read `engine/SKILL.md` fully, then `engine/references/storyboard.md` and
-   `engine/examples/pressure_cooker.json`. Follow SKILL.md for the video; this file adds the
+2. Read `engine/SKILL.md` fully, then `engine/references/storyboard.md`,
+   `engine/examples/pressure_cooker.json` and `engine/examples/sky_living.json` (the living-scene
+   style: animated sky, sun, clouds, light flow). Follow SKILL.md for the video; this file adds the
    topic choice, quality gates, posting and logging. Work from a copy of `engine/` in the
    working directory, not inside the repo checkout.
 3. Voice: the channel voice is **Sarvam AI, speaker `girish_hi_devotional`** (model
@@ -74,8 +75,22 @@ sarkari-school teacher; the jokes come from his character and from everyday Indi
 - Pose the mascot for the joke: `shock` for drama, `happy` after the punchline, `think` for the
   back-bencher's wrong answer.
 
+## 2c. Make it move (realistic, living scenes)
+
+The engine adds camera motion, background life, lip-sync and gestures by itself. The storyboard
+must add the rest (details: "Living scenes" in `engine/references/storyboard.md`):
+- The **hook** and the **mechanism** scene (and ideally the payoff) are custom SVG scenes that
+  look like the real thing, drawn with gradients: sky, sun, cloud, kitchen, cooker, road, water.
+- Every custom SVG has at least 3 continuously moving parts (`spin`, `drift`, `flow`, `orbit`,
+  `bob`, `breathe`, `twinkle`, `rise`) and something new on each beat (`data-step`, `data-move`,
+  `data-hide`, a cross-fade).
+- Show processes as motion: light/heat/sound/air as `flow` dashes, a sun setting with
+  `data-move`, a sky turning orange with a slow `fade` of a second gradient.
+- Look at the preview sheet for a busy or muddy frame; motion must never cover the text.
+
 ## 3. Quality gates (all must pass to post automatically)
 
+- The hook and mechanism scenes are living SVG scenes (3+ moving parts each, step 2c).
 - The script has a funny hook, at least 2 more funny lines (one in the narration) and a funny
   comment question at the end.
 - Total length 50-68 s; no `LAYOUT:` or `PAGE ERROR:` lines left after fixes.

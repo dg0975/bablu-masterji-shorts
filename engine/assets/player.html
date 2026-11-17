@@ -19,6 +19,12 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
   radial-gradient(700px 500px at 50% 82%, rgba(255,255,255,.045), transparent 70%), var(--bg)}
 #dots{position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.06) 1.5px, transparent 1.5px);background-size:54px 54px;
   mask-image:linear-gradient(#000 0%,transparent 55%)}
+#aurora,#motes{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+#aurora i{position:absolute;left:0;top:0;width:1200px;height:1200px;border-radius:50%;will-change:transform}
+#motes i{position:absolute;left:0;top:0;border-radius:50%;will-change:transform}
+#vig{position:absolute;inset:0;pointer-events:none;background:radial-gradient(1250px 1650px at 50% 42%, transparent 58%, rgba(0,0,0,.6) 100%)}
+#sweep{position:absolute;top:-300px;left:0;width:700px;height:2520px;pointer-events:none;opacity:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.13) 50%,transparent);will-change:transform}
+.cam{position:absolute;inset:0;transform-origin:50% 55%;will-change:transform}
 #handle{position:absolute;top:84px;right:60px;font:600 26px var(--mono);color:var(--dim);letter-spacing:.5px}
 #prog{position:absolute;top:134px;left:60px;width:960px;display:flex;gap:10px}
 #prog .seg{flex:1;height:7px;border-radius:4px;background:rgba(255,255,255,.14);overflow:hidden}
@@ -88,9 +94,9 @@ html,body{width:1080px;height:1920px;overflow:hidden;background:var(--bg);font-f
 </head>
 <body>
 <div id="stage">
-  <div id="bg"></div><div id="dots"></div>
+  <div id="bg"></div><div id="aurora"><i></i><i></i><i></i></div><div id="dots"></div><div id="motes"></div><div id="vig"></div>
   <div id="handle"></div><div id="prog"></div>
-  <div id="scenes"></div>
+  <div id="scenes"></div><div id="sweep"></div>
   <div id="caption"></div>
   <div id="cast">
     <div class="mascot" id="m0"></div><div class="bubble" id="b0"></div>
@@ -116,19 +122,23 @@ function buildVisual(v){
   if(!v) return '';
   const tag=v.tag?`<div class="vtag" ${A(v.tagStep||0,'fade',.3)}><span>${esc(v.tag)}</span></div>`:'';
   const T=v.type;
-  if(T==='svg'||T==='html') return (v.svg||v.html||'')+tag;
+  const inner=buildInner(v); return inner?`<div class="cam">${inner}</div>`+tag:'';
+}
+function buildInner(v){
+  const T=v.type;
+  if(T==='svg'||T==='html') return (v.svg||v.html||'');
   if(T==='cards') return `<div class="c-fill cards">`+v.items.map((it,i)=>
     `<div class="card${it.on?' on':''}" style="--c:${col(it.color)}" ${A(it.step,'pop',it.step?0:i*.12)}${it.hide!=null?` data-hide="${it.hide}"`:''}${it.dim!=null?` data-dim="${it.dim}"`:''}>
-      ${it.icon?`<div class="ic">${esc(it.icon)}</div>`:''}${it.label?`<div class="lb">${esc(it.label)}</div>`:''}${it.value?`<div class="vl">${esc(it.value)}</div>`:''}</div>`).join('')+`</div>`+tag;
+      ${it.icon?`<div class="ic">${esc(it.icon)}</div>`:''}${it.label?`<div class="lb">${esc(it.label)}</div>`:''}${it.value?`<div class="vl">${esc(it.value)}</div>`:''}</div>`).join('')+`</div>`;
   if(T==='bars'){const mx=v.max||Math.max(...v.items.map(i=>i.value));
     return `<div class="c-fill bars">`+v.items.map((it,i)=>{const h=Math.max(4,Math.round(300*it.value/mx));const d=it.step?0:i*.15;
       return `<div class="bar" style="--c:${col(it.color)}"><div class="num" ${A(it.step,'fade',d)}><span data-step="${it.step||0}" data-delay="${d}" data-count="0,${it.value},${v.decimals||0}" data-prefix="${esc(v.prefix||'')}" data-suffix="${esc(v.unit||'')}"></span></div>
-      <div class="col" style="height:${h}px" ${A(it.step,'grow',d)}></div><div class="lb" ${A(it.step,'fade',d)}>${esc(it.label)}</div></div>`}).join('')+`</div>`+tag}
+      <div class="col" style="height:${h}px" ${A(it.step,'grow',d)}></div><div class="lb" ${A(it.step,'fade',d)}>${esc(it.label)}</div></div>`}).join('')+`</div>`}
   if(T==='list') return `<div class="c-fill list">`+v.items.map((it,i)=>
-    `<div class="row" style="--c:${col(it.color||['pink','amber','green','cyan'][i%4])}" ${A(it.step!=null?it.step:i,'up')}${it.dim!=null?` data-dim="${it.dim}"`:''}><div class="n">${esc(it.n||i+1)}</div><div><div class="tt">${esc(it.title)}</div>${it.note?`<div class="nt">${esc(it.note)}</div>`:''}</div></div>`).join('')+`</div>`+tag;
-  if(T==='number') return `<div class="c-fill number" style="--c:${col(v.color)}"><div class="big" ${A(v.step,'pop')}><span data-step="${v.step||0}" data-count="${v.from||0},${v.to},${v.decimals||0}" data-dur="${v.dur||1.4}" data-prefix="${esc(v.prefix||'')}" data-suffix="${esc(v.suffix||'')}"></span></div>${v.label?`<div class="lb" ${A(v.step,'up',.25)}>${esc(v.label)}</div>`:''}</div>`+tag;
+    `<div class="row" style="--c:${col(it.color||['pink','amber','green','cyan'][i%4])}" ${A(it.step!=null?it.step:i,'up')}${it.dim!=null?` data-dim="${it.dim}"`:''}><div class="n">${esc(it.n||i+1)}</div><div><div class="tt">${esc(it.title)}</div>${it.note?`<div class="nt">${esc(it.note)}</div>`:''}</div></div>`).join('')+`</div>`;
+  if(T==='number') return `<div class="c-fill number" style="--c:${col(v.color)}"><div class="big" ${A(v.step,'pop')}><span data-step="${v.step||0}" data-count="${v.from||0},${v.to},${v.decimals||0}" data-dur="${v.dur||1.4}" data-prefix="${esc(v.prefix||'')}" data-suffix="${esc(v.suffix||'')}"></span></div>${v.label?`<div class="lb" ${A(v.step,'up',.25)}>${esc(v.label)}</div>`:''}</div>`;
   if(T==='compare'){const side=(s,d)=>`<div class="side" style="--c:${col(s.color)}" ${A(s.step,'up',d)}>${s.icon?`<div class="ic">${esc(s.icon)}</div>`:''}<div class="tt">${esc(s.title)}</div>${(s.lines||[]).map(l=>`<div class="ln">${esc(l)}</div>`).join('')}</div>`;
-    return `<div class="c-fill compare">${side(v.left,0)}${v.vs===false?'':`<div class="vs" ${A(v.right.step,'fade')}>VS</div>`}${side(v.right,v.right.step?0:.2)}</div>`+tag}
+    return `<div class="c-fill compare">${side(v.left,0)}${v.vs===false?'':`<div class="vs" ${A(v.right.step,'fade')}>VS</div>`}${side(v.right,v.right.step?0:.2)}</div>`}
   return '';
 }
 
@@ -308,38 +318,68 @@ function mjArm(pts,shirt){
   return `<path d="${d}" stroke="#1E1620" stroke-width="24"/><path d="${d}" stroke="#C68A5B" stroke-width="17"/>`+
          `<path d="${ds}" stroke="#1E1620" stroke-width="34"/><path d="${ds}" stroke="${shirt}" stroke-width="27"/>`;
 }
-function drawMasterji(Pa,Pb,p,t,talk,hop,wave){
+function drawMasterji(Pa,Pb,p,t,talk,hop,wave,lv,lvs){
+  // talk = 1 while his clip plays; lv = voice loudness now (0..1, drives the mouth); lvs = smoothed loudness (drives head and brows)
+  if(lv==null){lv=talk?(Math.abs(Math.sin(t*19))*.6+Math.abs(Math.sin(t*31+1))*.4):0; lvs=talk?.5:0}
   const A=MJ[Pa]||MJ.idle, B=MJ[Pb]||MJ.idle, P=p>.5?B:A, on=new Set(P.on);
   const L=A.l.map((q,k)=>[lerp(q[0],B.l[k][0],p),lerp(q[1],B.l[k][1],p)]);
   const R=A.r.map((q,k)=>[lerp(q[0],B.r[k][0],p),lerp(q[1],B.r[k][1],p)]);
   if(Pb==='wave'&&p>.5){const w=Math.sin(t*9)*10; R[2]=[R[2][0]+w,R[2][1]+Math.abs(w)*.3]}
-  const blink=((t+.7)%3.4)<0.14;
-  let face='';
-  for(const k of ['wrinkles','browsN','browsT','browsUp','browsSad']) if(on.has(k)) face+=MJ_FACE[k];
-  if(on.has('eyesDot')) face+=blink?MJ_FACE.eyesBlink:MJ_FACE.eyesDot;
+  // hand gestures: bigger while he talks, a little idle life otherwise
+  const amp=talk?(.55+.6*lvs):.3, g1=Math.sin(t*3.1), g2=Math.sin(t*4.7+1.3), g3=Math.sin(t*2.3+.5);
+  let dL=[0,0], dR=[0,0];
+  if(Pb==='shock'){dL=[g2*2.5,Math.sin(t*23)*1.5]; dR=[-g2*2.5,Math.sin(t*23+1)*1.5]}
+  else if(Pb==='point'){dL=[g1*5*amp,-Math.abs(Math.sin(t*3.6))*9*amp]; dR=[g3*6*amp,g2*5*amp]}
+  else if(Pb==='think'){dL=[g1*3*amp,g2*2*amp]; dR=[Math.sin(t*5)*2.5,Math.abs(Math.sin(t*2.5))*2]}
+  else if(Pb==='happy'){dL=[g2*7*amp,g1*6*amp]; dR=[g3*2.5,g1*2.5]}
+  else if(Pb==='wave'){dL=[g1*3*amp,g2*3*amp]}
+  else {dL=[g1*7*amp,g2*6*amp]; dR=[g2*8*amp,g3*7*amp]}
+  const ge=clamp(p*1.5); dL=[dL[0]*ge,dL[1]*ge]; dR=[dR[0]*ge,dR[1]*ge];
+  L[2]=[L[2][0]+dL[0],L[2][1]+dL[1]]; L[1]=[L[1][0]+dL[0]*.45,L[1][1]+dL[1]*.45];
+  R[2]=[R[2][0]+dR[0],R[2][1]+dR[1]]; R[1]=[R[1][0]+dR[0]*.45,R[1][1]+dR[1]*.45];
+  const blink=((t+.7)%3.4)<0.13||((t+2.9)%7.3)<0.11;
+  const sg=Math.floor(t/1.45), sx=(((sg*37)%7)-3)*.9, sy=(((sg*53)%5)-2)*.7; // small eye darts
+  const raise=talk?clamp((lvs-.3)*2.2)*5:0;
+  let face='', brows='';
+  for(const k of ['browsN','browsT','browsUp','browsSad']) if(on.has(k)) brows+=MJ_FACE[k];
+  if(on.has('wrinkles')) face+=MJ_FACE.wrinkles;
+  face+=`<g transform="translate(0 ${(-raise).toFixed(2)})">${brows}</g>`;
+  if(on.has('eyesDot')) face+=blink?MJ_FACE.eyesBlink:`<g transform="translate(${sx.toFixed(1)} ${sy.toFixed(1)})">${MJ_FACE.eyesDot}</g>`;
   for(const k of ['eyesUp','eyesWide','eyesHappy']) if(on.has(k)) face+=MJ_FACE[k];
   const g=lerp(A.g,B.g,p);
   face+=`<g transform="translate(0 ${g.toFixed(1)})">${MJ_GLASSES}</g>`;
   if(on.has('blush')) face+=MJ_FACE.blush;
-  if(talk>0){const o=(Math.abs(Math.sin(t*19))*.6+Math.abs(Math.sin(t*31+1))*.4);
-    face+=`<path d="M145 186 Q160 ${(190+o*20).toFixed(1)} 175 186 Z" fill="#6E2424" stroke="#1E1620" stroke-width="3" stroke-linejoin="round"/>`;}
+  if(talk>0){const o=clamp(lv), w=12+o*4;
+    if(o<.07) face+=MJ_FACE.mouthSmile;
+    else face+=`<path d="M${(160-w).toFixed(1)} 186 Q160 ${(189+o*24).toFixed(1)} ${(160+w).toFixed(1)} 186 Z" fill="#6E2424" stroke="#1E1620" stroke-width="3" stroke-linejoin="round"/>`+(o>.45?`<ellipse cx="160" cy="${(190+o*12).toFixed(1)}" rx="6" ry="3" fill="#E07A7A"/>`:'');}
   else for(const k of ['mouthSmile','mouthHmm','mouthFrown','mouthOpen','mouthO']) if(on.has(k)) face+=MJ_FACE[k];
-  const tilt=Math.sin(t*1.7)*1.4+(Pb==='think'&&p>.5?4:0);
-  const bob=Math.sin(t*2.3)*3-hop*40;
-  let props=''; for(const k in MJ_PROPS) if(on.has(k)) props+=MJ_PROPS[k];
+  const nod=talk?Math.sin(t*5.2)*(1+2.2*lvs):0;
+  const tilt=Math.sin(t*1.7)*1.4+(Pb==='think'&&p>.5?4:0)+nod;
+  const bob=Math.sin(t*2.3)*3-hop*40, br=Math.sin(t*2.1), lean=talk?Math.sin(t*1.3)*1.2:0;
+  const hy=-(214-425)*-.014*br - (talk?lvs*2.5:0); // head follows the breathing chest, lifts a little on loud words
+  const HAND={ruler:dL,chai:dR,waveLines:dR,fingers:[0,0],regBelly:[0,0],regSide:[0,0]};
+  let props=''; for(const k in MJ_PROPS) if(on.has(k)){const d=HAND[k]||[0,0]; props+=(d[0]||d[1])?`<g transform="translate(${d[0].toFixed(1)} ${d[1].toFixed(1)})">${MJ_PROPS[k]}</g>`:MJ_PROPS[k]}
   return `<ellipse cx="160" cy="430" rx="${(92-hop*24).toFixed(1)}" ry="9" fill="#000" opacity="0.35"/>
-   <g transform="translate(0 ${bob.toFixed(2)})">${MJ_BODY}${props}
+   <g transform="translate(0 ${bob.toFixed(2)}) rotate(${lean.toFixed(2)} 160 425)">
+    <g transform="translate(160 425) scale(${(1+.006*br).toFixed(4)} ${(1+.014*br).toFixed(4)}) translate(-160 -425)">${MJ_BODY}${props}
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">${mjArm(L,'#E6EEF8')}${mjArm(R,'#E6EEF8')}</g>
     <circle cx="${L[2][0].toFixed(1)}" cy="${L[2][1].toFixed(1)}" r="12" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/>
-    <circle cx="${R[2][0].toFixed(1)}" cy="${R[2][1].toFixed(1)}" r="12" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/>
-    <g transform="rotate(${tilt.toFixed(2)} 160 200)">${MJ_HEAD_BASE}${on.has('combUp')?MJ_FACE.combUp:MJ_FACE.combN}${face}${MJ_MOOCH}${on.has('sweat')?MJ_FACE.sweat:''}</g>
+    <circle cx="${R[2][0].toFixed(1)}" cy="${R[2][1].toFixed(1)}" r="12" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/></g>
+    <g transform="translate(0 ${hy.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 200)">${MJ_HEAD_BASE}${on.has('combUp')?MJ_FACE.combUp:MJ_FACE.combN}${face}${MJ_MOOCH}${on.has('sweat')?MJ_FACE.sweat:''}</g>
    </g>`;
 }
 
 /* ---------------- build ---------------- */
 const S=SB.scenes, BE=[]; // flat beats
+const rnd=k=>{const x=Math.sin(k*127.1+311.7)*43758.5453; return x-Math.floor(x)};
+const MOTES=[];
+function hexMix(a,b,p){const h=c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)); const A=h(a),B=h(b); return '#'+A.map((v,i)=>Math.round(lerp(v,B[i],clamp(p))).toString(16).padStart(2,'0')).join('')}
 function build(){
   $('#handle').textContent=SB.handle||'';
+  if(SB.ambient!==false){ let m=''; for(let k=0;k<30;k++){const big=k%6===0, sz=big?26+rnd(k+7)*34:3+rnd(k+3)*7;
+      MOTES.push({x:rnd(k)*1080, y:rnd(k+11)*2000, v:8+rnd(k+5)*(big?10:30), a:(big?.05:.12)+rnd(k+9)*(big?.06:.28), ph:rnd(k+13)*6.28, sw:10+rnd(k+17)*30, sz});
+      m+=`<i style="width:${sz.toFixed(0)}px;height:${sz.toFixed(0)}px;background:radial-gradient(circle,#fff ${big?0:35}%,transparent 70%)"></i>`}
+    $('#motes').innerHTML=m; }
   $('#prog').innerHTML=S.map(()=>`<div class="seg"><i></i></div>`).join('');
   $('#scenes').innerHTML=S.map((s,i)=>`<div class="scene" id="sc${i}" style="--accent:${col(s.color)}">
     <div class="head">${s.kicker?`<div class="kicker">${esc(s.kicker)}</div>`:''}<div class="headline">${rich(s.headline||'')}</div>${s.sub?`<div class="sub">${rich(s.sub)}</div>`:''}</div>
@@ -362,7 +402,13 @@ function build(){
       if(el instanceof SVGElement && el.dataset.anim!=='draw'){el.style.transformBox='fill-box'; el.style.transformOrigin=el.dataset.anim==='grow'?'50% 100%':el.dataset.anim==='growx'?'0% 50%':'50% 50%'}
       else if(el.dataset.anim==='grow') el.style.transformOrigin='50% 100%'; else if(el.dataset.anim==='growx') el.style.transformOrigin='0% 50%';
     });
+    $$('[data-move]',sc).forEach(el=>{const at=el.dataset.moveAt!=null?+el.dataset.moveAt:(+el.dataset.step||0);
+      el._mv=el.dataset.move.split(',').map(Number); el._mv0=stepT(s,at)+(+el.dataset.moveDelay||0);
+      el._mvD=+el.dataset.moveDur||Math.max(.5,s._t.end-el._mv0-.1);
+      if(el instanceof SVGElement&&!el.style.transformBox){el.style.transformBox='fill-box';el.style.transformOrigin='50% 50%'}});
+    $$('[data-origin]',sc).forEach(el=>{el.style.transformBox='fill-box'; el.style.transformOrigin=el.dataset.origin});
     $$('[data-loop]',sc).forEach(el=>{if(el instanceof SVGElement&&!el.style.transformBox){el.style.transformBox='fill-box';el.style.transformOrigin='50% 50%'}});
+    $$('[data-loop="flow"]',sc).forEach(el=>{if(!el.getAttribute('stroke-dasharray')) el.style.strokeDasharray='18 22'});
     sc.style.display='none';
   });
 }
@@ -378,8 +424,34 @@ function renderAt(t){
   $$('.scene').forEach((el,i)=>el.style.display=i===si?'block':'none');
   const sc=$('#sc'+si), lt=t-T.start, out=last?1:clamp((T.end-t)/0.2);
   [...$('.head',sc).children].forEach((el,k)=>{const p=eOut((lt-k*.1)/.5); el.style.opacity=p*out; el.style.transform=`translateY(${(1-p)*36}px)`});
-  $('.visual',sc).style.opacity=out;
-  $$('[data-step],[data-loop]',sc).forEach(el=>{
+  $('.visual',sc).style.opacity=out*(si===0?1:clamp(lt/.3));
+  // living background: drifting colour clouds in the scene colour, floating dust motes
+  const pc=si>0?col(S[si-1].color):col(s.color), cc=hexMix(pc,col(s.color),lt/.8);
+  if(SB.ambient!==false){
+    $$('#aurora i').forEach((el,k)=>{const c=k===1?hexMix(cc,'#7c5cff',.55):cc;
+      el.style.background=`radial-gradient(circle, ${c}${k===1?'1c':'24'} 0%, transparent 62%)`;
+      el.style.transform=`translate(${(-260+k*420+Math.sin(t*.13+k*2.1)*170).toFixed(1)}px,${(-160+k*560+Math.cos(t*.11+k*1.7)*150).toFixed(1)}px) scale(${(1+.12*Math.sin(t*.2+k)).toFixed(3)})`});
+    $$('#motes i').forEach((el,k)=>{const M=MOTES[k]; const y=((M.y-t*M.v)%2100+2100)%2100-90, x=M.x+Math.sin(t*.5+M.ph)*M.sw;
+      el.style.transform=`translate(${x.toFixed(1)}px,${y.toFixed(1)}px)`; el.style.opacity=(M.a*(.65+.35*Math.sin(t*1.3+M.ph))).toFixed(3)});
+    $('#dots').style.backgroundPosition=`${(Math.sin(t*.15)*14).toFixed(1)}px ${(-t*6%54).toFixed(1)}px`;
+  } else { $('#aurora').style.display=$('#motes').style.display='none'; }
+  // camera: slow push-in and drift per scene, a small punch on every new beat, settle-in on scene entry
+  const cam=$('.cam',sc);
+  if(cam){ const q=clamp(lt/Math.max(1,T.end-T.start)), dir=si%2?-1:1;
+    let z=1+.03*eIO(q), dx=dir*8*(eIO(q)*2-1), dy=-6*eIO(q);
+    T.beats.forEach((B,k)=>{const d=t-B.start; if(k>0&&d>0&&d<.7) z+=.014*Math.sin(d/.7*Math.PI)});
+    if(si>0){const e=eOut(lt/.6); z*=lerp(.93,1,e); dy+=(1-e)*30}
+    if(!last) z+=.03*clamp(1-(T.end-t)/.25);
+    if(window.NOCAM){z=1;dx=dy=0}
+    cam.style.transform=`translate(${dx.toFixed(2)}px,${dy.toFixed(2)}px) scale(${z.toFixed(4)})`;}
+  // light sweep across the frame at every scene change
+  const sw=$('#sweep'); let swp=-1;
+  for(let i=1;i<S.length;i++){const d=t-(TL.scenes[i].start-.12); if(d>=0&&d<.55) swp=d/.55}
+  if(swp>=0&&SB.sweep!==false){sw.style.opacity=Math.sin(swp*Math.PI).toFixed(3); sw.style.transform=`translateX(${lerp(-760,1140,eIO(swp)).toFixed(1)}px) skewX(-14deg)`} else sw.style.opacity=0;
+  // built-in components breathe: icons float, the highlighted card glows
+  $$('.ic',sc).forEach((el,k)=>{el.style.transform=`translateY(${(Math.sin(t*2.2+k*1.9)*7).toFixed(1)}px) rotate(${(Math.sin(t*1.6+k)*3).toFixed(1)}deg)`});
+  $$('.card.on',sc).forEach(el=>{const g=.5+.5*Math.sin(t*3); el.style.boxShadow=`0 0 ${(30+30*g).toFixed(0)}px color-mix(in srgb, var(--c) ${(22+18*g).toFixed(0)}%, transparent), inset 0 0 0 1px var(--c)`});
+  $$('[data-step],[data-loop],[data-move]',sc).forEach(el=>{
     let op=1, tr='';
     if(el._tIn!=null){ const d=+el.dataset.dur||.55, raw=(t-el._tIn)/d, p=eOut(raw), a=el.dataset.anim;
       if(el.dataset.count){const [f,to,dec]=el.dataset.count.split(',').map(Number); const q=eIO((t-el._tIn)/(+el.dataset.dur||1.1));
@@ -397,6 +469,16 @@ function renderAt(t){
     if(L==='pulse') tr+=` scale(${1+.06*Math.sin(t*5)})`; else if(L==='float') tr+=` translateY(${Math.sin(t*2.4)*9}px)`;
     else if(L==='spin') tr+=` rotate(${(t*120)%360}deg)`; else if(L==='shake') tr+=` translateX(${Math.sin(t*38)*5}px)`;
     else if(L==='blink') op*=.55+.45*Math.sin(t*7); else if(L==='rise') {const q=(t*.5+(+el.dataset.phase||0))%1; tr+=` translateY(${-q*(+el.dataset.dist||120)}px)`; op*=Math.sin(q*Math.PI)}
+    else if(L){const ph=(+el.dataset.phase||0)*6.283, ds=+el.dataset.dist, sp=+el.dataset.speed||1;
+      if(L==='drift') tr+=` translateX(${(Math.sin(t*.35*sp+ph)*(ds||40)).toFixed(1)}px)`;
+      else if(L==='sway') tr+=` rotate(${(Math.sin(t*1.6*sp+ph)*(ds||5)).toFixed(2)}deg)`;
+      else if(L==='twinkle'){const w=.5+.5*Math.sin(t*3.3*sp+ph); op*=.25+.75*w; tr+=` scale(${(.85+.3*w).toFixed(3)})`}
+      else if(L==='breathe') tr+=` scale(${(1+(ds||.04)*Math.sin(t*1.8*sp+ph)).toFixed(4)})`;
+      else if(L==='bob') tr+=` translateY(${(Math.sin(t*3*sp+ph)*(ds||6)).toFixed(1)}px)`;
+      else if(L==='orbit'){const r=ds||20; tr+=` translate(${(Math.cos(t*sp+ph)*r).toFixed(1)}px,${(Math.sin(t*sp+ph)*r).toFixed(1)}px)`}
+      else if(L==='flow') el.style.strokeDashoffset=(-t*60*sp).toFixed(1);
+      else if(L==='glow') op*=.6+.4*Math.sin(t*2.4*sp+ph);}
+    if(el._mv){const q=eIO((t-el._mv0)/el._mvD); tr=`translate(${(el._mv[0]*q).toFixed(1)}px,${(el._mv[1]*q).toFixed(1)}px) `+tr}
     el.style.opacity=op; el.style.transform=tr||'none';
   });
   // current beat
@@ -404,9 +486,13 @@ function renderAt(t){
   const b=BE[bi], bt=b._t, started=t>=bt.start, prev=BE[Math.max(0,bi-1)];
   const Pb=POSES[(started?b.pose:null)||'idle']||POSES.idle, Pa=POSES[(bi>0?prev.pose:'wave')||'idle']||POSES.idle;
   const pp=started?eIO((t-bt.start)/.35):1, speaking=started&&b.say&&t<bt.audioEnd?1:0;
-  const hop=t<0.9?Math.sin(clamp(t/.6)*Math.PI)*.8:Math.max(0,Math.sin(clamp((t-T.start)/.45)*Math.PI))*.35;
+  let hop=t<0.9?Math.sin(clamp(t/.6)*Math.PI)*.8:Math.max(0,Math.sin(clamp((t-T.start)/.45)*Math.PI))*.35;
+  if(started&&bt!==T.beats[0]) hop+=.12*Math.max(0,Math.sin(clamp((t-bt.start)/.3)*Math.PI));
+  let lv=null, lvs=null;
+  if(TL.env&&speaking){const E=TL.env, f=Math.round(t*(TL.envFps||30)), g=k=>E[Math.max(0,Math.min(E.length-1,k))]||0;
+    lv=Math.max(g(f),g(f+1)*.8); let a=0; for(let k=-6;k<=6;k++) a+=g(f+k); lvs=a/13;}
   if(SB.mascot==='robot') drawMascot(0,Pa,Pb,pp,t,speaking,hop);
-  else $('#mjg').innerHTML=drawMasterji((bi>0?prev.pose:'wave')||'idle',(started?b.pose:null)||'idle',pp,t,speaking,hop);
+  else $('#mjg').innerHTML=drawMasterji((bi>0?prev.pose:'wave')||'idle',(started?b.pose:null)||'idle',pp,t,speaking,hop,0,lv,lvs);
   const b0=$('#b0'), b1=$('#b1');
   const showB=(el,txt,t0,t1,acc)=>{ if(!txt||t<t0){el.style.opacity=0;return}
     if(el._txt!==txt){el._txt=txt; el.innerHTML=rich(txt)} const p=(t-t0)/.3; el.style.opacity=clamp(p*3)*clamp((t1-t)/.15); el.style.transform=`scale(${eBack(p)})`; };

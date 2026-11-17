@@ -77,6 +77,10 @@ Writing rules, and why they matter:
   speech bubbles up to about 4 words.
 - **Every scene has a visual, and something visible changes on most beats.** A still screen for
   more than about 5 seconds loses viewers.
+- **Living scenes:** at least two scenes (always the hook and the mechanism) use a custom SVG
+  that looks like the real thing (sky, sun, kitchen, cooker, cloud) with continuous motion: see
+  "Living scenes" in `references/storyboard.md`. Camera moves, background life, lip-sync and
+  Masterji's gestures are automatic.
 - **Give the mascot a pose on every beat** and vary them. Use `point` when the visual changes,
   `think` on questions, `shock` on surprises, `happy` on the payoff, `wave` on the last beat.
 - Set `"handle": "@bablu.masterji"` in every storyboard (the user's channel).

@@ -39,6 +39,7 @@ for i in $(seq 1 40); do
   fi
   # 2) otherwise ask the GitHub API whether this commit has been built
   st=$(gh api "repos/$OWNER_REPO/pages/builds/latest" --jq '.status + " " + .commit' 2>/dev/null || true)
+  case "$st" in built\ *|building\ *|queued\ *|errored\ *) ;; *) st="" ;; esac   # ignore proxy error pages
   if [ "$st" = "built $SHA" ]; then
     sleep 30   # let the CDN pick it up
     echo "PUBLIC_URL $URL"; echo "COVER_URL $BASE/$SLUG.jpg"; exit 0

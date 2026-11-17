@@ -228,6 +228,25 @@ def music_bed(n):
     return out
 
 
+ENV_FPS = 30
+
+
+def voice_envelope(mix):
+    """loudness of the voice track per video frame (0..1); drives Masterji's lip-sync and head nods"""
+    import numpy as np
+    hop = SR // ENV_FPS
+    n = len(mix) // hop
+    if n == 0:
+        return None
+    rms = np.sqrt((mix[: n * hop].reshape(n, hop) ** 2).mean(axis=1))
+    ref = np.percentile(rms[rms > 1e-4], 92) if (rms > 1e-4).any() else 0
+    if ref <= 0:
+        return None
+    env = np.clip(rms / ref, 0, 1) ** 0.7
+    env[env < 0.12] = 0
+    return [round(float(v), 2) for v in env]
+
+
 def write_audio(sb, clips, tl, path):
     import numpy as np
     n = int(tl["duration"] * SR) + 1
@@ -239,6 +258,9 @@ def write_audio(sb, clips, tl, path):
     pk = np.abs(mix).max()
     if pk > 0:
         mix *= 0.89 / pk
+    env = voice_envelope(mix)
+    if env:
+        tl["env"], tl["envFps"] = env, ENV_FPS
     vol = sb.get("music", 0.05)
     if vol:
         bed = music_bed(n) * float(vol if vol is not True else 0.05)
@@ -293,7 +315,7 @@ def shot(cdp, page, t, quality=92):
 
 def layout_report(page, tl):
     """measure overflow at the end of every scene so problems are caught before the long render"""
-    js = """(t)=>{renderAt(t); const out=[]; const sc=[...document.querySelectorAll('.scene')].find(e=>e.style.display==='block');
+    js = """(t)=>{window.NOCAM=true; renderAt(t); window.NOCAM=false; const out=[]; const sc=[...document.querySelectorAll('.scene')].find(e=>e.style.display==='block');
       const v=sc.querySelector('.visual').getBoundingClientRect(), h=sc.querySelector('.head').getBoundingClientRect();
       if(h.bottom>592) out.push('header text runs into the visual by '+Math.round(h.bottom-592)+'px (shorten headline/sub)');
       for(const el of sc.querySelectorAll('.visual .c-fill > *')){const r=el.getBoundingClientRect();

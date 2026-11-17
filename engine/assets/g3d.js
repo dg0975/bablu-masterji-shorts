@@ -155,7 +155,7 @@ window.G3D = (function () {
 
     // Sun, Earth and Moon on their orbits (seasons, moon phases, day/night)
     orbit(THREE, scene, camera, v, H) {
-      camera.position.set(0, 4.2, 7.2); camera.lookAt(0, 0, 0); H.stars(500);
+      camera.position.set(0, 5.6, 9.4); camera.lookAt(0, 0, .6); H.stars(500);
       const sun = new THREE.Mesh(new THREE.SphereGeometry(.85, 48, 32), new THREE.MeshBasicMaterial({ color: 0xffc640 }));
       const glow = H.glow('#ffb020', 4.2, .9); sun.add(glow); scene.add(sun);
       const pl = new THREE.PointLight(0xffffff, 3.2, 0, 0); scene.add(pl); scene.add(new THREE.AmbientLight(0xffffff, .08));
@@ -169,8 +169,8 @@ window.G3D = (function () {
         earthPivot.rotation.y = -H.phase(lt, v.earthSpeed ?? .25); earth.rotation.y = lt * 1.2; moonPivot.rotation.y = -H.phase(lt, v.moonSpeed ?? 1.4);
         const f = v.focusStep != null && step >= v.focusStep ? eIO(sp / 1.6) : 0;
         const ep = new THREE.Vector3(); earth.getWorldPosition(ep);
-        camera.position.set(lerp(Math.sin(lt * .1) * 1.2, ep.x * 1.0 + 1.6, f), lerp(4.2, 1.3, f), lerp(7.2, ep.z + 2.4, f));
-        camera.lookAt(lerp(0, ep.x, f), 0, lerp(0, ep.z, f));
+        camera.position.set(lerp(Math.sin(lt * .1) * 1.2, ep.x * 1.0 + 1.6, f), lerp(5.6, 1.3, f), lerp(9.4, ep.z + 2.4, f));
+        camera.lookAt(lerp(0, ep.x, f), 0, lerp(.6, ep.z, f));
         glow.material.opacity = .8 + .15 * Math.sin(t * 2); labs.forEach(l => l.material.opacity = 1 - f);
       };
     },

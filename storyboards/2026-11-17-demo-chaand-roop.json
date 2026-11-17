@@ -1,0 +1,170 @@
+{
+ "title": "Chaand roz apna roop kyun badalta hai?",
+ "post_title": "Chand ka aakar roz kyun badalta hai? 🌙 Science in Hindi #shorts",
+ "note": "DEMO for the user to review, not posted",
+ "handle": "@bablu.masterji",
+ "mascot": "masterji",
+ "tts": "sarvam",
+ "music": 0.05,
+ "scenes": [
+  {
+   "color": "amber",
+   "kicker": "Roz ka science",
+   "headline": "Chaand *diet* par hai kya?",
+   "sub": "Kal gol, aaj aadha!",
+   "visual": {
+    "type": "svg",
+    "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><defs><linearGradient id='ns' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0b1230'/><stop offset='1' stop-color='#1d2a5a'/></linearGradient><radialGradient id='mg'><stop offset='0' stop-color='#fff7d6' stop-opacity='.55'/><stop offset='1' stop-color='#fff7d6' stop-opacity='0'/></radialGradient><radialGradient id='sg'><stop offset='0' stop-color='#fff3a0'/><stop offset='.6' stop-color='#ffb020'/><stop offset='1' stop-color='#ff8a00' stop-opacity='0'/></radialGradient></defs><rect width='960' height='530' rx='26' fill='url(#ns)'/><circle cx='80' cy='60' r='3' fill='#fff' data-loop='twinkle' data-phase='0.1'/><circle cx='190' cy='140' r='2' fill='#fff' data-loop='twinkle' data-phase='0.5'/><circle cx='300' cy='50' r='3' fill='#fff' data-loop='twinkle' data-phase='0.8'/><circle cx='420' cy='120' r='2' fill='#fff' data-loop='twinkle' data-phase='0.3'/><circle cx='560' cy='40' r='3' fill='#fff' data-loop='twinkle' data-phase='0.6'/><circle cx='700' cy='110' r='2' fill='#fff' data-loop='twinkle' data-phase='0.2'/><circle cx='860' cy='60' r='3' fill='#fff' data-loop='twinkle' data-phase='0.9'/><circle cx='900' cy='200' r='2' fill='#fff' data-loop='twinkle' data-phase='0.4'/><circle cx='120' cy='260' r='2' fill='#fff' data-loop='twinkle' data-phase='0.7'/><circle cx='640' cy='230' r='2' fill='#fff' data-loop='twinkle' data-phase='0.15'/><g data-loop='breathe' data-dist='.05'><circle cx='620' cy='210' r='150' fill='url(#mg)'/></g><g data-hide='1'><circle cx='620' cy='210' r='95' fill='#f3efe4'/><text x='430' y='120' text-anchor='middle' class='t-big' fill='#dfe4ee' font-size='54'>Kal</text></g><g data-step='1' data-anim='pop'><circle cx='620' cy='210' r='95' fill='#2a2f3d' stroke='#4a5168' stroke-width='3'/><path d='M620,115 A95 95 0 0 1 620,305 Z' fill='#f3efe4'/><text x='800' y='120' text-anchor='middle' class='t-big' fill='#ffb020' font-size='54'>Aaj?!</text></g><g data-loop='drift' data-dist='60'><ellipse cx='380' cy='170' rx='110' ry='26' fill='#c9d3ff' opacity='.18'/><ellipse cx='430' cy='150' rx='70' ry='22' fill='#c9d3ff' opacity='.15'/></g><path d='M0 470 L120 470 L120 420 L170 380 L220 420 L220 470 L330 470 L330 440 L400 440 L400 470 L960 470 L960 530 L0 530 Z' fill='#070a18'/><rect x='150' y='430' width='22' height='22' fill='#ffd54a' data-loop='glow'/></svg>",
+    "panel": false
+   },
+   "beats": [
+    {
+     "say": "बच्चों, कल चाँद पूरा गोल था, आज आधा! चाँद डाइट पर है क्या?",
+     "pose": "shock",
+     "bubble": "Diet pe chaand?!"
+    },
+    {
+     "say": "नहीं बेटा, चाँद नहीं बदलता। बदलता है वो हिस्सा, जो हमें दिखता है।",
+     "pose": "think",
+     "bubble": "Samjhe ki nahi?"
+    }
+   ]
+  },
+  {
+   "color": "pink",
+   "kicker": "Sabse bada myth",
+   "headline": "Dharti ki *parchhai*? Nahi!",
+   "visual": {
+    "type": "compare",
+    "vs": true,
+    "left": {
+     "title": "Myth",
+     "lines": [
+      "Dharti ki parchhai"
+     ],
+     "color": "red"
+    },
+    "right": {
+     "title": "Sach",
+     "lines": [
+      "Parchhai sirf grahan mein"
+     ],
+     "color": "green",
+     "step": 1
+    }
+   },
+   "beats": [
+    {
+     "say": "ज़्यादातर लोग सोचते हैं, धरती की परछाईं चाँद को ढकती है।",
+     "pose": "idle",
+     "friend": "Parchhai hai na?",
+     "friendPose": "think"
+    },
+    {
+     "say": "बिल्कुल गलत! परछाईं तो सिर्फ़ चंद्र ग्रहण में पड़ती है।",
+     "pose": "point",
+     "bubble": "Bilkul galat, beta!"
+    }
+   ]
+  },
+  {
+   "color": "cyan",
+   "kicker": "Asli raaz",
+   "headline": "Chaand ki *apni roshni* nahi",
+   "visual": {
+    "type": "svg",
+    "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><defs><linearGradient id='ns' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0b1230'/><stop offset='1' stop-color='#1d2a5a'/></linearGradient><radialGradient id='mg'><stop offset='0' stop-color='#fff7d6' stop-opacity='.55'/><stop offset='1' stop-color='#fff7d6' stop-opacity='0'/></radialGradient><radialGradient id='sg'><stop offset='0' stop-color='#fff3a0'/><stop offset='.6' stop-color='#ffb020'/><stop offset='1' stop-color='#ff8a00' stop-opacity='0'/></radialGradient></defs><circle cx='80' cy='60' r='3' fill='#fff' data-loop='twinkle' data-phase='0.1'/><circle cx='190' cy='140' r='2' fill='#fff' data-loop='twinkle' data-phase='0.5'/><circle cx='300' cy='50' r='3' fill='#fff' data-loop='twinkle' data-phase='0.8'/><circle cx='420' cy='120' r='2' fill='#fff' data-loop='twinkle' data-phase='0.3'/><circle cx='560' cy='40' r='3' fill='#fff' data-loop='twinkle' data-phase='0.6'/><circle cx='700' cy='110' r='2' fill='#fff' data-loop='twinkle' data-phase='0.2'/><circle cx='860' cy='60' r='3' fill='#fff' data-loop='twinkle' data-phase='0.9'/><circle cx='900' cy='200' r='2' fill='#fff' data-loop='twinkle' data-phase='0.4'/><circle cx='120' cy='260' r='2' fill='#fff' data-loop='twinkle' data-phase='0.7'/><circle cx='640' cy='230' r='2' fill='#fff' data-loop='twinkle' data-phase='0.15'/><g data-loop='breathe' data-dist='.04'><circle cx='150' cy='265' r='130' fill='url(#sg)'/></g><g transform='translate(150 265)'><g data-loop='spin' data-speed='.3'><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(0)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(30)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(60)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(90)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(120)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(150)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(180)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(210)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(240)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(270)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(300)'/><line x1='0' y1='-95' x2='0' y2='-120' stroke='#ffd54a' stroke-width='7' stroke-linecap='round' transform='rotate(330)'/></g></g><circle cx='150' cy='265' r='70' fill='#ffc640'/><text x='150' y='420' text-anchor='middle' class='t-sm' fill='#ffb020'>Suraj</text><path d='M240 205 L610 200' stroke='#ffe9a0' stroke-width='5' stroke-dasharray='22 26' fill='none' data-loop='flow' data-phase='0.1' opacity='.8'/><path d='M240 240 L610 235' stroke='#ffe9a0' stroke-width='5' stroke-dasharray='22 26' fill='none' data-loop='flow' data-phase='0.4' opacity='.8'/><path d='M240 275 L610 265' stroke='#ffe9a0' stroke-width='5' stroke-dasharray='22 26' fill='none' data-loop='flow' data-phase='0.7' opacity='.8'/><path d='M240 310 L610 300' stroke='#ffe9a0' stroke-width='5' stroke-dasharray='22 26' fill='none' data-loop='flow' data-phase='0.2' opacity='.8'/><path d='M240 335 L610 330' stroke='#ffe9a0' stroke-width='5' stroke-dasharray='22 26' fill='none' data-loop='flow' data-phase='0.55' opacity='.8'/><circle cx='720' cy='265' r='110' fill='#2a2f3d' stroke='#4a5168' stroke-width='3'/><path d='M720,155 A110 110 0 0 0 720,375 Z' fill='#f3efe4'/><text x='720' y='420' text-anchor='middle' class='t-sm' fill='#dfe4ee'>Chaand</text><g data-step='1' data-anim='up'><rect x='500' y='34' width='420' height='70' rx='35' fill='#ffb020'/><text x='710' y='80' text-anchor='middle' font-size='32' font-weight='700' font-family='Poppins, sans-serif' fill='#1e1620'>Hamesha aadha roshan</text></g><g data-step='1' data-anim='fade' data-delay='.5'><g data-loop='pulse'><path d='M720,155 A110 110 0 0 0 720,375' stroke='#ffb020' stroke-width='6' fill='none'/></g></g></svg>",
+    "panel": false
+   },
+   "beats": [
+    {
+     "say": "चाँद की अपनी रोशनी नहीं होती, वो सूरज की धूप चमकाता है।",
+     "pose": "point",
+     "bubble": "Udhaar ki roshni!"
+    },
+    {
+     "say": "और सूरज हमेशा उसका आधा हिस्सा रोशन रखता है, जैसे टॉर्च से गेंद।",
+     "pose": "happy",
+     "pause": 0.3
+    }
+   ]
+  },
+  {
+   "color": "violet",
+   "kicker": "3D mein dekho",
+   "headline": "Chaand *ghoomta* hai, view badalta hai",
+   "visual": {
+    "type": "3d",
+    "preset": "orbit",
+    "focusStep": 1,
+    "moonSpeed": 1.1,
+    "names": {
+     "Sun": "Suraj",
+     "Earth": "Dharti",
+     "Moon": "Chaand"
+    },
+    "why": "Moon circles Earth while the Sun lights one half of it; flying in to Earth shows how much of that lit half faces us."
+   },
+   "beats": [
+    {
+     "say": "चाँद धरती के चक्कर लगाता है, तो हम उस रोशन आधे को रोज़ नए कोण से देखते हैं।",
+     "pose": "point"
+    },
+    {
+     "say": "रोशन हिस्सा पूरा सामने, तो पूर्णिमा। बिल्कुल पीछे, तो अमावस्या।",
+     "pose": "think",
+     "bubble": "Ye exam mein aayega!"
+    }
+   ]
+  },
+  {
+   "color": "green",
+   "kicker": "Number yaad rakho",
+   "headline": "Ek poora chakkar: *lagbhag 29.5 din*",
+   "visual": {
+    "type": "number",
+    "from": 0,
+    "to": 29.5,
+    "decimals": 1,
+    "suffix": " din",
+    "label": "Amavasya se agli Amavasya tak",
+    "tag": "lagbhag",
+    "color": "green"
+   },
+   "beats": [
+    {
+     "say": "एक अमावस्या से अगली तक, लगभग साढ़े उनतीस दिन लगते हैं।",
+     "caption": "एक अमावस्या से अगली तक, लगभग 29.5 दिन लगते हैं।",
+     "pose": "happy",
+     "bubble": "Shabaash!"
+    },
+    {
+     "say": "इसीलिए मंथ शब्द भी मून से बना। चाँद ने कैलेंडर बना दिया, और तुमसे होमवर्क नहीं बनता!",
+     "pose": "shock",
+     "bubble": "Silence! Class hai!"
+    }
+   ]
+  },
+  {
+   "color": "amber",
+   "kicker": "Yaad rakho",
+   "headline": "Chaand nahi badalta, *view* badalta hai",
+   "visual": {
+    "type": "svg",
+    "svg": "<svg viewBox='0 0 960 530' xmlns='http://www.w3.org/2000/svg'><defs><linearGradient id='ns' x1='0' y1='0' x2='0' y2='1'><stop offset='0' stop-color='#0b1230'/><stop offset='1' stop-color='#1d2a5a'/></linearGradient><radialGradient id='mg'><stop offset='0' stop-color='#fff7d6' stop-opacity='.55'/><stop offset='1' stop-color='#fff7d6' stop-opacity='0'/></radialGradient><radialGradient id='sg'><stop offset='0' stop-color='#fff3a0'/><stop offset='.6' stop-color='#ffb020'/><stop offset='1' stop-color='#ff8a00' stop-opacity='0'/></radialGradient></defs><rect width='960' height='530' rx='26' fill='url(#ns)'/><circle cx='80' cy='60' r='3' fill='#fff' data-loop='twinkle' data-phase='0.1'/><circle cx='190' cy='140' r='2' fill='#fff' data-loop='twinkle' data-phase='0.5'/><circle cx='300' cy='50' r='3' fill='#fff' data-loop='twinkle' data-phase='0.8'/><circle cx='420' cy='120' r='2' fill='#fff' data-loop='twinkle' data-phase='0.3'/><circle cx='560' cy='40' r='3' fill='#fff' data-loop='twinkle' data-phase='0.6'/><circle cx='700' cy='110' r='2' fill='#fff' data-loop='twinkle' data-phase='0.2'/><circle cx='860' cy='60' r='3' fill='#fff' data-loop='twinkle' data-phase='0.9'/><circle cx='900' cy='200' r='2' fill='#fff' data-loop='twinkle' data-phase='0.4'/><circle cx='120' cy='260' r='2' fill='#fff' data-loop='twinkle' data-phase='0.7'/><circle cx='640' cy='230' r='2' fill='#fff' data-loop='twinkle' data-phase='0.15'/><g data-step='0' data-anim='pop' data-delay='0.0'><g data-loop='bob' data-phase='0.0'><circle cx='110' cy='230' r='70' fill='#2a2f3d' stroke='#4a5168' stroke-width='3'/><text x='110' y='345' text-anchor='middle' class='t-sm' fill='#dfe4ee'>Amavasya</text></g></g><g data-step='0' data-anim='pop' data-delay='0.25'><g data-loop='bob' data-phase='0.2'><circle cx='295' cy='230' r='70' fill='#2a2f3d' stroke='#4a5168' stroke-width='3'/><path d='M295,160 A70 70 0 0 1 295,300 A38 70 0 0 0 295,160 Z' fill='#f3efe4'/><text x='295' y='345' text-anchor='middle' class='t-sm' fill='#dfe4ee'>Patla</text></g></g><g data-step='0' data-anim='pop' data-delay='0.5'><g data-loop='bob' data-phase='0.4'><circle cx='480' cy='230' r='70' fill='#2a2f3d' stroke='#4a5168' stroke-width='3'/><path d='M480,160 A70 70 0 0 1 480,300 Z' fill='#f3efe4'/><text x='480' y='345' text-anchor='middle' class='t-sm' fill='#dfe4ee'>Aadha</text></g></g><g data-step='0' data-anim='pop' data-delay='0.75'><g data-loop='bob' data-phase='0.6000000000000001'><circle cx='665' cy='230' r='70' fill='#2a2f3d' stroke='#4a5168' stroke-width='3'/><path d='M665,160 A70 70 0 0 1 665,300 A38 70 0 0 1 665,160 Z' fill='#f3efe4'/><text x='665' y='345' text-anchor='middle' class='t-sm' fill='#dfe4ee'>Zyada</text></g></g><g data-step='0' data-anim='pop' data-delay='1.0'><g data-loop='bob' data-phase='0.8'><circle cx='850' cy='230' r='70' fill='#f3efe4'/><text x='850' y='345' text-anchor='middle' class='t-sm' fill='#dfe4ee'>Poornima</text></g></g><g data-loop='breathe' data-dist='.06'><circle cx='850' cy='230' r='100' fill='url(#mg)'/></g><g data-step='1' data-anim='up'><rect x='250' y='400' width='460' height='76' rx='38' fill='#ffb020'/><text x='480' y='450' text-anchor='middle' class='t-mid' fill='#1e1620'>Aaj raat ka chaand?</text></g></svg>",
+    "panel": false
+   },
+   "beats": [
+    {
+     "say": "तो चाँद नहीं बदलता, बस उसका दिखने वाला रोशन हिस्सा बदलता है।",
+     "pose": "point"
+    },
+    {
+     "say": "कमेंट में बताओ, आज रात चाँद कैसा दिखा? और प्रेज़ेंट लगाओ!",
+     "pose": "wave",
+     "bubble": "Present lagao!"
+    }
+   ]
+  }
+ ]
+}

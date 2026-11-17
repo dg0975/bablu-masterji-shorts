@@ -323,7 +323,7 @@ def layout_report(page, tl):
     js = """(t)=>{window.NOCAM=true; renderAt(t); window.NOCAM=false; const out=[]; const sc=[...document.querySelectorAll('.scene')].find(e=>e.style.display==='block');
       const v=sc.querySelector('.visual').getBoundingClientRect(), h=sc.querySelector('.head').getBoundingClientRect();
       if(h.bottom>592) out.push('header text runs into the visual by '+Math.round(h.bottom-592)+'px (shorten headline/sub)');
-      for(const el of sc.querySelectorAll('.visual .c-fill > *')){const r=el.getBoundingClientRect();
+      for(const el of sc.querySelectorAll('.visual .c-fill > *')){if(+getComputedStyle(el).opacity<0.05) continue; const r=el.getBoundingClientRect();
         if(r.left<v.left-6||r.right>v.right+6||r.top<v.top-6||r.bottom>v.bottom+6){out.push('visual content overflows its 960x530 box (fewer/shorter items)');break}}
       for(const id of ['b0','b1']){const b=document.getElementById(id); if(+b.style.opacity>0){const r=b.getBoundingClientRect(); if(r.height>190) out.push('speech bubble too tall ('+b.textContent+')')}}
       return out}"""

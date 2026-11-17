@@ -133,7 +133,8 @@ roast situations, never groups or real people. (Details: the channel repo's DAIL
 
 ## 3D
 
-Use a `"type":"3d"` visual (three.js) for the one or two scenes where depth explains best:
+Use a `"type":"3d"` visual (three.js) only where it shows the very thing the narration explains
+(never decoration; skip 3D if nothing fits), for at most two scenes where depth explains best:
 presets `earth`, `molecules`, `orbit`, `atom`, `waves`, or custom `code` built from three.js
 primitives. Details and an example in `references/storyboard.md` ("3D visuals").
 

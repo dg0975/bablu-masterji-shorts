@@ -184,7 +184,12 @@ Rules that avoid surprises:
 ## 6b. 3D visuals (three.js)
 
 `{"type":"3d", ...}` fills the 960 x 530 visual box with a real-time 3D scene (WebGL, rendered
-in the same headless browser). Use it for the 1-2 scenes where depth helps most: planets, orbits,
+in the same headless browser).
+**Relevance first:** the 3D must show exactly what that scene's narration is about (presets only
+for their own topics: earth = sky/atmosphere/day-night, orbit = moon/eclipses/seasons,
+molecules = heat/states of matter, atom = atoms/charge, waves = sound/water/vibration). For a
+household object build that object with `code`; if nothing fits, use 2D instead. Add a short
+`"why"` field explaining how the 3D shows the concept. Use it for the 1-2 scenes where depth helps most: planets, orbits,
 molecules, waves, a rotating object. Keep the other scenes 2D (they render faster and carry text).
 Text stays in the headline/sub/captions; 3D labels are short (2-4 words).
 

@@ -91,14 +91,24 @@ must add the rest (details: "Living scenes" in `engine/references/storyboard.md`
   `data-move`, a sky turning orange with a slow `fade` of a second gradient.
 - Look at the preview sheet for a busy or muddy frame; motion must never cover the text.
 
-## 2e. 3D scene (one or two per video)
+## 2e. 3D scene: only when it shows today's concept
 
-Every video uses a **3D visual** (`"type":"3d"`, see "3D visuals" in
-`engine/references/storyboard.md`) for the scene where depth explains best, usually the
-mechanism or the hook: a preset (`earth`, `molecules`, `orbit`, `atom`, `waves`) when it fits
-the topic, otherwise a custom `code` scene built from three.js primitives (a cooker, a fridge, a
-bulb, a prism, a magnet). At most two 3D scenes per video; the rest stay 2D. Check the 3D frame
-on the preview sheet: object centred, not too dark, labels not cut off.
+A 3D scene must show **the actual thing the narration is talking about at that moment**. If a
+viewer muted the video, the 3D picture alone should hint at the topic. Decoration is not allowed.
+- Pick the scene where depth genuinely helps (the mechanism, usually), then ask: "Is this object
+  or process literally in today's topic?" Only then use 3D.
+- Preset fit, by topic: `earth` = sky colour, sunsets, day/night, seasons, atmosphere;
+  `orbit` = moon phases, eclipses, year/seasons, tides; `molecules` = heat, boiling,
+  evaporation, melting, gas pressure, diffusion; `atom` = atoms, electricity, magnets at atomic
+  level; `waves` = sound, water waves, vibration, echoes. Never use a preset outside its topics
+  (no Earth/orbit in a kitchen topic, no atom in a sky topic).
+- Kitchen, home and machine topics (cooker, fridge, fan, bulb, mirror, magnet, cycle) get a
+  **custom `code`** 3D model of that very object, or no 3D at all.
+- If no 3D view would make the idea clearer, **skip 3D**: a good 2D SVG scene is better than an
+  unrelated 3D one. At most two 3D scenes per video.
+- Write one line in the storyboard per 3D visual: `"why": "<how this 3D shows the concept>"`.
+  If you cannot write it honestly, do not use that 3D scene.
+- On the preview sheet: object centred, not too dark, labels not cut off.
 
 ## 2d. Title and caption keywords (reach)
 
@@ -127,7 +137,8 @@ The title decides whether people find and tap the video. Write it for search fir
 ## 3. Quality gates (all must pass to post automatically)
 
 - The hook and mechanism scenes are living SVG scenes (3+ moving parts each, step 2c).
-- The video has at least one 3D scene that renders (no `PAGE ERROR`).
+- Every 3D scene shows today's topic (its `why` line is true) and renders (no `PAGE ERROR`).
+  An unrelated 3D scene fails the gate: replace it with a related one or with 2D.
 - The script has a funny hook, at least 2 more funny lines (one in the narration) and a funny
   comment question at the end.
 - Total length 50-68 s; no `LAYOUT:` or `PAGE ERROR:` lines left after fixes.

@@ -54,8 +54,30 @@ made like this:
 
 Sarvam reads numbers well, but still spell key numbers as words in `say` for consistency.
 
+## 2b. Make it funny (engagement)
+
+Every video needs real comedy, not only facts. Bablu Masterji is a lovable, slightly dramatic
+sarkari-school teacher; the jokes come from his character and from everyday Indian life.
+- **Hook joke (first 3 seconds):** open with a funny relatable line, e.g. a mummy/pressure-cooker,
+  chai, Indian-traffic, power-cut, exam-fear or back-bencher situation, then the question.
+- **2-3 funny lines spread through the script**, at least one in the narration (`say`) and the
+  rest in bubbles/friend lines. Kinds that work: Masterji's over-the-top teacher drama
+  ("Silence! Ye physics hai, koi WhatsApp forward nahi!"), a back-bencher's wrong answer that he
+  roasts gently, a desi exaggeration, a self-own about his three hairs / taped glasses / chai.
+- **Comment bait at the end:** a funny question or challenge viewers want to answer
+  ("Comment mein batao, aapke ghar mein cooker ki kitni seeti lagti hai?") plus the
+  "Present lagao" attendance gag.
+- The joke must never change or blur the fact; the science stays correct and clear.
+- Clean, family-friendly humour only: no insults about caste, religion, region, gender, body
+  or real people; roast the situation, not a group. Do not reuse a joke used in the last
+  7 storyboards (check `storyboards/`).
+- Pose the mascot for the joke: `shock` for drama, `happy` after the punchline, `think` for the
+  back-bencher's wrong answer.
+
 ## 3. Quality gates (all must pass to post automatically)
 
+- The script has a funny hook, at least 2 more funny lines (one in the narration) and a funny
+  comment question at the end.
 - Total length 50-68 s; no `LAYOUT:` or `PAGE ERROR:` lines left after fixes.
 - You viewed the preview sheet and it looks right (no clipped text, visual not empty).
 - Every stated number was confirmed by a source; rounded ones say लगभग and carry a tag.

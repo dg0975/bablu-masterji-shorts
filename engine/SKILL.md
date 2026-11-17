@@ -121,6 +121,12 @@ government-school teacher actually talks to his class:
 Default voice settings (top level of the storyboard): `"voice": "hi-IN-MadhurNeural"`,
 `"rate": "-2%"`, `"pitch": "-3Hz"` (slightly slower and deeper, an older man's voice).
 
+## Humour
+
+Every short has a funny hook, 2-3 funny lines from Masterji's character (at least one spoken)
+and a funny comment question at the end. Jokes never change the fact. Family-friendly only;
+roast situations, never groups or real people. (Details: the channel repo's DAILY_RUN.md, step 2b.)
+
 ## 3. Check before the long render
 
 ```bash

@@ -5,7 +5,7 @@
  "handle": "@bablu.masterji",
  "mascot": "masterji",
  "tts": "sarvam",
- "music": 0.05,
+ "music_style": "lively",
  "scenes": [
   {
    "color": "amber",

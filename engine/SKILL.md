@@ -193,8 +193,9 @@ its clips come from `--voice-dir` (see the channel repo's DAILY_RUN.md) or from 
 `SARVAM_API_KEY` is set in the environment. Otherwise the Microsoft voice is used.
 
 Top-level storyboard fields: `voice` (`hi-IN-MadhurNeural` male, `hi-IN-SwaraNeural` female),
-`rate` (default `"-2%"`), `pitch` (default `"-3Hz"`, Microsoft voice only), `music` (volume of the soft code-generated background pad, default
-`0.05`, `0` for none), `captions` (`false` hides Hindi captions), `handle` (`@bablu.masterji`),
+`rate` (default `"-2%"`), `pitch` (default `"-3Hz"`, Microsoft voice only), `music_style` (`lively` default: an original upbeat tune made in code, different tempo/key/hook
+per video, automatically lowered while the voice speaks; `pad` = old soft pad), `music` (volume,
+default 0.2 lively / 0.05 pad, `0` for none), `captions` (`false` hides Hindi captions), `handle` (`@bablu.masterji`),
 `mascot` (`masterji` default, `robot` for the old robot).
 
 ## Limits to be honest about

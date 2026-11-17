@@ -228,6 +228,96 @@ def music_bed(n):
     return out
 
 
+def music_lively(n, seed=1, bpm=None):
+    """upbeat original background tune, generated in code (no samples, no copyright):
+    light beat + tabla-style taps + bouncy bass + sitar-like plucked melody over I-V-vi-IV chords"""
+    import numpy as np
+    R = np.random.default_rng(seed)
+    bpm = bpm or int(R.choice([100, 104, 108, 112]))
+    beat = 60.0 / bpm; s16 = beat / 4
+    key = float(R.choice([0, 2, 5, 7, -3]))                       # C, D, F, G, A major
+    f = lambda semi: 261.63 * 2 ** ((semi + key) / 12)               # semitones from C4 (+key)
+    out = np.zeros(n + SR * 2, dtype=np.float32)
+    dur = n / SR
+
+    def put(sig, t, gain):
+        a = int(t * SR); b = min(len(out), a + len(sig))
+        if a < len(out): out[a:b] += sig[: b - a] * gain
+
+    def env(L, a=.004, d=.2):
+        t = np.arange(int(L * SR)) / SR
+        return np.minimum(t / a, 1) * np.exp(-t / d)
+
+    def pluck(freq, L=.55, bright=1.0, bend=0.0):
+        t = np.arange(int(L * SR)) / SR
+        fr = freq * (1 + bend * np.exp(-t * 18))                  # small "meend" slide into the note
+        ph = 2 * np.pi * np.cumsum(fr) / SR
+        sig = sum((1 / k) * np.exp(-t * (3 + k * 2.2 / bright)) * np.sin(k * ph + k) for k in range(1, 9))
+        sig += .18 * np.exp(-t * 9) * np.sin(13 * ph)              # bright "jawari" buzz
+        return sig * np.minimum(t / .003, 1)
+
+    def kick():
+        t = np.arange(int(.22 * SR)) / SR
+        return np.sin(2 * np.pi * np.cumsum(50 + 90 * np.exp(-t * 30)) / SR) * np.exp(-t * 14)
+
+    noise = R.standard_normal(SR).astype(np.float32)
+    def hat(L=.035):
+        x = noise[: int(L * SR)].copy(); x = np.diff(x, prepend=0)     # crude high-pass
+        return x * np.exp(-np.arange(len(x)) / SR / (L / 4))
+    def clap():
+        x = noise[: int(.14 * SR)] * env(.14, .002, .045)
+        return np.convolve(x, np.ones(3) / 3, 'same')
+    def tabla(high=True):
+        t = np.arange(int(.18 * SR)) / SR
+        f0 = (330 if high else 150) * (1 + .25 * np.exp(-t * 40))
+        return np.sin(2 * np.pi * np.cumsum(f0) / SR) * np.exp(-t * (22 if high else 12))
+
+    prog = [(0, 4, 7), (7, 11, 14), (9, 12, 16), (5, 9, 12)]          # I  V  vi  IV
+    scale = [0, 2, 4, 7, 9, 12, 14, 16]                                 # major pentatonic (+octave)
+    motif = [int(x) for x in R.choice(len(scale), 8)]                   # this video's hook phrase
+    rhythm = [0, 3, 6, 8, 10, 11, 14, 15]                               # 16th positions in a bar
+    tab_pat = [1, 0, 0, 1, 0, 1, 0, 0, 1, 0, 0, 1, 0, 1, 1, 0]
+    bar = beat * 4; nbars = int(np.ceil(dur / bar)) + 1
+    for b in range(nbars):
+        t0 = b * bar; root, third, fifth = prog[b % 4]
+        sec = (b // 4) % 4                                              # 4-bar sections: build up, full, full, light
+        for q in range(4):                                              # beat layer
+            tq = t0 + q * beat
+            if sec > 0 or q in (0, 2): put(kick(), tq, .9 if q in (0, 2) else .45)
+            if q in (1, 3) and sec > 0: put(clap(), tq, .32)
+        for e in range(8):                                              # swung shaker on 8ths
+            put(hat(), t0 + e * beat / 2 + (s16 * .33 if e % 2 else 0), .12 if e % 2 else .07)
+        for k in range(16):                                             # tabla-style taps
+            if tab_pat[(k + b) % 16] and sec != 0: put(tabla(k % 4 != 0), t0 + k * s16, .22)
+        for e, semi in enumerate([root, root, root + 12, root, fifth, root, root + 12, fifth]):   # bouncy bass
+            put(pluck(f(semi - 24), .32, .6), t0 + e * beat / 2, .55)
+        for v in (root, third, fifth):                                  # soft chord stabs on the off-beats
+            for q in range(4):
+                put(pluck(f(v), .3, .5), t0 + q * beat + beat / 2, .07)
+        if sec in (1, 2):                                               # sitar-like hook melody
+            for i, pos in enumerate(rhythm):
+                note = scale[(motif[i] + (b % 2) * (i % 3 == 0)) % len(scale)]
+                put(pluck(f(note + 12), .5, 1.3, bend=.03 if i % 3 == 0 else 0), t0 + pos * s16, .26)
+    out = out[:n]
+    out = out / max(1e-6, np.sqrt((out ** 2).mean())) * 0.25          # loudness-normalise (RMS), not peak
+    return np.tanh(out * 1.6) / 1.6                                    # soft limiter keeps the kick from spiking
+
+
+def duck_curve(voice, depth=0.5):
+    """gain curve that lowers the music while the voice speaks (smooth attack/release)"""
+    import numpy as np
+    hop = SR // 100
+    n = len(voice) // hop + 1
+    rms = np.array([np.sqrt((voice[i * hop:(i + 1) * hop] ** 2).mean()) if i * hop < len(voice) else 0 for i in range(n)])
+    act = (rms > 0.02).astype(float)
+    g = np.ones(n)
+    for i in range(1, n):                      # fast duck (60 ms), slow return (400 ms)
+        target = 1 - depth * act[i]
+        k = 0.17 if target < g[i - 1] else 0.025
+        g[i] = g[i - 1] + (target - g[i - 1]) * k
+    return np.interp(np.arange(len(voice)) / hop, np.arange(n), g).astype(np.float32)
+
+
 ENV_FPS = 30
 
 
@@ -261,9 +351,16 @@ def write_audio(sb, clips, tl, path):
     env = voice_envelope(mix)
     if env:
         tl["env"], tl["envFps"] = env, ENV_FPS
-    vol = sb.get("music", 0.05)
+    style = sb.get("music_style", "lively")
+    vol = sb.get("music", 0.2 if style == "lively" else 0.05)
     if vol:
-        bed = music_bed(n) * float(vol if vol is not True else 0.05)
+        vol = float(vol if vol is not True else (0.2 if style == "lively" else 0.05))
+        if style == "lively":
+            import zlib
+            seed = zlib.crc32((sb.get("title") or "x").encode())
+            bed = music_lively(n, seed=seed) * vol * duck_curve(mix)
+        else:
+            bed = music_bed(n) * vol
         fade = int(.8 * SR)
         bed[:fade] *= np.linspace(0, 1, fade)
         bed[-fade:] *= np.linspace(1, 0, fade)

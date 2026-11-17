@@ -10,7 +10,7 @@ Clip file names come from clip_key(), so both sides agree on which clip belongs 
 import base64, hashlib, json, time, urllib.error, urllib.request
 
 API = "https://api.sarvam.ai/text-to-speech"
-DEFAULTS = {"model": "bulbul:v4-flash", "speaker": "girish_hi_devotional", "pace": 1.05}
+DEFAULTS = {"model": "bulbul:v4-flash", "speaker": "harpreet_pa_narration", "pace": 0.97}
 
 
 def settings(sb):

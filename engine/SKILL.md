@@ -174,7 +174,7 @@ again the same way. Voice clips are cached in `work/tts`, so the render reuses t
 ## Options
 
 Voice engines: `"tts": "sarvam"` uses Sarvam AI (Bulbul) with `sarvam_speaker` (default
-`girish_hi_devotional`), `sarvam_model` (default `bulbul:v4-flash`) and `sarvam_pace` (default 1.05);
+`harpreet_pa_narration`, Harpreet), `sarvam_model` (default `bulbul:v4-flash`) and `sarvam_pace` (default 0.97);
 its clips come from `--voice-dir` (see the channel repo's DAILY_RUN.md) or from the API directly if
 `SARVAM_API_KEY` is set in the environment. Otherwise the Microsoft voice is used.
 

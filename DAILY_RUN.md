@@ -18,8 +18,10 @@ post text.
    style: animated sky, sun, clouds, light flow). Follow SKILL.md for the video; this file adds the
    topic choice, quality gates, posting and logging. Work from a copy of `engine/` in the
    working directory, not inside the repo checkout.
-3. Voice: the channel voice is **Sarvam AI, speaker `girish_hi_devotional`** (model
-   `bulbul:v4-flash`). The API key lives only in the repo's GitHub secret, so the clips are made
+3. Voice: the channel voice is **Sarvam AI, speaker `harpreet_pa_narration` (Harpreet), pace
+   `0.97`** (model `bulbul:v4-flash`); the user chose it on 2026-11-17 (previously Girish
+   `girish_hi_devotional` at 1.05). Pace 0.97 keeps Harpreet at the same speaking speed as the
+   earlier videos; do not change it. The API key lives only in the repo's GitHub secret, so the clips are made
    by the GitHub workflow `.github/workflows/voice.yml` whenever a storyboard is pushed, and
    published on the `voice` branch. Never ask for or handle the key yourself.
    Backup voice, only if Sarvam fails: Microsoft `hi-IN-MadhurNeural` through edge-tts, which
@@ -41,7 +43,8 @@ Follow `engine/SKILL.md` steps 1-4 (storyboard, `--check`, fix, full render), wi
 made like this:
 
 1. Save the storyboard to `storyboards/<YYYY-MM-DD>-<slug>.json` with
-   `"handle": "@bablu.masterji"` and `"tts": "sarvam"`. Commit and push it to `main`
+   `"handle": "@bablu.masterji"`, `"tts": "sarvam"`,
+   `"sarvam_speaker": "harpreet_pa_narration"` and `"sarvam_pace": 0.97`. Commit and push it to `main`
    (message `storyboard: <date> <slug>`).
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice` waits (up to 8 min) for the
    GitHub voice job and copies the clips.

@@ -132,6 +132,25 @@ The title decides whether people find and tap the video. Write it for search fir
   `#scienceinhindi`, `#hindifacts`, plus 1-2 topic tags. Avoid huge irrelevant hashtag lists.
 - **YouTube tags:** 6-10 tags mixing Hindi and English search phrases for the topic
   (e.g. "aasmaan neela kyun", "why is sky blue in hindi", "science facts hindi").
+- **Engagement keywords** (genuine prompts that make people act; vary them daily):
+  - **Say the keyword in the first spoken sentence** and show it in the hook headline: both
+    platforms read speech and on-screen text for search, and viewers know at once the video
+    answers their question.
+  - **Comment trigger:** end the narration and the caption with a specific, easy question about
+    the viewer's own life or a quick A/B choice ("Aapke ghar mein cooker ki kitni seeti? 2 ya 3?",
+    "Sach ya myth? Comment karo"). One question, answerable in one word.
+  - **Save trigger:** one line that makes the video worth keeping ("Save karo, exam mein aayega!",
+    "Save karo, next time mummy se bahas jeetoge").
+  - **Share trigger:** a playful tag line ("Us dost ko bhejo jo kehta hai chaand diet par hai").
+  - **Follow line:** "Roz ek naya 'aisa kyun?' — follow karo @bablu.masterji".
+  - **Power words** in title/caption, only when true: "asli wajah", "sach", "myth", "99% log galat",
+    "pehli baar", "exam mein aayega", "1 minute mein". Never invent claims to sound exciting.
+  - **Avoid engagement bait** that platforms push down: "like karo agar...", "comment YES",
+    "tag 10 friends", "share nahi kiya to...". No more than one save, one share and one
+    comment prompt per caption.
+  - **First comment** (posted right after publishing, see steps 4 and 4b): a bonus quiz question
+    on the same topic with options, e.g. "Bonus sawaal: chaand ka kitna hissa hamesha roshan
+    rehta hai? A) Poora B) Aadha C) Kuch nahi". It starts the comment thread.
 - Save the final title in the storyboard as `"post_title"` so tomorrow's run can see recent titles.
 
 **Background music:** the channel tune is `funky` (the user's choice; it is the default, so leave
@@ -165,7 +184,10 @@ video (if any) plus one line saying which gate failed.
    built by step 2d (comment question + "Present" + 4-6 hashtags), `share_to_feed` = true,
    `thumb_offset` = milliseconds of the hook frame (first beat's audio end from
    `work/timeline.json`, times 1000).
-3. If the script printed `UNVERIFIED` and Windsor says the video URL could not be fetched,
+3. Then post the bonus quiz question as the first comment: `execute_action` with action
+   `create_comment` (params `media_id` = the new post's id, `message` = the question).
+   A failed comment never blocks the post; just mention it in the report.
+4. If the script printed `UNVERIFIED` and Windsor says the video URL could not be fetched,
    wait 3 minutes and call it once more. For any other Windsor error (expired trial,
    disconnected account, rejected video), do not retry more than once. Log status `post_failed` and send the user the video and the error.
 
@@ -184,6 +206,7 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
    - `youtubeData`: `title` = the keyword title from step 2d (under 70 characters, ends with `#shorts`), `type` `short`,
      `privacy` `public`, `category` `EDUCATION`, `madeForKids` **false** (user's choice),
      `isAiGeneratedContent` false (animated cartoon, not realistic), the 6-10 `tags` from step 2d
+   - `firstCommentText` = the same bonus quiz question (if Metricool rejects it, post without it)
    - `publicationDate` `{dateTime, timezone: "Asia/Calcutta"}` matching `date`
 3. Wait about 7 minutes, then `getScheduledPosts` for today: the YouTube provider should show
    `status` `PUBLISHED` with a `publicUrl`. If it shows an error, do not retry more than once;

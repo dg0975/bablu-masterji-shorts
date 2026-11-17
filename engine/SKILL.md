@@ -180,7 +180,12 @@ again the same way. Voice clips are cached in `work/tts`, so the render reuses t
   - **Caption/description:** keyword title as the first line, 2-3 Hinglish lines with one related
     keyword phrase, the comment question, and 4-6 relevant hashtags (#science #scienceinhindi
     #hindifacts + topic tags; #shorts on YouTube).
-  - **YouTube tags:** 6-10 Hindi and English search phrases for the topic. Mention any number that is approximate so the user can
+  - **YouTube tags:** 6-10 Hindi and English search phrases for the topic.
+  - **Engagement wording:** say the keyword in the first spoken line; end narration and caption
+    with one easy one-word question (A/B or about the viewer's life); add one save line ("Save
+    karo, exam mein aayega!"), one share line ("Us dost ko bhejo jo..."), and a follow line.
+    Use power words ("asli wajah", "myth", "sach") only when true. No engagement bait ("like karo
+    agar", "comment YES", "tag 10 friends"). Suggest a bonus quiz question for the first comment. Mention any number that is approximate so the user can
   double-check it before posting.
 - You cannot hear the audio. Say so once and ask the user to listen for mispronounced words; fix
   those by respelling the word in `say` (keep the right spelling in `caption`) and rendering again.

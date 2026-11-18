@@ -10,6 +10,10 @@ Language: Hindi narration, Hinglish on-screen text. Mascot: Bablu Masterji.
 gh-pages push, no Instagram or YouTube post), log nothing, and send the user the video and
 post text.
 
+**Posting time:** the run starts at 14:41 IST so both posts go live between 3:00 and 4:00 PM IST
+(the user's chosen slot). If a run finishes late, still post; never hold a finished video for
+the next day.
+
 ## 0. Setup
 
 1. Attach and clone this repo with push access: `dg0975/bablu-masterji-shorts`.
@@ -246,7 +250,7 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
 2. Send the user (SendUserMessage + SendUserFile) the MP4 and cover, with:
    - whether it went live on Instagram and YouTube (with the YouTube Shorts link),
    - any approximate number to double-check, and a note that you cannot hear the audio.
-   - **Channel performance** (from the `stats` branch, refreshed daily at 08:15 IST by the
+   - **Channel performance** (from the `stats` branch, refreshed daily at 14:15 IST by the
      `youtube-stats` workflow with the read-only `YOUTUBE_API_KEY` secret):
      `git fetch --depth 1 origin stats && git show FETCH_HEAD:stats.json`. Report yesterday's
      Short (views, likes, comments) and the best Short of the last 7 days, in 2-3 short lines.

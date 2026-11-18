@@ -2,7 +2,7 @@ name: youtube-stats
 # Reads public channel/video stats with the YOUTUBE_API_KEY secret and publishes them on the `stats` branch.
 on:
   schedule:
-    - cron: "45 2 * * *"        # 08:15 IST daily, before the 8:36 daily short run
+    - cron: "45 8 * * *"        # 14:15 IST daily, before the 14:41 daily short run
   workflow_dispatch:
   push:
     branches: [main]

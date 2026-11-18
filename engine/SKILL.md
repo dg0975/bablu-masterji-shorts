@@ -138,6 +138,15 @@ Use a `"type":"3d"` visual (three.js) only where it shows the very thing the nar
 presets `earth`, `molecules`, `orbit`, `atom`, `waves`, or custom `code` built from three.js
 primitives. Details and an example in `references/storyboard.md` ("3D visuals").
 
+## Stay monetisable
+
+Vary the format (aisa-kyun, myth-vs-sach, kya-hoga-agar, ghar-ka-experiment, quiz-challenge,
+3-facts), scene count, opener and catchphrase so no two videos differ only superficially; never
+reuse narration lines; every video teaches one checked idea with a fresh Indian example. End
+captions/descriptions with `🎙️ AI voice · Facts: <source>`. No health advice, politics,
+religion, dangerous experiments, real people, brand logos, copied clips/music, or more than 5
+hashtags. General audience (not made for kids).
+
 ## 3. Check before the long render
 
 ```bash

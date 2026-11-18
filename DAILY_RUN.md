@@ -37,6 +37,32 @@ post text.
 - Fact-check the explanation and every number with web search before writing. If the sources
   disagree or you cannot confirm a key number, pick another topic.
 
+## 1b. Stay monetisable: original, varied, honest (YouTube "inauthentic content", Meta rules)
+
+YouTube demonetises channels whose videos differ only superficially (same template, same
+narration pattern); Instagram expects original content. Every video must be clearly its own work:
+- **Rotate the format.** Pick a format different from the last 2 storyboards (read their
+  `"format"` field) and save yours as `"format"`:
+  `aisa-kyun` (hook, myth, mechanism, payoff, takeaway) · `myth-vs-sach` (bust 2-3 myths in a row)
+  · `kya-hoga-agar` (a "what if" scenario explained step by step) · `ghar-ka-experiment` (a safe
+  experiment with everyday kitchen items, explained; nothing hot, sharp, electrical or chemical
+  beyond vinegar/salt/baking soda) · `quiz-challenge` (question first, 3 clues, reveal) ·
+  `3-facts` (countdown of 3 surprising facts on one theme).
+- **Vary the shape:** 5-7 scenes, a different opening visual type and colour order from
+  yesterday, a different Masterji opener and catchphrase.
+- **No recycled lines:** do not reuse any narration sentence (or near-copy) from the last 14
+  storyboards, apart from the short sign-off. Every video has at least one fresh everyday Indian
+  example or analogy specific to its topic.
+- **Real value:** each video must teach one clear, checked idea a viewer did not know; no padding.
+- **Be transparent about AI:** the Instagram caption and YouTube description end with
+  `🎙️ AI voice · Facts: <short source name>` (e.g. "Facts: NASA"). YouTube `isAiGeneratedContent`
+  stays false (animated explainer, not realistic footage of real people or events).
+- **Never:** health or medical advice, political or religious topics, dangerous stunts, real
+  people or brand logos, other creators' clips, copied music or images, misleading titles or
+  thumbnails, more than one post per day, re-uploading an old video, more than 5 hashtags.
+- **Audience:** general audience (students and adults), so YouTube `madeForKids` stays false;
+  do not write in nursery or kids-only style.
+
 ## 2. Make the video
 
 Follow `engine/SKILL.md` steps 1-4 (storyboard, `--check`, fix, full render), with the voice
@@ -226,5 +252,14 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
      Short (views, likes, comments) and the best Short of the last 7 days, in 2-3 short lines.
      Channel totals can lag on YouTube; trust the per-video numbers. If `ok` is false or the
      branch is missing, skip this part and mention it in one line.
+   - **Milestones** (one line daily, a short table on Mondays): YouTube subscribers and
+     `views_90d` from `stats.json` against 500 subs + 3M Shorts views/90 days (fan funding) and
+     1,000 subs + 10M Shorts views/90 days (ads; rises to 20M for new applicants from
+     1 Feb 2027); Instagram followers via Windsor `get_data` (connector `instagram`, account
+     `bablu.masterji`, field `followers_count`, date_preset `last_1dT`) against 500 (Gifts),
+     1,000 (Creator Marketplace, brand deals) and 10,000 (Subscriptions). Show percent reached.
+   - **Mondays only:** one line of human-touch advice for the owner from the week's comments
+     (e.g. "reply to these 3 comments", "pin the best answer"), since real interaction also
+     shows the channel is not mass-produced.
 
 Keep the report short: the user reads it on a phone.

@@ -51,6 +51,9 @@ def main():
                                       "views": int(s.get("viewCount", 0)), "likes": int(s.get("likeCount", 0)),
                                       "comments": int(s.get("commentCount", 0)), "url": f"https://www.youtube.com/shorts/{v['id']}"})
         res["videos"].sort(key=lambda v: v["published"], reverse=True)
+        cut = (datetime.datetime.utcnow() - datetime.timedelta(days=90)).isoformat() + "Z"
+        res["views_90d"] = sum(v["views"] for v in res["videos"] if v["published"] >= cut)
+        res["uploads_90d"] = sum(1 for v in res["videos"] if v["published"] >= cut)
         print(f"OK: {res['channel']['title']}, {res['channel']['subscribers']} subscribers, {len(res['videos'])} videos")
     except Exception as e:  # noqa
         res["ok"] = False; res["error"] = str(e)

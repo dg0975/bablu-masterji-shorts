@@ -1,0 +1,252 @@
+{
+ "kind": "skit",
+ "series": "MASTERJI KI CLASS",
+ "title": "Golu ka garmi wala jugaad",
+ "handle": "@bablu.masterji",
+ "post_title": "Fridge khula rakhne se kamra thanda hota hai? Golu ka jugaad | Science in Hindi #shorts",
+ "note": "DEMO skit for the user to review, not posted",
+ "tts": "sarvam",
+ "lead": 0.15,
+ "gap": 0.2,
+ "outro": 1.4,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "golu": {
+   "name": "Golu",
+   "voice": "kunal_hi_kids"
+  },
+  "mummy": {
+   "name": "Mummy",
+   "voice": "roopa_hi_conversational"
+  },
+  "papa": {
+   "name": "Papa",
+   "voice": "ashok_hi_character"
+  },
+  "masterji": {
+   "name": "Masterji"
+  }
+ },
+ "scenes": [
+  {
+   "set": "kitchen",
+   "cast": [
+    {
+     "id": "golu",
+     "x": 620,
+     "pose": "sly",
+     "enter": "left"
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "आहा! गर्मी का पक्का इलाज, फ्रिज का दरवाज़ा खोलो, पूरी रसोई ठंडी!",
+     "act": {
+      "golu": "happy"
+     },
+     "sfx": "whoosh"
+    },
+    {
+     "hold": 1.6,
+     "act": {
+      "golu": "dance"
+     },
+     "fx": {
+      "kind": "hearts",
+      "on": "golu"
+     },
+     "sfx": "boing"
+    }
+   ]
+  },
+  {
+   "set": "kitchen",
+   "cam": {
+    "zoom": 1.7,
+    "on": "mummy"
+   },
+   "cast": [
+    {
+     "id": "golu",
+     "x": 760,
+     "pose": "dance"
+    },
+    {
+     "id": "mummy",
+     "x": 300,
+     "pose": "angry",
+     "enter": "left"
+    }
+   ],
+   "beats": [
+    {
+     "who": "mummy",
+     "say": "गोलू! बिजली का बिल तेरे पापा भरेंगे या तेरा फ्रिज?",
+     "act": {
+      "mummy": "angry"
+     },
+     "fx": {
+      "kind": "anger",
+      "on": "mummy"
+     },
+     "sfx": "crash",
+     "shake": true
+    }
+   ],
+   "scale": 0.9
+  },
+  {
+   "set": "kitchen",
+   "cast": [
+    {
+     "id": "papa",
+     "x": 220,
+     "pose": "hold",
+     "enter": "left"
+    },
+    {
+     "id": "mummy",
+     "x": 540,
+     "pose": "angry"
+    },
+    {
+     "id": "golu",
+     "x": 860,
+     "pose": "shock"
+    }
+   ],
+   "beats": [
+    {
+     "who": "papa",
+     "say": "और सुन, कमरा ठंडा तो होगा नहीं, उल्टा और गरम हो जाएगा!",
+     "act": {
+      "papa": "point",
+      "golu": "shock"
+     },
+     "fx": {
+      "kind": "question",
+      "on": "golu"
+     },
+     "sfx": "scratch"
+    }
+   ],
+   "scale": 0.78
+  },
+  {
+   "set": "classroom",
+   "board": "Fridge = garmi ka pump",
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 540,
+     "pose": "point",
+     "enter": "pop"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "बिल्कुल सही! फ्रिज ठंडक बनाता नहीं, वो अंदर की गर्मी उठाकर पीछे से बाहर फेंकता है।",
+     "act": {
+      "masterji": "point"
+     },
+     "fx": {
+      "kind": "bulb",
+      "on": "masterji"
+     },
+     "sfx": "ding"
+    },
+    {
+     "who": "masterji",
+     "say": "दरवाज़ा खुला रहेगा, तो मोटर लगातार चलेगी, और अपनी गर्मी भी कमरे में डालेगी!",
+     "act": {
+      "masterji": "shock"
+     },
+     "cam": {
+      "zoom": 1.5,
+      "on": "masterji"
+     }
+    }
+   ]
+  },
+  {
+   "set": "kitchen",
+   "cast": [
+    {
+     "id": "papa",
+     "x": 220,
+     "pose": "facepalm"
+    },
+    {
+     "id": "mummy",
+     "x": 540,
+     "pose": "angry"
+    },
+    {
+     "id": "golu",
+     "x": 860,
+     "pose": "sad"
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था?",
+     "act": {
+      "golu": "sad",
+      "papa": "facepalm",
+      "mummy": "laugh"
+     },
+     "fx": {
+      "kind": "sweat",
+      "on": "golu"
+     },
+     "sfx": "slide",
+     "cam": {
+      "zoom": 1.6,
+      "on": "golu"
+     }
+    },
+    {
+     "hold": 1.3,
+     "sfx": "drum",
+     "act": {
+      "mummy": "laugh",
+      "papa": "laugh"
+     }
+    }
+   ],
+   "scale": 0.78
+  },
+  {
+   "set": "classroom",
+   "board": "Khula fridge = garam kamra",
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 540,
+     "pose": "wave"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "Khula fridge kamre ko garam karta hai: andar ki garmi peeche se bahar, upar se motor ki garmi alag.",
+    "foot": "Aapke ghar ka 'Golu' kaun hai? Comment karo!"
+   },
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "समझे? कमेंट में बताओ, तुम्हारे घर का गोलू कौन है!",
+     "act": {
+      "masterji": "wave"
+     },
+     "sfx": "bell"
+    }
+   ]
+  }
+ ]
+}

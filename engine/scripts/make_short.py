@@ -29,7 +29,49 @@ def pip_install(pkg):
 
 
 # ----------------------------------------------------------------------------- validation
+SKIT_CAST = {"masterji", "golu", "mummy", "papa"}
+SKIT_SETS = {"classroom", "livingroom", "kitchen"}
+SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
+SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
+SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch"}
+
+
+def validate_skit(sb):
+    errs, warns = [], []
+    scenes = sb.get("scenes") or []
+    if not scenes:
+        errs.append("skit has no scenes (shots)")
+    for i, s in enumerate(scenes):
+        tag = f"shot {i}"
+        if s.get("set", "classroom") not in SKIT_SETS:
+            errs.append(f"{tag}: unknown set {s.get('set')!r} (use {sorted(SKIT_SETS)})")
+        ids = [c.get("id") for c in s.get("cast", [])]
+        for c in ids:
+            if c not in SKIT_CAST:
+                errs.append(f"{tag}: unknown character {c!r} (use {sorted(SKIT_CAST)})")
+        for j, b in enumerate(s.get("beats") or []):
+            if b.get("who") and b["who"] not in ids:
+                errs.append(f"{tag} beat {j}: speaker {b['who']!r} is not in this shot's cast")
+            for c, pose in (b.get("act") or {}).items():
+                if c not in ids:
+                    errs.append(f"{tag} beat {j}: act for {c!r}, who is not in the shot")
+                if pose not in SKIT_POSES:
+                    errs.append(f"{tag} beat {j}: unknown pose {pose!r} (use {sorted(SKIT_POSES)})")
+            for f in [] if not b.get("fx") else (b["fx"] if isinstance(b["fx"], list) else [b["fx"]]):
+                if f.get("kind") not in SKIT_FX:
+                    errs.append(f"{tag} beat {j}: unknown fx {f.get('kind')!r} (use {sorted(SKIT_FX)})")
+            for x in [] if not b.get("sfx") else (b["sfx"] if isinstance(b["sfx"], list) else [b["sfx"]]):
+                name = x if isinstance(x, str) else x.get("s")
+                if name not in SFX_NAMES:
+                    errs.append(f"{tag} beat {j}: unknown sfx {name!r} (use {sorted(SFX_NAMES)})")
+            if not b.get("say") and not b.get("hold"):
+                warns.append(f"{tag} beat {j}: no line and no 'hold'; using 1.2 s")
+    return errs, warns
+
+
 def validate(sb):
+    if sb.get("kind") == "skit":
+        return validate_skit(sb)
     errs, warns = [], []
     scenes = sb.get("scenes") or []
     if not scenes:
@@ -135,9 +177,10 @@ def synth_sarvam(sb, voice_dir):
     cdir.mkdir(parents=True, exist_ok=True)
     clips, missing = {}, []
     for i, j, text in st.lines(sb):
-        f = cdir / f"{st.clip_key(cfg, text)}.wav"
+        c = st.beat_cfg(sb, i, j)
+        f = cdir / f"{st.clip_key(c, text)}.wav"
         if not f.exists() and api_key:
-            st.synth(text, cfg, api_key, str(f))
+            st.synth(text, c, api_key, str(f))
         if f.exists():
             clips[(i, j)] = load_pcm(f)
         else:
@@ -193,7 +236,7 @@ def synth_all(sb, out, pref, voice_dir=None):
 
 # ----------------------------------------------------------------------------- timeline + audio
 def build_timeline(sb, clips):
-    gap, lead = float(sb.get("gap", 0.28)), 0.5
+    gap, lead = float(sb.get("gap", 0.28)), float(sb.get("lead", 0.5))
     t, scenes = 0.0, []
     for i, s in enumerate(sb["scenes"]):
         st = t
@@ -402,6 +445,41 @@ def music_for(sb, n):
     return fn(n, seed=seed), style
 
 
+def sfx(name):
+    """small comedy sound effects made in code (no samples)"""
+    import numpy as np
+    t = lambda L: np.arange(int(L * SR)) / SR
+    R = np.random.default_rng(len(name))
+    if name == "boing":
+        x = t(.6); f = 180 + 220 * np.exp(-x * 6) * (1 + .5 * np.sin(2 * np.pi * 14 * x))
+        return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-x * 4) * .9
+    if name == "ding":
+        x = t(1.2); return (np.sin(2 * np.pi * 1320 * x) + .5 * np.sin(2 * np.pi * 2640 * x) + .3 * np.sin(2 * np.pi * 3960 * x)) * np.exp(-x * 3.5) * .45
+    if name == "whoosh":
+        x = t(.5); n = R.standard_normal(len(x)); k = int(SR * .002); n = np.convolve(n, np.ones(k) / k, "same")
+        return n * np.sin(np.pi * x / .5) ** 2 * 1.4
+    if name == "pop":
+        x = t(.12); return np.sin(2 * np.pi * np.cumsum(900 - 5000 * x) / SR) * np.exp(-x * 40) * .8
+    if name == "crash":
+        x = t(1.0); return R.standard_normal(len(x)) * np.exp(-x * 4) * .5
+    if name == "drum":   # ba-dum-tss
+        out = np.zeros(int(1.3 * SR))
+        for at, f0 in ((0, 180), (.18, 140)):
+            x = t(.25); a = int(at * SR); out[a:a + len(x)] += np.sin(2 * np.pi * f0 * x * (1 + .3 * np.exp(-x * 30))) * np.exp(-x * 14) * .8
+        x = t(.9); a = int(.38 * SR); hi = np.diff(R.standard_normal(len(x) + 1)); out[a:a + len(x)] += hi * np.exp(-x * 5) * .35
+        return out
+    if name == "bell":   # school bell ring
+        x = t(1.4); trem = (np.sign(np.sin(2 * np.pi * 22 * x)) + 1) / 2
+        return (np.sin(2 * np.pi * 1700 * x) + .6 * np.sin(2 * np.pi * 2350 * x)) * trem * np.exp(-x * 1.2) * .35
+    if name == "slide":  # slide whistle down
+        x = t(.7); f = 1400 * np.exp(-x * 2.2) + 300
+        return np.sin(2 * np.pi * np.cumsum(f) / SR) * np.minimum(x / .03, 1) * np.exp(-x * 1.5) * .5
+    if name == "scratch":
+        x = t(.35); f = 300 + 900 * np.abs(np.sin(2 * np.pi * 6 * x))
+        return (np.sin(2 * np.pi * np.cumsum(f) / SR) * .5 + R.standard_normal(len(x)) * .25) * np.exp(-x * 4)
+    return np.zeros(1)
+
+
 def duck_curve(voice, depth=0.5):
     """gain curve that lowers the music while the voice speaks (smooth attack/release)"""
     import numpy as np
@@ -458,12 +536,24 @@ def write_audio(sb, clips, tl, path):
             bed = music_bed(n) * vol
         else:
             tune, style = music_for(sb, n)
-            bed = tune * vol * duck_curve(mix)
+            bed = tune * vol * duck_curve(mix, float(sb.get("duck", 0.5)))
         tl["music_style"] = style
         fade = int(.8 * SR)
         bed[:fade] *= np.linspace(0, 1, fade)
         bed[-fade:] *= np.linspace(1, 0, fade)
         mix += bed
+    for i, s in enumerate(sb["scenes"]):          # comedy sound effects at their beats
+        for j, b in enumerate(s.get("beats", [])):
+            fxl = b.get("sfx")
+            if not fxl:
+                continue
+            for x in (fxl if isinstance(fxl, list) else [fxl]):
+                name, at, g = (x, 0.0, 1.0) if isinstance(x, str) else (x.get("s"), float(x.get("at", 0)), float(x.get("gain", 1)))
+                a = sfx(name).astype(np.float32) * 0.6 * g
+                st_ = int((tl["scenes"][i]["beats"][j]["start"] + at) * SR)
+                e = min(n, st_ + len(a))
+                if 0 <= st_ < n:
+                    mix[st_:e] += a[: e - st_]
     mix = np.clip(mix, -1, 1)
     with wave.open(str(path), "wb") as w:
         w.setnchannels(1); w.setsampwidth(2); w.setframerate(SR)
@@ -473,6 +563,9 @@ def write_audio(sb, clips, tl, path):
 # ----------------------------------------------------------------------------- rendering
 def write_page(sb, tl, out):
     html = (ASSETS / "player.html").read_text(encoding="utf-8")
+    if sb.get("kind") == "skit":                  # skits reuse Masterji's drawing code from the player
+        a = html.index("/* ---------------- Bablu Masterji"); b = html.index("/* ---------------- build")
+        html = (ASSETS / "skit.html").read_text(encoding="utf-8").replace("/*MASTERJI*/", html[a:b])
     fdir = (ASSETS / "fonts").resolve()
     faces = "".join(
         f"@font-face{{font-family:'Poppins';font-weight:{wgt};src:url('file://{fdir}/Poppins-{name}.ttf')}}\n"
@@ -481,7 +574,7 @@ def write_page(sb, tl, out):
         faces += f"@font-face{{font-family:'Kalam';font-weight:700;src:url('file://{fdir}/Kalam-Bold.ttf')}}\n"
     data = "const SB=" + json.dumps(sb, ensure_ascii=False).replace("</", "<\\/") + ";\nconst TL=" + json.dumps(tl) + ";"
     libs = ""
-    if any((sc.get("visual") or {}).get("type") == "3d" for sc in sb["scenes"]):
+    if sb.get("kind") != "skit" and any((sc.get("visual") or {}).get("type") == "3d" for sc in sb["scenes"]):
         for js in (ASSETS / "vendor" / "three.min.js", ASSETS / "g3d.js"):
             libs += f'<script src="file://{js.resolve()}"></script>\n'
     html = html.replace("/*FONTS*/", faces).replace("<script>\n/*DATA*/", libs + "<script>\n/*DATA*/", 1).replace("/*DATA*/", data)
@@ -516,6 +609,8 @@ def shot(cdp, page, t, quality=92):
 
 def layout_report(page, tl):
     """measure overflow at the end of every scene so problems are caught before the long render"""
+    if page.evaluate("typeof SB!=='undefined' && SB.kind==='skit'"):
+        return []
     js = """(t)=>{window.NOCAM=true; renderAt(t); window.NOCAM=false; const out=[]; const sc=[...document.querySelectorAll('.scene')].find(e=>e.style.display==='block');
       const v=sc.querySelector('.visual').getBoundingClientRect(), h=sc.querySelector('.head').getBoundingClientRect();
       if(h.bottom>592) out.push('header text runs into the visual by '+Math.round(h.bottom-592)+'px (shorten headline/sub)');

@@ -18,6 +18,21 @@ def settings(sb):
     return {k: sb.get("sarvam_" + k, v) for k, v in DEFAULTS.items()}
 
 
+def beat_cfg(sb, i, j):
+    """voice settings for one line: skits give each character its own Sarvam speaker via sb["cast"]"""
+    cfg = settings(sb)
+    b = sb["scenes"][i]["beats"][j]
+    who = b.get("who")
+    v = (sb.get("cast") or {}).get(who) or {}
+    if v.get("voice"):
+        cfg = dict(cfg, speaker=v["voice"])
+    if v.get("pace"):
+        cfg = dict(cfg, pace=v["pace"])
+    if b.get("voice"):
+        cfg = dict(cfg, speaker=b["voice"])
+    return cfg
+
+
 def clip_key(cfg, text):
     return hashlib.md5(f"sarvam|{cfg['model']}|{cfg['speaker']}|{cfg['pace']}|{text}".encode()).hexdigest()[:16]
 

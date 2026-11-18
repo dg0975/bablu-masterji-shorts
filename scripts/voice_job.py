@@ -45,13 +45,14 @@ def main():
             raise RuntimeError("SARVAM_API_KEY secret is missing in the repo settings")
         made = reused = 0
         for i, j, text in st.lines(sb):
-            k = st.clip_key(cfg, text)
+            c = st.beat_cfg(sb, i, j)                     # skits: each character has its own voice
+            k = st.clip_key(c, text)
             dst = OUT / "clips" / f"{k}.wav"
             old = PREV / "clips" / f"{k}.wav"
             if old.exists():
                 shutil.copy(old, dst); reused += 1
             elif not dst.exists():
-                st.synth(text, cfg, key, dst); made += 1
+                st.synth(text, c, key, dst); made += 1
             status["clips"][k] = f"clips/{k}.wav"
         print(f"{sb_path.name}: {made} new clips, {reused} reused, speaker {cfg['speaker']}")
     except Exception as e:  # noqa

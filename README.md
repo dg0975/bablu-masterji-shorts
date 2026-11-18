@@ -16,3 +16,6 @@ Instagram Reel via Windsor.ai → video + YouTube text sent to the owner for the
 
 Videos live only on the `gh-pages` branch, which is replaced every day, so the repo stays small.
 No passwords or API keys are stored here.
+
+**Skits** (comedy + science punchline, Golu/Mummy/Papa/Masterji): engine in `engine/assets/skit.html`,
+format in `engine/references/skit.md`. Demo done; scheduling waits for the final voice choice.

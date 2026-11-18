@@ -147,6 +147,13 @@ captions/descriptions with `🎙️ AI voice · Facts: <source>`. No health advi
 religion, dangerous experiments, real people, brand logos, copied clips/music, or more than 5
 hashtags. General audience (not made for kids).
 
+## Skits (comedy + science punchline)
+
+`"kind":"skit"` storyboards make 25-40 s "Masterji ki Class" comedy shorts with drawn sets
+(classroom, living room, kitchen), the cast Masterji, Golu, Mummy and Papa, camera close-ups,
+comic effects, sound effects and a voice per character. Format and options:
+`references/skit.md`. Not scheduled yet: voices still being chosen.
+
 ## 3. Check before the long render
 
 ```bash

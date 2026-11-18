@@ -7,7 +7,7 @@ Writes clips/<key>.wav and status/<storyboard-stem>.json into ./voiceout, reusin
 from the previous voice branch when the line did not change. The workflow then replaces
 the `voice` branch with ./voiceout. SARVAM_API_KEY comes from the repo secret and is never printed.
 """
-import hashlib, json, os, shutil, subprocess, sys
+import hashlib, json, os, shutil, subprocess, sys, time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -42,7 +42,7 @@ def main():
     key = os.environ.get("SARVAM_API_KEY", "").strip()
     try:
         if not key:
-            raise RuntimeError("SARVAM_API_KEY secret is missing in the repo settings")
+            raise RuntimeError("SARVAM_API_KEY secret is missing in the repo settings")  # needed for Masterji and other lines
         made = reused = 0
         for i, j, text in st.lines(sb):
             c = st.beat_cfg(sb, i, j)                     # skits: each character has its own voice
@@ -52,7 +52,19 @@ def main():
             if old.exists():
                 shutil.copy(old, dst); reused += 1
             elif not dst.exists():
-                st.synth(text, c, key, dst); made += 1
+                if c.get("engine") == "gemini":
+                    gk = os.environ.get("GEMINI_API_KEY", "").strip()
+                    if not gk:
+                        raise RuntimeError("GEMINI_API_KEY secret is missing in the repo settings")
+                    import gemini_tts
+                    try:
+                        model = gemini_tts.synth(text, c["voice"], c["style"], gk, dst)
+                    except RuntimeError as e:
+                        raise RuntimeError(str(e).replace(gk, "***")) from None
+                    status.setdefault("gemini_model", model); time.sleep(6)   # stay under free-tier rate limits
+                else:
+                    st.synth(text, c, key, dst)
+                made += 1
             status["clips"][k] = f"clips/{k}.wav"
         print(f"{sb_path.name}: {made} new clips, {reused} reused, speaker {cfg['speaker']}")
     except Exception as e:  # noqa

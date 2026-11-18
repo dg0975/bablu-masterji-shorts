@@ -233,7 +233,7 @@ function renderAt(t){
  // subtitles
  const showSub=B.who&&(B.caption||B.say);
  $('#sub').style.opacity=showSub?1:0;
- if(showSub){const w=$('#sub .who');w.textContent=(CAST[B.who]&&CAST[B.who].name)||NAME[B.who]||B.who;w.style.background=TAG[B.who]||'#fff';$('#sub .line').textContent=B.caption||B.say}
+ if(showSub){const w=$('#sub .who');w.textContent=(CAST[B.who]&&CAST[B.who].name)||NAME[B.who]||B.who;w.style.background=TAG[B.who]||'#fff';$('#sub .line').textContent=(B.caption||B.say).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim()}
  // ending card
  const card=s.card; const C=$('#card');
  if(card){C.style.opacity=clamp((lt-.2)/.4);C.style.transform=`translateY(${((1-eOut((lt-.2)/.5))*60).toFixed(1)}px)`;C.querySelector('.k').textContent=card.kicker||'Science ka sach';C.querySelector('.t').textContent=card.text||'';C.querySelector('.f').textContent=card.foot||''}

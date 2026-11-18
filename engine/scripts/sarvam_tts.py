@@ -30,10 +30,15 @@ def beat_cfg(sb, i, j):
         cfg = dict(cfg, pace=v["pace"])
     if b.get("voice"):
         cfg = dict(cfg, speaker=b["voice"])
+    if v.get("engine") == "gemini" or b.get("engine") == "gemini":     # expressive Google voice
+        cfg = {"engine": "gemini", "voice": b.get("gvoice") or v.get("gvoice", "Puck"),
+               "style": b.get("style") or v.get("style", "")}
     return cfg
 
 
 def clip_key(cfg, text):
+    if cfg.get("engine") == "gemini":
+        return hashlib.md5(f"gemini|{cfg['voice']}|{cfg['style']}|{text}".encode()).hexdigest()[:16]
     return hashlib.md5(f"sarvam|{cfg['model']}|{cfg['speaker']}|{cfg['pace']}|{text}".encode()).hexdigest()[:16]
 
 

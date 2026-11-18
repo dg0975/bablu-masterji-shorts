@@ -203,7 +203,10 @@ def synth_sarvam(sb, voice_dir):
     for i, j, text in st.lines(sb):
         c = st.beat_cfg(sb, i, j)
         f = cdir / f"{st.clip_key(c, text)}.wav"
-        if not f.exists() and api_key:
+        if not f.exists() and c.get("engine") == "gemini" and os.environ.get("GEMINI_API_KEY"):
+            import gemini_tts
+            gemini_tts.synth(text, c["voice"], c["style"], os.environ["GEMINI_API_KEY"].strip(), str(f))
+        elif not f.exists() and api_key and c.get("engine") != "gemini":
             st.synth(text, c, api_key, str(f))
         if f.exists():
             clips[(i, j)] = trim_silence(load_pcm(f))

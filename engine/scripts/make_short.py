@@ -167,6 +167,30 @@ def load_pcm(path, tempo=1.0):
     return a
 
 
+def trim_silence(a, thr=0.012, keep=0.06):
+    """cut long silence at the start/end of a clip and squeeze long pauses inside it to 0.35 s"""
+    import numpy as np
+    if len(a) == 0:
+        return a
+    hop = SR // 100
+    n = len(a) // hop
+    if n < 3:
+        return a
+    rms = np.sqrt((a[: n * hop].reshape(n, hop) ** 2).mean(axis=1))
+    on = np.where(rms > thr * max(1e-6, rms.max()) * 8)[0]
+    if len(on) == 0:
+        return a
+    s0 = max(0, on[0] * hop - int(keep * SR)); s1 = min(len(a), (on[-1] + 1) * hop + int(keep * SR))
+    a = a[s0:s1]; rms = rms[on[0]:on[-1] + 1]
+    out, run, maxgap = [], 0, int(.35 * 100)
+    loud = rms > thr * max(1e-6, rms.max()) * 8
+    for k in range(len(rms)):
+        run = 0 if loud[k] else run + 1
+        if run <= maxgap:
+            out.append(a[k * hop:(k + 1) * hop])
+    return np.concatenate(out) if out else a
+
+
 def synth_sarvam(sb, voice_dir):
     """Sarvam AI voice: clips made by the GitHub voice job (or directly if SARVAM_API_KEY is set)"""
     sys.path.insert(0, str(HERE))
@@ -182,7 +206,7 @@ def synth_sarvam(sb, voice_dir):
         if not f.exists() and api_key:
             st.synth(text, c, api_key, str(f))
         if f.exists():
-            clips[(i, j)] = load_pcm(f)
+            clips[(i, j)] = trim_silence(load_pcm(f))
         else:
             missing.append(f"scene {i} beat {j}")
     if missing:

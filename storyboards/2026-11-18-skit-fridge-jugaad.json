@@ -16,7 +16,8 @@
  "cast": {
   "golu": {
    "name": "Golu",
-   "voice": "kunal_hi_kids"
+   "voice": "kunal_hi_kids",
+   "pace": 1.4
   },
   "mummy": {
    "name": "Mummy",
@@ -24,7 +25,8 @@
   },
   "papa": {
    "name": "Papa",
-   "voice": "ashok_hi_character"
+   "voice": "ashok_hi_character",
+   "pace": 1.5
   },
   "masterji": {
    "name": "Masterji"

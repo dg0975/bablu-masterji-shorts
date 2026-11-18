@@ -3,9 +3,11 @@
 A skit is a storyboard with `"kind": "skit"`. It reuses the voice, timing, music and render code of
 `make_short.py`, but draws full-screen sets with several characters (`assets/skit.html`).
 Status: **scheduled** Tue/Thu/Sat, run starts 18:21 IST (posts about 6:30-7:00 PM), following
-`SKIT_RUN.md`; first run (Thu 19 Nov 2026) posts the approved demo. Voices approved by the owner:
-Golu `kunal_hi_kids` pace 1.4, Mummy `roopa_hi_conversational`, Papa `ashok_hi_character` pace 1.5,
-Masterji = channel voice.
+`SKIT_RUN.md`; first run (Thu 19 Nov 2026) posts the approved demo. Voices chosen by the owner: Google Gemini (free key `GEMINI_API_KEY`, model gemini-3.8-flash-tts with
+fallbacks) for Golu `Fenrir`, Mummy `Kore`, Papa `Algenib`, each with an acting `style`; Masterji =
+Sarvam channel voice. Per beat: `"style"` (emotion of that line) and optional inline tags in `say`:
+`<laugh>`, `<sigh>`, `<gasp>`, `<short pause>` (hidden in subtitles). A cast member with
+`"engine":"gemini","gvoice":"<voice>"` uses Gemini; otherwise Sarvam `voice`/`pace`.
 
 Shape that works: 25-40 s, 5-7 shots, one relatable desi situation (home or class), a wrong idea
 from Golu, Mummy/Papa reaction, Masterji explains in 2 short lines, Golu's punchline, ending card

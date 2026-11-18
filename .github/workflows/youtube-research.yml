@@ -1,0 +1,26 @@
+name: youtube-research
+# Public stats of another channel's uploads (format research only), published on the `research` branch.
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["research-request.txt"]
+permissions:
+  contents: write
+jobs:
+  research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+      - name: Read public channel data
+        env:
+          YOUTUBE_API_KEY: ${{ secrets.YOUTUBE_API_KEY }}
+        run: python3 scripts/youtube_research.py
+      - name: Publish research branch
+        run: |
+          cd out
+          git init -q -b research
+          git add -A
+          git -c user.name="Bablu Masterji bot" -c user.email="bot@users.noreply.github.com" commit -q -m "research ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" research:research

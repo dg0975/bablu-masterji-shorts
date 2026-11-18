@@ -42,6 +42,22 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
   prop, never actual hitting. No real people, brands or other creators' characters or songs.
 - Vary sets, shot order and gags from the last 3 skits. Save `"post_title"` and `"format":"skit"`.
 
+## 2b. Relatable first (lessons from studying successful desi comedy Shorts)
+
+Format research on a desi cartoon-comedy channel (public stats of its last 100 Shorts, Nov 2026;
+studied for patterns only, never copy anyone's characters, jokes, scripts or songs):
+- The best performers are **instantly relatable family moments**: the Indian mother, family
+  drama, money/"gareeb" jokes, friends, office/boss, childhood memories, railway, chai. Lead with
+  a situation every Indian viewer recognises within 2 seconds, then deliver our science twist.
+- **Open on the joke**, not on setup: first shot already shows the funny situation.
+- **Reaction close-ups** (deadpan parents, shocked faces) carry the laugh; use at least one.
+- **Titles are short and emotional**, 2-5 words plus one emoji, e.g. "Golu ka jugaad 😂",
+  "Mummy vs Fridge 😤", then `#funny #relatable` and one science tag. The search keyword goes in
+  the first line of the description instead (DAILY_RUN.md 2d still applies to descriptions).
+- Recurring cast helps people come back: keep Golu, Mummy and Papa's personalities consistent
+  (Golu: jugaadu and overconfident; Mummy: strict, belan, always right; Papa: dry, sarcastic,
+  newspaper).
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`
@@ -55,7 +71,7 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - Instagram via Windsor (`create_video_post`) and YouTube Short via Metricool exactly as
   DAILY_RUN.md steps 4 and 4b (keyword-first title, caption ending `🎙️ AI voice · Facts: <source>`,
   first-comment quiz/question, `madeForKids` false, `isAiGeneratedContent` false).
-- Caption style for skits: the funny situation first ("Golu ka garmi wala jugaad 😂"), then the
-  science line, the comment question, 4-5 hashtags (#comedy #scienceinhindi #hindimemes #golu + 1 topic).
+- Caption style for skits: the short relatable title (step 2b) first, then the science line, the
+  comment question, 4-5 hashtags (#funny #relatable #scienceinhindi #golu + 1 topic).
 - Append to `topics/skits_used.csv`: `date,slug,idea,status,instagram_media_id`; commit and push.
 - Send the owner the MP4 and links (SendUserMessage + SendUserFile), short, phone-friendly.

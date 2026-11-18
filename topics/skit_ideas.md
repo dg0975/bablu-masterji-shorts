@@ -14,3 +14,13 @@
 - thermos-jaadu: Golu: "thermos ko kaise pata garam rakhna hai ya thanda?"; vacuum blocks heat both ways
 - mirror-ulta: Golu asks why the mirror flips left-right but not up-down; it flips front-back
 - garam-tawa-boondein: water drops dance on Mummy's hot tawa (Mummy demonstrates, Golu watches from afar); Leidenfrost effect
+
+## Relatable-theme ideas (family / money / friends / railway / chai), each with a science twist
+- train-ped-bhaagte: on a train trip Golu says the trees are running backwards; relative motion (railway)
+- chai-malai: Papa fishes the malai layer off his cooling chai, Golu calls it "chai ka blanket"; milk proteins and fat form a skin as it cools (chai)
+- ac-16-degree: Golu sets the AC remote to 16 to "cool faster", Mummy grabs the remote; a lower setting changes the target temperature, not the speed of cooling (verify for the AC type before using; family)
+- piggy-bank-sikke: Golu shakes his gullak to guess the money by sound, "gareeb" joke; heavier, more coins sound duller (money)
+- phone-garam: Golu charges and games at once, phone gets hot, Papa: "phone ko bhi bukhaar?"; batteries and processors heat up while working (friends/phone)
+- rakhi-roti-phoolna: Mummy's roti puffs up on the flame, Golu thinks it is "breathing"; trapped water turns to steam (Indian mother)
+- school-bag-bhari: Golu complains the bag is heavier on the way back; it is not, he is just tired, muscles fatigue (childhood)
+- dost-ki-selfie-dhoop: friends take a selfie facing the sun, all faces dark; the camera exposes for the bright sky (friends)

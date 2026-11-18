@@ -2,10 +2,10 @@
 
 A skit is a storyboard with `"kind": "skit"`. It reuses the voice, timing, music and render code of
 `make_short.py`, but draws full-screen sets with several characters (`assets/skit.html`).
-Status: engine and demo done (`storyboards/2026-11-18-skit-fridge-jugaad.json`); **not scheduled
-yet**: the owner wants more human voices first (options: better Sarvam voices from the audition in
-`storyboards/2026-11-18-voice-audition.json`, Google Gemini TTS free tier, AI4Bharat Indic
-Parler-TTS). Planned slot once approved: extra post Tue/Thu/Sat about 6:45 PM IST.
+Status: **scheduled** Tue/Thu/Sat, run starts 18:21 IST (posts about 6:30-7:00 PM), following
+`SKIT_RUN.md`; first run (Thu 19 Nov 2026) posts the approved demo. Voices approved by the owner:
+Golu `kunal_hi_kids` pace 1.4, Mummy `roopa_hi_conversational`, Papa `ashok_hi_character` pace 1.5,
+Masterji = channel voice.
 
 Shape that works: 25-40 s, 5-7 shots, one relatable desi situation (home or class), a wrong idea
 from Golu, Mummy/Papa reaction, Masterji explains in 2 short lines, Golu's punchline, ending card

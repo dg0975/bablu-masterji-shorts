@@ -152,7 +152,7 @@ hashtags. General audience (not made for kids).
 `"kind":"skit"` storyboards make 25-40 s "Masterji ki Class" comedy shorts with drawn sets
 (classroom, living room, kitchen), the cast Masterji, Golu, Mummy and Papa, camera close-ups,
 comic effects, sound effects and a voice per character. Format and options:
-`references/skit.md`. Not scheduled yet: voices still being chosen.
+`references/skit.md`. Scheduled Tue/Thu/Sat evenings via the repo's `SKIT_RUN.md`.
 
 ## 3. Check before the long render
 

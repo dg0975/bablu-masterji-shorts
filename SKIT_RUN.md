@@ -29,6 +29,13 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - **Voices: Google Gemini for the family (the owner chose them), channel voice for Masterji.**
   Use exactly this cast:
   `"cast":{"golu":{"name":"Golu","engine":"gemini","gvoice":"Fenrir","style":"a cheeky 12-year-old Indian boy, excited and mischievous, fast"},"mummy":{"name":"Mummy","engine":"gemini","gvoice":"Kore","style":"an Indian mother scolding her son, loud, dramatic and annoyed"},"papa":{"name":"Papa","engine":"gemini","gvoice":"Algenib","style":"a tired Indian father, dry and sarcastic, calm"},"masterji":{"name":"Masterji"}}`
+  When a skit uses the extra cast, add them with these Gemini voices (keep them the same every time):
+  `"dadi":{"name":"Dadi","engine":"gemini","gvoice":"Gacrux","style":"a loving, witty Indian grandmother, slow and warm, a little teasing"}`,
+  `"pinky":{"name":"Pinky","engine":"gemini","gvoice":"Leda","style":"a sarcastic teenage Indian elder sister, bored and unimpressed"}`,
+  `"bunty":{"name":"Bunty","engine":"gemini","gvoice":"Iapetus","style":"a polite know-it-all topper boy, precise and a bit smug"}`,
+  `"aunty":{"name":"Sharma Aunty","engine":"gemini","gvoice":"Laomedeia","style":"a nosy, gossipy neighbour aunty, loud and dramatic"}`.
+  Sarvam fallback for them: Dadi `roopa_hi_narration`, Pinky `kavya_hi_conversational`,
+  Bunty `aayan_hi_conversational`, Aunty `simran_hi_social_excited`.
   **Act every family line:** add a beat-level `"style"` describing the emotion of that moment
   ("shouting angrily", "embarrassed and sheepish", "thrilled, laughing"), and use at most one
   inline English tag in `say` where it fits: `<laugh>`, `<sigh>`, `<gasp>`, `<short pause>`.
@@ -54,9 +61,14 @@ studied for patterns only, never copy anyone's characters, jokes, scripts or son
 - **Titles are short and emotional**, 2-5 words plus one emoji, e.g. "Golu ka jugaad 😂",
   "Mummy vs Fridge 😤", then `#funny #relatable` and one science tag. The search keyword goes in
   the first line of the description instead (DAILY_RUN.md 2d still applies to descriptions).
-- Recurring cast helps people come back: keep Golu, Mummy and Papa's personalities consistent
-  (Golu: jugaadu and overconfident; Mummy: strict, belan, always right; Papa: dry, sarcastic,
-  newspaper).
+- Recurring cast helps people come back: keep every personality consistent. Golu: jugaadu and
+  overconfident. Mummy: strict, belan, always right. Papa: dry, sarcastic, newspaper. Dadi: loving,
+  sharp, old-school wisdom that is often right, walking stick. Pinky: Golu's elder sister, glued to
+  her phone, roasts him. Bunty: the neighbour's perfect topper ("Bunty ko dekho!"), glasses, books;
+  sometimes he is wrong too. Sharma Aunty: nosy neighbour who spreads half-true "facts" Masterji
+  corrects. Use 2-3 characters per skit, rotate who appears; Masterji explains the science.
+- Sets: classroom, livingroom, kitchen, train (trees rush past the windows), tapri (street chai
+  stall), terrace (water tank, washing line, kite), bedroom (`"night":true` for a night window).
 
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.

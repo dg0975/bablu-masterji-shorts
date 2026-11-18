@@ -37,7 +37,9 @@ channel voice). A beat may override with `"voice"`. Render with
  "card":{"kicker":"Science ka sach","text":"...","foot":"comment question"},
  "beats":[ ... ]}
 ```
-- `set`: `classroom`, `livingroom`, `kitchen`. Characters: `masterji`, `golu`, `mummy`, `papa`.
+- `set`: `classroom`, `livingroom`, `kitchen`, `train`, `tapri`, `terrace`, `bedroom` (`"night":true` on the shot
+  for a night window). Characters: `masterji`, `golu`, `mummy`, `papa`, `dadi` (stick, glasses), `pinky`
+  (phone), `bunty` (glasses, books), `aunty` (Sharma Aunty, big bindi).
 - `x` = centre on the 1080-wide frame; 3 people: x 220/540/860 with shot `"scale":0.78`; 2 people: `0.9`.
 - `enter`: `left`, `right`, `pop`, `drop`. `flip:true` mirrors a character.
 - `cam.on` = character id (close-up on the face) or `[x,y]`; `zoom` 1-2; `push` slow zoom-in.

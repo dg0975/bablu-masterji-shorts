@@ -29,8 +29,8 @@ def pip_install(pkg):
 
 
 # ----------------------------------------------------------------------------- validation
-SKIT_CAST = {"masterji", "golu", "mummy", "papa"}
-SKIT_SETS = {"classroom", "livingroom", "kitchen"}
+SKIT_CAST = {"masterji", "golu", "mummy", "papa", "dadi", "pinky", "bunty", "aunty"}
+SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", "bedroom"}
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
 SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch"}

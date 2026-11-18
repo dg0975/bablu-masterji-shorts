@@ -24,3 +24,12 @@
 - rakhi-roti-phoolna: Mummy's roti puffs up on the flame, Golu thinks it is "breathing"; trapped water turns to steam (Indian mother)
 - school-bag-bhari: Golu complains the bag is heavier on the way back; it is not, he is just tired, muscles fatigue (childhood)
 - dost-ki-selfie-dhoop: friends take a selfie facing the sun, all faces dark; the camera exposes for the bright sky (friends)
+
+## Ideas for the extra cast
+- dadi-haldi-doodh vs Bunty: AVOID (health claim). Instead: dadi-matka: Dadi says the matka keeps water colder than the steel bottle; evaporation through clay (Dadi is right, Bunty is wrong)
+- aunty-chaand-grahan: Sharma Aunty says the moon "disappears" in an eclipse; Earth's shadow, it is still there
+- pinky-phone-dark-mode: Pinky's phone battery dies, Golu's "dark mode saves battery" jugaad; true mainly on OLED screens (verify)
+- bunty-paani-glass-straw: Bunty shows the "bent" straw in water, Golu thinks it is broken; refraction
+- train-chai-garam: on the train Dadi's thermos chai stays hot while Golu's cup goes cold; insulation
+- terrace-patang: Golu flies a kite with no wind and blames the kite; kites need moving air for lift
+- tapri-kulhad: Papa says chai tastes better in a kulhad, Pinky rolls her eyes; clay keeps it warm and adds aroma (keep claim modest)

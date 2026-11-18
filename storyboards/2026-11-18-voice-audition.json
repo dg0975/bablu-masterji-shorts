@@ -1,0 +1,132 @@
+{
+ "kind": "skit",
+ "title": "Voice audition (not a post)",
+ "note": "voice audition for the user, not posted",
+ "tts": "sarvam",
+ "cast": {
+  "golu": {
+   "name": "Golu"
+  },
+  "mummy": {
+   "name": "Mummy"
+  },
+  "papa": {
+   "name": "Papa"
+  }
+ },
+ "scenes": [
+  {
+   "set": "classroom",
+   "cast": [
+    {
+     "id": "golu",
+     "x": 540
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था? हे भगवान!",
+     "voice": "aayan_hi_conversational"
+    },
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था? हे भगवान!",
+     "voice": "kabir_hi_conversational"
+    },
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था? हे भगवान!",
+     "voice": "sunny_hi_reels"
+    },
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था? हे भगवान!",
+     "voice": "chirag_hi_social"
+    },
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था? हे भगवान!",
+     "voice": "vipul_hi_social"
+    },
+    {
+     "who": "golu",
+     "say": "मतलब... मैं फ्रिज नहीं, हीटर चला रहा था? हे भगवान!",
+     "voice": "rehan_hi_social"
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "cast": [
+    {
+     "id": "mummy",
+     "x": 540
+    }
+   ],
+   "beats": [
+    {
+     "who": "mummy",
+     "say": "गोलू! बिजली का बिल तेरा फ्रिज भरेगा? रुक, अभी बताती हूँ!",
+     "voice": "kavya_hi_conversational"
+    },
+    {
+     "who": "mummy",
+     "say": "गोलू! बिजली का बिल तेरा फ्रिज भरेगा? रुक, अभी बताती हूँ!",
+     "voice": "shreya_hi_conversational"
+    },
+    {
+     "who": "mummy",
+     "say": "गोलू! बिजली का बिल तेरा फ्रिज भरेगा? रुक, अभी बताती हूँ!",
+     "voice": "simran_hi_social_excited"
+    },
+    {
+     "who": "mummy",
+     "say": "गोलू! बिजली का बिल तेरा फ्रिज भरेगा? रुक, अभी बताती हूँ!",
+     "voice": "ritu_hi_social_lively"
+    },
+    {
+     "who": "mummy",
+     "say": "गोलू! बिजली का बिल तेरा फ्रिज भरेगा? रुक, अभी बताती हूँ!",
+     "voice": "shalini_hi_social"
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "cast": [
+    {
+     "id": "papa",
+     "x": 540
+    }
+   ],
+   "beats": [
+    {
+     "who": "papa",
+     "say": "अरे सुन, कमरा ठंडा नहीं होगा, उल्टा और गरम हो जाएगा!",
+     "voice": "rahul_hi_conversational"
+    },
+    {
+     "who": "papa",
+     "say": "अरे सुन, कमरा ठंडा नहीं होगा, उल्टा और गरम हो जाएगा!",
+     "voice": "amit_hi_conversational"
+    },
+    {
+     "who": "papa",
+     "say": "अरे सुन, कमरा ठंडा नहीं होगा, उल्टा और गरम हो जाएगा!",
+     "voice": "mohit_hi_conversational"
+    },
+    {
+     "who": "papa",
+     "say": "अरे सुन, कमरा ठंडा नहीं होगा, उल्टा और गरम हो जाएगा!",
+     "voice": "ashutosh_hi_conversational"
+    },
+    {
+     "who": "papa",
+     "say": "अरे सुन, कमरा ठंडा नहीं होगा, उल्टा और गरम हो जाएगा!",
+     "voice": "ratan_hi_social"
+    }
+   ]
+  }
+ ]
+}

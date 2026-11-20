@@ -23,9 +23,10 @@ VIS_FPS = 30
 # lively but clear: syllables per second (whole clip, pauses included)
 TARGET_RATE = {"golu": 6.6, "bunty": 6.3, "pinky": 6.4, "mummy": 6.4, "aunty": 6.6,
                "papa": 5.9, "dadi": 5.4, "masterji": 6.2}
-# typical speaking pitch (Hz). Kids are pitched up to this with their formants (voice size) shifted too,
+# typical speaking pitch (Hz). Kid voices start from a light, bright voice model (Golu Zephyr, Bunty
+# Erinome) and are pitched up to this with their formants (voice size) shifted too,
 # so a grown-up voice model sounds like a 10-12 year old instead of a man/woman.
-KID_F0 = {"golu": 285, "bunty": 270}
+KID_F0 = {"golu": 275, "bunty": 262}
 MAX_PAUSE = 0.14          # longest silence kept inside a line (s)
 
 
@@ -116,7 +117,7 @@ def polish(a, text, who, sb, log=None):
     if want:
         f0 = f0_median(a)
         if f0 > 0:
-            pitch = min(1.5, max(.9, float(want) / f0))
+            pitch = min(1.3, max(.9, float(want) / f0))
             formant = "shifted"           # smaller "voice box" too, not just higher notes
     if cast.get("pitch"):                 # manual override in semitones
         pitch, formant = 2 ** (float(cast["pitch"]) / 12), "shifted"

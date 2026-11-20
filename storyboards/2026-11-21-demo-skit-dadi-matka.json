@@ -11,8 +11,8 @@
  "duck": 0.65,
  "format": "skit",
  "cast": {
-  "golu": {"name": "Golu", "engine": "gemini", "gvoice": "Puck", "style": "a cheeky 10-year-old Indian boy, excited and mischievous"},
-  "bunty": {"name": "Bunty", "engine": "gemini", "gvoice": "Iapetus", "style": "a polite know-it-all topper boy, precise and a bit smug"},
+  "golu": {"name": "Golu", "engine": "gemini", "gvoice": "Zephyr", "style": "a cheeky 10-year-old Indian boy, excited and mischievous"},
+  "bunty": {"name": "Bunty", "engine": "gemini", "gvoice": "Erinome", "style": "a polite know-it-all 11-year-old topper boy, precise and a bit smug"},
   "dadi": {"name": "Dadi", "engine": "gemini", "gvoice": "Gacrux", "style": "a loving, witty Indian grandmother, warm and a little teasing"},
   "masterji": {"name": "Masterji", "engine": "gemini", "gvoice": "Charon", "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}
  },
@@ -29,7 +29,7 @@
      "style": "a 10-year-old boy, genuinely impressed and curious"},
     {"who": "bunty", "say": "<short pause> सदर बाज़ार से।",
      "act": {"bunty": "sly", "golu": "facepalm"}, "sfx": "scratch",
-     "style": "the smug boy suddenly mumbling, quick and embarrassed, trying to hide it"}
+     "style": "the smug boy suddenly embarrassed, saying it fast and quietly"}
    ]
   },
   {
@@ -53,7 +53,7 @@
    "props": [{"kind": "matka", "x": 150, "y": 1300, "scale": 1.1}],
    "cast": [{"id": "golu", "x": 560, "pose": "hold", "item": "glass"}],
    "beats": [
-    {"who": "golu", "say": "बोतल का पानी... धूप में रखी लस्सी!",
+    {"who": "golu", "say": "बोतल का पानी तो धूप में रखी लस्सी है!",
      "act": {"golu": "sad"}, "fx": {"kind": "sweat", "on": "golu"}, "sfx": "slide",
      "style": "a boy grimacing after a sip of warm water, disgusted"},
     {"who": "golu", "say": "<gasp> मटका तो बर्फ़! दादी ने अंदर फ्रिज छुपाया है क्या?",
@@ -81,7 +81,7 @@
     {"who": "bunty", "say": "मतलब मेरी इम्पोर्टेड बोतल हार गई?",
      "act": {"bunty": "sad"}, "fx": {"kind": "sweat", "on": "bunty"},
      "style": "a topper boy, crushed and sulking"},
-    {"who": "dadi", "say": "इम्पोर्टेड नहीं बेटा... सदर बाज़ार हार गया।",
+    {"who": "dadi", "say": "इम्पोर्टेड नहीं बेटा, सदर बाज़ार हार गया।",
      "act": {"dadi": "sly", "golu": "laugh"}, "sfx": "drum",
      "style": "a witty grandmother, deadpan, delivering the final punchline with perfect timing"},
     {"hold": 0.7, "act": {"golu": "laugh", "bunty": "facepalm", "dadi": "happy"}, "sfx": "boing"}

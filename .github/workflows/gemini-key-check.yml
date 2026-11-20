@@ -1,0 +1,37 @@
+name: gemini-key-check
+# Manual check that each Gemini key can make a voice clip. Prints only OK/FAIL, never the keys.
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Try each key
+        env:
+          K1: ${{ secrets.GEMINI_API_KEY }}
+          K2: ${{ secrets.GEMINI_API_KEY_2 }}
+        run: |
+          python3 - <<'PY'
+          import os, sys
+          sys.path.insert(0, "engine/scripts")
+          import gemini_tts
+          for name in ("K1", "K2"):
+              k = os.environ.get(name, "").strip()
+              label = "GEMINI_API_KEY" if name == "K1" else "GEMINI_API_KEY_2"
+              if not k:
+                  print(f"{label}: MISSING"); continue
+              try:
+                  m = gemini_tts.synth("नमस्ते, ये टेस्ट है।", "Kore", "", k, f"/tmp/{name}.wav")
+                  print(f"{label}: OK ({m}, {os.path.getsize(f'/tmp/{name}.wav')} bytes)")
+              except Exception as e:
+                  msg = str(e)
+                  for x in (os.environ.get("K1", ""), os.environ.get("K2", "")):
+                      if x: msg = msg.replace(x, "***")
+                  print(f"{label}: FAIL {msg[:200]}")
+          PY

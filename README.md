@@ -18,4 +18,4 @@ Videos live only on the `gh-pages` branch, which is replaced every day, so the r
 No passwords or API keys are stored here.
 
 **Skits** (comedy + science punchline, Golu/Mummy/Papa/Masterji): engine in `engine/assets/skit.html`,
-format in `engine/references/skit.md`. Posted Tue/Thu/Sat about 6:30-7:00 PM IST by the skit scheduled task (`SKIT_RUN.md`).
+format in `engine/references/skit.md`. Posted every evening about 6:30-7:00 PM IST by the skit scheduled task (`SKIT_RUN.md`); since 21 Nov 2026 this is the only daily post (the 3 PM explainer, `DAILY_RUN.md`, is paused).

@@ -2,7 +2,7 @@
 
 A skit is a storyboard with `"kind": "skit"`. It reuses the voice, timing, music and render code of
 `make_short.py`, but draws full-screen sets with several characters (`assets/skit.html`).
-Status: **scheduled** Tue/Thu/Sat, run starts 18:21 IST (posts about 6:30-7:00 PM), following
+Status: **scheduled daily** (the channel's only post since 21 Nov 2026), run starts 18:21 IST (posts about 6:30-7:00 PM), following
 `SKIT_RUN.md`; first run (Thu 19 Nov 2026) posts the approved demo. Voices chosen by the owner: Google Gemini (free key `GEMINI_API_KEY`, model gemini-3.8-flash-tts with
 fallbacks) for Golu `Zephyr` (pitched to a kid), Bunty `Erinome`, Mummy `Kore`, Papa `Algenib`, each with an acting `style`; Masterji = Gemini `Charon` in skits (the explainers keep his Sarvam channel voice). Per beat: `"style"` (emotion of that line) and optional inline tags in `say`:
 `<laugh>`, `<sigh>`, `<gasp>`, `<short pause>` (hidden in subtitles). A cast member with

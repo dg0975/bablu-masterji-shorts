@@ -1,5 +1,9 @@
 # Daily run: one Bablu Masterji short, made and posted
 
+> **Paused since 21 Nov 2026:** the owner now posts only the evening skit (`SKIT_RUN.md`). The
+> explainer scheduled task is turned off. Keep this file: SKIT_RUN.md uses its posting (4, 4b),
+> monetisation (1b) and report (5) rules. Make an explainer only when the owner asks in chat.
+
 This file is the instruction set for the daily scheduled task. Each run is a fresh Claude
 session with no memory of earlier runs; everything it needs is in this repo.
 

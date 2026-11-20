@@ -1,8 +1,10 @@
-# Skit run: one "Masterji ki Class" comedy short (Tue, Thu, Sat evenings)
+# Skit run: one "Masterji ki Class" comedy short, every evening
 
 This file is the instruction set for the skit scheduled task. Each run is a fresh Claude session;
-everything it needs is in this repo. Skits are an EXTRA post: the daily explainer (DAILY_RUN.md)
-still posts at 3-4 PM. Skit posts go live about 6:30-7:00 PM IST.
+everything it needs is in this repo. **Since 21 Nov 2026 the skit is the channel's only daily post**
+(owner's choice: evenings work best). The run starts 18:21 IST and the post goes live about
+6:30-7:00 PM IST. The 3 PM explainer (DAILY_RUN.md) is paused; DAILY_RUN.md still holds the posting,
+monetisation and report rules this file points to.
 
 Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 `engine/references/skit.md` (format, sets, cast, poses, fx, sfx) and the demo
@@ -22,6 +24,14 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
   unchanged** (copy it to `storyboards/<today>-skit-dadi-matka.json`), then go to step 3.
 - Otherwise take the first unused idea from `topics/skit_ideas.md` (or a fresher everyday idea
   with a solid science fact). Never repeat a skit or its punchline.
+- **Keep the queue full (daily posting uses it fast):** if fewer than 10 unused ideas remain, add
+  8-10 new ones to `topics/skit_ideas.md` in the same one-line format (slug: situation with the
+  cast; the checked science fact), mixing the extra cast, sets and science areas (heat, light,
+  sound, forces, body, plants, kitchen chemistry, space), and commit them with the run.
+- **Stay original day after day (YouTube "inauthentic content"):** never the same set + cast
+  combination as yesterday, never the same opening gag shape twice in a week, rotate who wins the
+  argument, and change the end-card question style (A/B choice, "aapke ghar mein kaun...",
+  quiz). Follow DAILY_RUN.md 1b's never-list and labels.
 - Fact-check the science fact with web search; if unsure, pick another idea.
 
 ## 2. Write the skit
@@ -131,4 +141,7 @@ studied for patterns only, never copy anyone's characters, jokes, scripts or son
 - Caption style for skits: the short relatable title (step 2b) first, then the science line, the
   comment question, 4-5 hashtags (#funny #relatable #scienceinhindi #golu + 1 topic).
 - Append to `topics/skits_used.csv`: `date,slug,idea,status,instagram_media_id`; commit and push.
-- Send the owner the MP4 and links (SendUserMessage + SendUserFile), short, phone-friendly.
+- Send the owner the MP4 and links (SendUserMessage + SendUserFile), short, phone-friendly, with:
+  the skit idea and its 3 jokes, which voices were used (Gemini or the Sarvam fallback), and the
+  **channel performance, milestones and Monday human-touch lines exactly as DAILY_RUN.md step 5**
+  describes (yesterday's post = yesterday's skit).

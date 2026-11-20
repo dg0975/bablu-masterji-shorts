@@ -155,7 +155,7 @@ comic effects, sound effects and a Gemini voice with acting directions for every
 (Masterji too). The engine polishes voices automatically (comedy pace, kid pitch, loudness match),
 lip-syncs mouths to the audio, draws shaded characters with real blinks and gaze, and runs an auto
 camera that cuts to whoever speaks. Format and options:
-`references/skit.md`. Scheduled Tue/Thu/Sat evenings via the repo's `SKIT_RUN.md`.
+`references/skit.md`. Scheduled every evening via the repo's `SKIT_RUN.md` (the only daily post since 21 Nov 2026).
 
 ## 3. Check before the long render
 

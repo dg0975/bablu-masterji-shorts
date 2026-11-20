@@ -4,10 +4,16 @@ A skit is a storyboard with `"kind": "skit"`. It reuses the voice, timing, music
 `make_short.py`, but draws full-screen sets with several characters (`assets/skit.html`).
 Status: **scheduled** Tue/Thu/Sat, run starts 18:21 IST (posts about 6:30-7:00 PM), following
 `SKIT_RUN.md`; first run (Thu 19 Nov 2026) posts the approved demo. Voices chosen by the owner: Google Gemini (free key `GEMINI_API_KEY`, model gemini-3.8-flash-tts with
-fallbacks) for Golu `Fenrir`, Mummy `Kore`, Papa `Algenib`, each with an acting `style`; Masterji =
-Sarvam channel voice. Per beat: `"style"` (emotion of that line) and optional inline tags in `say`:
+fallbacks) for Golu `Puck`, Mummy `Kore`, Papa `Algenib`, each with an acting `style`; Masterji = Gemini `Charon` in skits (the explainers keep his Sarvam channel voice). Per beat: `"style"` (emotion of that line) and optional inline tags in `say`:
 `<laugh>`, `<sigh>`, `<gasp>`, `<short pause>` (hidden in subtitles). A cast member with
 `"engine":"gemini","gvoice":"<voice>"` uses Gemini; otherwise Sarvam `voice`/`pace`.
+
+Look and motion (20 Nov 2026 upgrade): shaded "2.5D" characters (skin/cloth gradients, eyes with
+iris, catchlights and real blinks, tapered brows, soft drop shadows), softly blurred sets for depth,
+warm light + vignette, listeners look at whoever talks, audio lip-sync (`voice_fx.visemes` ->
+`TL.visO/visS` -> `lipMouth()` in player.html, also used by Masterji in explainers), auto camera
+(`"autocam": false` turns it off), voice polish in `voice_fx.polish` (pause squeeze, comedy tempo,
+kid pitch via rubberband, EQ/compressor, loudness match). Render takes ~3.5 min for a 30 s skit.
 
 Shape that works: 25-40 s, 5-7 shots, one relatable desi situation (home or class), a wrong idea
 from Golu, Mummy/Papa reaction, Masterji explains in 2 short lines, Golu's punchline, ending card

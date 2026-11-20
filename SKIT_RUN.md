@@ -26,11 +26,11 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - 25-40 s, 5-7 shots: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
   (belan, newspaper, facepalm), Masterji's 2 short lines explaining the science, Golu's punchline,
   ending card (`card`) with the checked fact and a one-word comment question.
-- **Voices: Google Gemini for the family (the owner chose them), channel voice for Masterji.**
-  Use exactly this cast:
-  `"cast":{"golu":{"name":"Golu","engine":"gemini","gvoice":"Fenrir","style":"a cheeky 12-year-old Indian boy, excited and mischievous, fast"},"mummy":{"name":"Mummy","engine":"gemini","gvoice":"Kore","style":"an Indian mother scolding her son, loud, dramatic and annoyed"},"papa":{"name":"Papa","engine":"gemini","gvoice":"Algenib","style":"a tired Indian father, dry and sarcastic, calm"},"masterji":{"name":"Masterji"}}`
+- **Voices: Google Gemini for everyone in a skit, Masterji included (owner feedback 20 Nov: voices must fit the
+  characters and move fast).** Use exactly this cast:
+  `"cast":{"golu":{"name":"Golu","engine":"gemini","gvoice":"Puck","style":"a cheeky 10-year-old Indian boy, excited and mischievous"},"mummy":{"name":"Mummy","engine":"gemini","gvoice":"Kore","style":"an Indian mother scolding her son, loud, dramatic and annoyed"},"papa":{"name":"Papa","engine":"gemini","gvoice":"Algenib","style":"a tired Indian father, dry and sarcastic"},"masterji":{"name":"Masterji","engine":"gemini","gvoice":"Charon","style":"Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}}`
   When a skit uses the extra cast, add them with these Gemini voices (keep them the same every time):
-  `"dadi":{"name":"Dadi","engine":"gemini","gvoice":"Gacrux","style":"a loving, witty Indian grandmother, slow and warm, a little teasing"}`,
+  `"dadi":{"name":"Dadi","engine":"gemini","gvoice":"Gacrux","style":"a loving, witty Indian grandmother, warm and a little teasing"}`,
   `"pinky":{"name":"Pinky","engine":"gemini","gvoice":"Leda","style":"a sarcastic teenage Indian elder sister, bored and unimpressed"}`,
   `"bunty":{"name":"Bunty","engine":"gemini","gvoice":"Iapetus","style":"a polite know-it-all topper boy, precise and a bit smug"}`,
   `"aunty":{"name":"Sharma Aunty","engine":"gemini","gvoice":"Laomedeia","style":"a nosy, gossipy neighbour aunty, loud and dramatic"}`.
@@ -40,11 +40,22 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
   ("shouting angrily", "embarrassed and sheepish", "thrilled, laughing"), and use at most one
   inline English tag in `say` where it fits: `<laugh>`, `<sigh>`, `<gasp>`, `<short pause>`.
   Keep the rest of `say` a clean spoken line (no stage directions); subtitles hide the tags.
+  Never write "slow" or "calm" in a style: the engine adds a sitcom-pace instruction to every Gemini line.
+  **Automatic polish (make_short.py + voice_fx.py, nothing to set):** pauses inside a line are
+  squeezed, slow lines are sped up to comedy pace (up to x1.32), Golu and Bunty are pitched to a real
+  kid's voice, every character is EQ'd, compressed and loudness-matched, and mouths lip-sync to the
+  actual sounds (closed m/b/p, open aa, wide ee, round o/oo, teeth s/f). Check the `[voice]` lines
+  in the render log; a kid line with `pitch x1.4+` or any `polish failed` line is worth mentioning.
+- **Pace:** reaction beats (`hold`) are capped at 0.75 s and lines follow each other with a 0.08 s
+  gap. Keep `hold` at 0.5-0.75. Don't set `gap`/`lead`.
+- **Camera:** leave `cam` out on most beats. The auto camera cuts to a close shot of whoever speaks
+  (alternating framing), goes wider for group reactions, with a slow push-in and slight handheld
+  drift. Use an explicit `cam` only for a special moment (a big reveal or slow push).
   **Fallback:** if `get_voice.sh` reports a Gemini error (quota, rate limit, model), replace the
   cast with the Sarvam cast `"golu":{"voice":"kunal_hi_kids","pace":1.4}`,
   `"mummy":{"voice":"roopa_hi_conversational"}`, `"papa":{"voice":"ashok_hi_character","pace":1.5}`
   (keep the names), push again, re-run `get_voice.sh`, and mention the fallback in the report.
-  plus `"tts":"sarvam","lead":0.15,"gap":0.2,"outro":1.4,"music_style":"funky","music":0.16,"duck":0.65`.
+  plus `"tts":"sarvam","outro":1.4,"music_style":"funky","music":0.16,"duck":0.65`.
 - Lines are short spoken Hindi in Devanagari, about 6-12 words each. Funny but family-friendly: roast situations, never groups; Mummy's belan is a joke
   prop, never actual hitting. No real people, brands or other creators' characters or songs.
 - Vary sets, shot order and gags from the last 3 skits. Save `"post_title"` and `"format":"skit"`.

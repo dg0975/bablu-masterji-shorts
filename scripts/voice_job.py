@@ -44,6 +44,7 @@ def main():
         if not key:
             raise RuntimeError("SARVAM_API_KEY secret is missing in the repo settings")  # needed for Masterji and other lines
         made = reused = 0
+        gem_key = 0                                   # index of the Gemini key that works
         for i, j, text in st.lines(sb):
             c = st.beat_cfg(sb, i, j)                     # skits: each character has its own voice
             k = st.clip_key(c, text)
@@ -53,14 +54,28 @@ def main():
                 shutil.copy(old, dst); reused += 1
             elif not dst.exists():
                 if c.get("engine") == "gemini":
-                    gk = os.environ.get("GEMINI_API_KEY", "").strip()
-                    if not gk:
+                    keys = [x for x in (os.environ.get("GEMINI_API_KEY", "").strip(),
+                                        os.environ.get("GEMINI_API_KEY_2", "").strip()) if x]
+                    if not keys:
                         raise RuntimeError("GEMINI_API_KEY secret is missing in the repo settings")
                     import gemini_tts
-                    try:
-                        model = gemini_tts.synth(text, c["voice"], c["style"], gk, dst)
-                    except RuntimeError as e:
-                        raise RuntimeError(str(e).replace(gk, "***")) from None
+                    model, errs = None, []
+                    for n, gk in enumerate(keys[gem_key:], start=gem_key):   # backup key when the main one fails
+                        try:
+                            model = gemini_tts.synth(text, c["voice"], c["style"], gk, dst,
+                                                     quick_429=n + 1 < len(keys))
+                            if n != gem_key:
+                                print(f"  Gemini key {gem_key + 1} failed, using backup key {n + 1}")
+                            gem_key = n
+                            status["gemini_key"] = n + 1
+                            break
+                        except RuntimeError as e:
+                            msg = str(e)
+                            for x in keys:
+                                msg = msg.replace(x, "***")
+                            errs.append(f"key {n + 1}: {msg}")
+                    if model is None:
+                        raise RuntimeError("Gemini failed with every key: " + " | ".join(errs))
                     status.setdefault("gemini_model", model); time.sleep(6)   # stay under free-tier rate limits
                 else:
                     st.synth(text, c, key, dst)

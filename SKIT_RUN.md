@@ -63,7 +63,9 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - **Camera:** leave `cam` out on most beats. The auto camera cuts to a close shot of whoever speaks
   (alternating framing), goes wider for group reactions, with a slow push-in and slight handheld
   drift. Use an explicit `cam` only for a special moment (a big reveal or slow push).
-  **Fallback:** if `get_voice.sh` reports a Gemini error (quota, rate limit, model), replace the
+  The voice job tries the backup Gemini key (`GEMINI_API_KEY_2` secret) by itself when the main key
+  fails or hits its quota; `status.json` shows `gemini_key` 1 or 2 (mention 2 in the report).
+  **Fallback:** if `get_voice.sh` reports a Gemini error with every key (quota, rate limit, model), replace the
   cast with the Sarvam cast `"golu":{"voice":"kunal_hi_kids","pace":1.4}`,
   `"mummy":{"voice":"roopa_hi_conversational"}`, `"papa":{"voice":"ashok_hi_character","pace":1.5}`
   (keep the names), push again, re-run `get_voice.sh`, and mention the fallback in the report.

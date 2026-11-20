@@ -65,7 +65,7 @@ def _old_api(model, text, voice, style, key):
     return _post(BASE + f"models/{model}:generateContent", body, key)
 
 
-def synth(text, voice, style, key, path):
+def synth(text, voice, style, key, path, quick_429=False):
     """write a WAV for one line; raises RuntimeError with the last API message on failure"""
     order = ([_good["m"]] if _good.get("m") else []) + [m for m in NEW_MODELS + OLD_MODELS if m != _good.get("m")]
     last = None
@@ -89,6 +89,8 @@ def synth(text, voice, style, key, path):
                 msg = e.read().decode(errors="replace")[:300].replace(key, "***")
                 last = f"{model}: HTTP {e.code}: {msg}"
                 if e.code == 429:                 # free-tier rate limit: wait and retry this model
+                    if quick_429 and attempt >= 1:  # a backup key exists: switch to it instead of waiting
+                        raise RuntimeError(last)
                     time.sleep(25 + 15 * attempt); continue
                 break                             # 400/403/404: try the next model
             except Exception as e:  # noqa

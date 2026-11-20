@@ -209,7 +209,12 @@ def synth_sarvam(sb, voice_dir):
         elif not f.exists() and api_key and c.get("engine") != "gemini":
             st.synth(text, c, api_key, str(f))
         if f.exists():
-            clips[(i, j)] = trim_silence(load_pcm(f))
+            if sb.get("kind") == "skit":           # comedy pace, kid voices that sound like kids, level and clean
+                import voice_fx
+                who = sb["scenes"][i]["beats"][j].get("who", "")
+                clips[(i, j)] = voice_fx.polish(load_pcm(f), text, who, sb, log=print)
+            else:
+                clips[(i, j)] = trim_silence(load_pcm(f))
         else:
             missing.append(f"scene {i} beat {j}")
     if missing:
@@ -263,7 +268,10 @@ def synth_all(sb, out, pref, voice_dir=None):
 
 # ----------------------------------------------------------------------------- timeline + audio
 def build_timeline(sb, clips):
+    skit = sb.get("kind") == "skit"
     gap, lead = float(sb.get("gap", 0.28)), float(sb.get("lead", 0.5))
+    if skit:                       # snappy: lines follow each other like real banter, reactions stay short
+        gap, lead = min(gap, 0.08), min(lead, 0.12)
     t, scenes = 0.0, []
     for i, s in enumerate(sb["scenes"]):
         st = t
@@ -271,10 +279,12 @@ def build_timeline(sb, clips):
         beats = []
         for j, b in enumerate(s["beats"]):
             d = len(clips[(i, j)]) / SR if (i, j) in clips else float(b.get("hold", 1.2))
+            if skit and (i, j) not in clips:
+                d = min(d, 0.75)
             extra = float(b.get("pause", 0))
             beats.append({"start": round(t, 3), "audioEnd": round(t + d, 3), "end": round(t + d + gap + extra, 3)})
             t += d + gap + extra
-        t += 0.15
+        t += 0.04 if skit else 0.15
         scenes.append({"start": round(st, 3), "end": round(t, 3), "beats": beats})
     total = t + float(sb.get("outro", 0.9))
     scenes[-1]["end"] = round(total, 3)
@@ -555,6 +565,19 @@ def write_audio(sb, clips, tl, path):
     env = voice_envelope(mix)
     if env:
         tl["env"], tl["envFps"] = env, ENV_FPS
+    try:                                          # mouth shapes per frame for lip-sync
+        import voice_fx
+        nf = int(tl["duration"] * voice_fx.VIS_FPS) + 2
+        vo, vs = [0] * nf, ["X"] * nf
+        for (i, j), a in clips.items():
+            o9, shp = voice_fx.visemes(a)
+            f0 = int(round(tl["scenes"][i]["beats"][j]["start"] * voice_fx.VIS_FPS))
+            for k in range(len(o9)):
+                if 0 <= f0 + k < nf:
+                    vo[f0 + k], vs[f0 + k] = o9[k], shp[k]
+        tl["visO"], tl["visS"], tl["visFps"] = vo, "".join(vs), voice_fx.VIS_FPS
+    except Exception as e:  # noqa
+        print(f"  [lipsync] skipped: {e}")
     style = sb.get("music_style", "funky")
     vol = sb.get("music", 0.05 if style == "pad" else 0.2)
     if vol:

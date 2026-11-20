@@ -1,0 +1,279 @@
+{
+ "kind": "skit",
+ "series": "MASTERJI KI CLASS",
+ "title": "Golu ka khaali kamra AC",
+ "handle": "@bablu.masterji",
+ "post_title": "Khaali kamre mein pankha? Golu ka jugaad 😂",
+ "tts": "sarvam",
+ "lead": 0.15,
+ "outro": 1.4,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "golu": {
+   "name": "Golu",
+   "engine": "gemini",
+   "gvoice": "Puck",
+   "style": "a cheeky 10-year-old Indian boy, excited and mischievous"
+  },
+  "mummy": {
+   "name": "Mummy",
+   "engine": "gemini",
+   "gvoice": "Kore",
+   "style": "an Indian mother scolding her son, loud, dramatic and annoyed"
+  },
+  "papa": {
+   "name": "Papa",
+   "engine": "gemini",
+   "gvoice": "Algenib",
+   "style": "a tired Indian father, dry and sarcastic"
+  },
+  "pinky": {
+   "name": "Pinky",
+   "engine": "gemini",
+   "gvoice": "Leda",
+   "style": "a sarcastic teenage Indian elder sister, bored and unimpressed"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
+ },
+ "scenes": [
+  {
+   "set": "livingroom",
+   "cast": [
+    {
+     "id": "golu",
+     "x": 560,
+     "pose": "point",
+     "enter": "right"
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "पंखा फुल स्पीड! खेलकर आऊँ, तब तक कमरा बर्फ़ जैसा ठंडा!",
+     "act": {
+      "golu": "point"
+     },
+     "fx": {
+      "kind": "lines",
+      "on": "golu"
+     },
+     "sfx": "whoosh",
+     "style": "a cheeky 12-year-old Indian boy, thrilled and proud of his genius plan, fast"
+    },
+    {
+     "hold": 1.0,
+     "act": {
+      "golu": "dance"
+     },
+     "fx": {
+      "kind": "stars",
+      "on": "golu"
+     },
+     "sfx": "boing"
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.9,
+   "cam": {
+    "zoom": 1.7,
+    "on": "pinky"
+   },
+   "cast": [
+    {
+     "id": "pinky",
+     "x": 320,
+     "pose": "idle",
+     "enter": "left"
+    },
+    {
+     "id": "golu",
+     "x": 760,
+     "pose": "dance"
+    }
+   ],
+   "beats": [
+    {
+     "who": "pinky",
+     "say": "<sigh> खाली कमरे को हवा? दीवारों को पसीना आता है क्या?",
+     "act": {
+      "pinky": "talk",
+      "golu": "shock"
+     },
+     "fx": {
+      "kind": "question",
+      "on": "golu"
+     },
+     "sfx": "scratch",
+     "style": "a teenage Indian elder sister, bored and deadpan, mocking her little brother without looking up from her phone"
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "papa",
+     "x": 220,
+     "pose": "hold",
+     "enter": "left"
+    },
+    {
+     "id": "pinky",
+     "x": 540,
+     "pose": "laugh"
+    },
+    {
+     "id": "golu",
+     "x": 860,
+     "pose": "shock"
+    }
+   ],
+   "beats": [
+    {
+     "who": "papa",
+     "say": "बेटा, पंखा हवा घुमाता है, ठंडी नहीं करता। बिल मैं भरूँगा?",
+     "act": {
+      "papa": "hold",
+      "golu": "sad"
+     },
+     "fx": {
+      "kind": "sweat",
+      "on": "golu"
+     },
+     "sfx": "drum",
+     "cam": {
+      "zoom": 1.5,
+      "on": "papa"
+     },
+     "style": "a tired Indian father behind his newspaper, dry and sarcastic, deadpan"
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "board": "Pankha = pasina sukhao",
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 540,
+     "pose": "point",
+     "enter": "pop"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "पंखा हवा को ठंडा नहीं करता, हमारा पसीना जल्दी सुखाता है।",
+     "act": {
+      "masterji": "point"
+     },
+     "fx": {
+      "kind": "bulb",
+      "on": "masterji"
+     },
+     "sfx": "ding"
+    },
+    {
+     "who": "masterji",
+     "say": "पसीना सूखे, तो ठंडक लगती है। खाली कमरे में बस बिजली जलती है!",
+     "act": {
+      "masterji": "shock"
+     },
+     "cam": {
+      "zoom": 1.5,
+      "on": "masterji"
+     }
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "papa",
+     "x": 220,
+     "pose": "hold"
+    },
+    {
+     "id": "pinky",
+     "x": 540,
+     "pose": "idle"
+    },
+    {
+     "id": "golu",
+     "x": 860,
+     "pose": "think"
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "<gasp> मतलब कमरा हवा खा रहा था, और बिल पापा का कट रहा था!",
+     "act": {
+      "golu": "shock",
+      "papa": "facepalm",
+      "pinky": "laugh"
+     },
+     "fx": {
+      "kind": "pop",
+      "on": "golu",
+      "text": "DHADAAM!"
+     },
+     "sfx": "slide",
+     "cam": {
+      "zoom": 1.6,
+      "on": "golu"
+     },
+     "style": "a cheeky 12-year-old Indian boy, shocked by his own discovery, then a little sheepish"
+    },
+    {
+     "hold": 1.1,
+     "sfx": "drum",
+     "act": {
+      "pinky": "laugh",
+      "papa": "facepalm",
+      "golu": "sad"
+     }
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "board": "Khaali kamra + pankha = bill",
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 540,
+     "pose": "wave"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "Pankha hawa ko thanda nahi karta: wo pasina jaldi sukhata hai, isliye humein thanda lagta hai. Khaali kamre mein pankha = bijli barbaad.",
+    "foot": "Aapke ghar mein pankha kaun chalu chhodta hai? Comment karo!"
+   },
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "समझे? कमेंट करो, घर में पंखा कौन चालू छोड़ता है!",
+     "act": {
+      "masterji": "wave"
+     },
+     "sfx": "bell"
+    }
+   ]
+  }
+ ]
+}

@@ -31,8 +31,10 @@ def beat_cfg(sb, i, j):
     if b.get("voice"):
         cfg = dict(cfg, speaker=b["voice"])
     if v.get("engine") == "gemini" or b.get("engine") == "gemini":     # expressive Google voice
-        cfg = {"engine": "gemini", "voice": b.get("gvoice") or v.get("gvoice", "Puck"),
-               "style": b.get("style") or v.get("style", "")}
+        style = b.get("style") or v.get("style", "")
+        if sb.get("kind") == "skit" and "SKETCH PACE" not in style:   # Gemini drags and pauses unless told
+            style = (style + ". " if style else "") + "SKETCH PACE: quick, punchy comedy timing like a TV sitcom, natural spoken Hindi, no long pauses between words"
+        cfg = {"engine": "gemini", "voice": b.get("gvoice") or v.get("gvoice", "Puck"), "style": style}
     return cfg
 
 

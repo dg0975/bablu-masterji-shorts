@@ -212,6 +212,27 @@ function drawMascot(i,Pa,Pb,p,t,talk,hop){
 }
 
 /* ---------------- Bablu Masterji (main mascot, from the user's design) ---------------- */
+/* ---------------- lip-sync mouth (shapes from the voice: make_short.py -> TL.visO openness 0..9, TL.visS letters) ---------------- */
+const VIS={X:[26,0,0,0],M:[22,0,0,0],A:[33,1,.15,.5],E:[37,.55,0,1],O:[23,.9,1,.15],U:[17,.55,1,0],S:[31,.25,0,1]}; // width, open, round, teeth
+function visAt(t){ if(typeof TL==='undefined'||!TL.visS) return null;
+  const F=TL.visFps||30, f=t*F, k=Math.floor(f), fr=f-k, n=TL.visS.length;
+  const get=i=>{i=Math.max(0,Math.min(n-1,i));const s=VIS[TL.visS[i]]||VIS.X,o=(TL.visO[i]||0)/9,on=o>0?1:0;return [s[0],s[1]*o,s[2]*on,s[3]*on]};
+  const a=get(k),b=get(k+1),c=get(k-1), m=[0,1,2,3].map(q=>.78*(a[q]*(1-fr)+b[q]*fr)+.22*c[q]);
+  return {w:m[0],h:m[1]*30,r:m[2],teeth:m[3]};}
+let LIPN=0;
+function lipMouth(m,cx,cy,sc,lip,ink){ ink=ink||'#2A1A16';
+  const w=m.w*sc*(1-.12*m.r), h=m.h*sc, x0=cx-w/2, x1=cx+w/2, f=v=>v.toFixed(1);
+  if(h<3) return `<path d="M${f(x0)} ${f(cy)} Q${f(cx)} ${f(cy+4*sc)} ${f(x1)} ${f(cy)}" stroke="${ink}" stroke-width="${f(3.6*sc)}" fill="none" stroke-linecap="round"/>`;
+  const rd=m.r, top=cy-h*.3-h*.22*rd, bot=cy+h*.7+h*.25*rd, k1=lerp(.16,.0,rd), k2=lerp(.18,.0,rd);
+  const d=`M${f(x0)} ${f(cy)} C${f(x0+w*k1)} ${f(top)} ${f(x1-w*k1)} ${f(top)} ${f(x1)} ${f(cy)} C${f(x1-w*k2)} ${f(bot)} ${f(x0+w*k2)} ${f(bot)} ${f(x0)} ${f(cy)} Z`;
+  const id='lm'+(LIPN++), ty=(top+cy)/2-h*.12;
+  let s=`<clipPath id="${id}"><path d="${d}"/></clipPath><path d="${d}" fill="#3d0f14"/><g clip-path="url(#${id})">`;
+  if(m.teeth>.25) s+=`<rect x="${f(x0)}" y="${f(ty-12)}" width="${f(w)}" height="${f(12+Math.min(h*.32,7*sc))}" fill="#fbf6ee"/>`;
+  if(h>9*sc) s+=`<ellipse cx="${f(cx)}" cy="${f(bot-h*.12)}" rx="${f(w*.3)}" ry="${f(h*.26)}" fill="#d9666f"/>`;
+  s+=`</g><path d="${d}" fill="none" stroke="${ink}" stroke-width="${f(3*sc)}" stroke-linejoin="round"/>`;
+  s+=`<path d="M${f(cx-w*.2)} ${f(bot+3.5*sc)} Q${f(cx)} ${f(bot+6.5*sc)} ${f(cx+w*.2)} ${f(bot+3.5*sc)}" stroke="${lip}" stroke-width="${f(2.6*sc)}" fill="none" stroke-linecap="round" opacity=".75"/>`;
+  return s;}
+
 const MJ={ // arms: [shoulder, elbow, hand]; on: visible parts; g: glasses offset
   idle :{l:[[106,214],[94,262],[100,306]], r:[[214,214],[226,262],[220,306]], on:['regSide','combN','browsN','eyesDot','mouthSmile'], g:0},
   point:{l:[[106,214],[70,186],[46,150]],  r:[[214,214],[244,262],[222,296]], on:['ruler','combN','browsN','eyesDot','mouthSmile'], g:0},
@@ -319,7 +340,7 @@ function mjArm(pts,shirt){
   return `<path d="${d}" stroke="#1E1620" stroke-width="24"/><path d="${d}" stroke="#C68A5B" stroke-width="17"/>`+
          `<path d="${ds}" stroke="#1E1620" stroke-width="34"/><path d="${ds}" stroke="${shirt}" stroke-width="27"/>`;
 }
-function drawMasterji(Pa,Pb,p,t,talk,hop,wave,lv,lvs){
+function drawMasterji(Pa,Pb,p,t,talk,hop,wave,lv,lvs,vm){
   // talk = 1 while his clip plays; lv = voice loudness now (0..1, drives the mouth); lvs = smoothed loudness (drives head and brows)
   if(lv==null){lv=talk?(Math.abs(Math.sin(t*19))*.6+Math.abs(Math.sin(t*31+1))*.4):0; lvs=talk?.5:0}
   const A=MJ[Pa]||MJ.idle, B=MJ[Pb]||MJ.idle, P=p>.5?B:A, on=new Set(P.on);
@@ -350,7 +371,8 @@ function drawMasterji(Pa,Pb,p,t,talk,hop,wave,lv,lvs){
   const g=lerp(A.g,B.g,p);
   face+=`<g transform="translate(0 ${g.toFixed(1)})">${MJ_GLASSES}</g>`;
   if(on.has('blush')) face+=MJ_FACE.blush;
-  if(talk>0){const o=clamp(lv), w=12+o*4;
+  if(talk>0&&vm) face+=lipMouth(vm,160,189,.92,'#9a4a3a');
+  else if(talk>0){const o=clamp(lv), w=12+o*4;
     if(o<.07) face+=MJ_FACE.mouthSmile;
     else face+=`<path d="M${(160-w).toFixed(1)} 186 Q160 ${(189+o*24).toFixed(1)} ${(160+w).toFixed(1)} 186 Z" fill="#6E2424" stroke="#1E1620" stroke-width="3" stroke-linejoin="round"/>`+(o>.45?`<ellipse cx="160" cy="${(190+o*12).toFixed(1)}" rx="6" ry="3" fill="#E07A7A"/>`:'');}
   else for(const k of ['mouthSmile','mouthHmm','mouthFrown','mouthOpen','mouthO']) if(on.has(k)) face+=MJ_FACE[k];
@@ -495,7 +517,7 @@ function renderAt(t){
   if(TL.env&&speaking){const E=TL.env, f=Math.round(t*(TL.envFps||30)), g=k=>E[Math.max(0,Math.min(E.length-1,k))]||0;
     lv=Math.max(g(f),g(f+1)*.8); let a=0; for(let k=-6;k<=6;k++) a+=g(f+k); lvs=a/13;}
   if(SB.mascot==='robot') drawMascot(0,Pa,Pb,pp,t,speaking,hop);
-  else $('#mjg').innerHTML=drawMasterji((bi>0?prev.pose:'wave')||'idle',(started?b.pose:null)||'idle',pp,t,speaking,hop,0,lv,lvs);
+  else $('#mjg').innerHTML=drawMasterji((bi>0?prev.pose:'wave')||'idle',(started?b.pose:null)||'idle',pp,t,speaking,hop,0,lv,lvs,speaking?visAt(t):null);
   const b0=$('#b0'), b1=$('#b1');
   const showB=(el,txt,t0,t1,acc)=>{ if(!txt||t<t0){el.style.opacity=0;return}
     if(el._txt!==txt){el._txt=txt; el.innerHTML=rich(txt)} const p=(t-t0)/.3; el.style.opacity=clamp(p*3)*clamp((t1-t)/.15); el.style.transform=`scale(${eBack(p)})`; };

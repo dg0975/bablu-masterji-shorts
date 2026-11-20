@@ -18,6 +18,8 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - Read `topics/skits_used.csv`. **If `fridge-jugaad` is not in it, this run posts the approved
   demo `storyboards/2026-11-18-skit-fridge-jugaad-gemini.json` unchanged** (copy it to
   `storyboards/<today>-skit-fridge-jugaad.json`), then go to step 3.
+- **Else, if `dadi-matka` is not in it, post the ready demo `storyboards/2026-11-21-demo-skit-dadi-matka.json`
+  unchanged** (copy it to `storyboards/<today>-skit-dadi-matka.json`), then go to step 3.
 - Otherwise take the first unused idea from `topics/skit_ideas.md` (or a fresher everyday idea
   with a solid science fact). Never repeat a skit or its punchline.
 - Fact-check the science fact with web search; if unsure, pick another idea.
@@ -28,11 +30,11 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
   ending card (`card`) with the checked fact and a one-word comment question.
 - **Voices: Google Gemini for everyone in a skit, Masterji included (owner feedback 20 Nov: voices must fit the
   characters and move fast).** Use exactly this cast:
-  `"cast":{"golu":{"name":"Golu","engine":"gemini","gvoice":"Puck","style":"a cheeky 10-year-old Indian boy, excited and mischievous"},"mummy":{"name":"Mummy","engine":"gemini","gvoice":"Kore","style":"an Indian mother scolding her son, loud, dramatic and annoyed"},"papa":{"name":"Papa","engine":"gemini","gvoice":"Algenib","style":"a tired Indian father, dry and sarcastic"},"masterji":{"name":"Masterji","engine":"gemini","gvoice":"Charon","style":"Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}}`
+  `"cast":{"golu":{"name":"Golu","engine":"gemini","gvoice":"Zephyr","style":"a cheeky 10-year-old Indian boy, excited and mischievous"},"mummy":{"name":"Mummy","engine":"gemini","gvoice":"Kore","style":"an Indian mother scolding her son, loud, dramatic and annoyed"},"papa":{"name":"Papa","engine":"gemini","gvoice":"Algenib","style":"a tired Indian father, dry and sarcastic"},"masterji":{"name":"Masterji","engine":"gemini","gvoice":"Charon","style":"Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}}`
   When a skit uses the extra cast, add them with these Gemini voices (keep them the same every time):
   `"dadi":{"name":"Dadi","engine":"gemini","gvoice":"Gacrux","style":"a loving, witty Indian grandmother, warm and a little teasing"}`,
   `"pinky":{"name":"Pinky","engine":"gemini","gvoice":"Leda","style":"a sarcastic teenage Indian elder sister, bored and unimpressed"}`,
-  `"bunty":{"name":"Bunty","engine":"gemini","gvoice":"Iapetus","style":"a polite know-it-all topper boy, precise and a bit smug"}`,
+  `"bunty":{"name":"Bunty","engine":"gemini","gvoice":"Erinome","style":"a polite know-it-all 11-year-old topper boy, precise and a bit smug"}`,
   `"aunty":{"name":"Sharma Aunty","engine":"gemini","gvoice":"Laomedeia","style":"a nosy, gossipy neighbour aunty, loud and dramatic"}`.
   Sarvam fallback for them: Dadi `roopa_hi_narration`, Pinky `kavya_hi_conversational`,
   Bunty `aayan_hi_conversational`, Aunty `simran_hi_social_excited`.
@@ -59,6 +61,38 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - Lines are short spoken Hindi in Devanagari, about 6-12 words each. Funny but family-friendly: roast situations, never groups; Mummy's belan is a joke
   prop, never actual hitting. No real people, brands or other creators' characters or songs.
 - Vary sets, shot order and gags from the last 3 skits. Save `"post_title"` and `"format":"skit"`.
+- **Cast:** use at least one of the extra cast (Dadi, Pinky, Bunty, Sharma Aunty) in every skit,
+  rotating them; Golu, Mummy and Papa are not needed every time. Props for the gag: scene
+  `"props":[{"kind":"matka","x":150,"y":1300,"scale":1.1}]` or a held `"item"` on a cast member
+  (`bottle`, `glass`, `chai`, `matka`; change per beat with `"item":{"golu":"glass"}`).
+- No "..." inside `say` (Gemini turns it into a long pause); use a comma.
+
+## 2a. Joke quality (write the jokes first, the science second)
+
+A skit is judged on its laughs. Before writing JSON, write the 3 jokes in plain text and check each
+against these rules; rewrite any that fail.
+1. **Three laughs minimum:** an opening gag in the first 3 s, a mid-skit topper, and the final
+   punchline. Plus one visual gag (prop, reaction, fx) that works with the sound off.
+2. **Setup, then misdirect, then punch.** The listener expects one thing, the last words flip it.
+   Put the punch word **at the very end** of the line ("...सदर बाज़ार से।"), never explain it after.
+3. **Callback ending:** the best final punchline reuses something from the first 10 s in a new
+   way (Bunty's "imported" bottle "from Sadar Bazaar" -> Dadi: "सदर बाज़ार हार गया"). Plan the
+   ending first, then plant its setup early.
+4. **Character-driven, not random:** each joke comes from who they are. Golu's confident wrong
+   logic, Bunty's showing off getting punctured, Dadi's old-school wisdom winning, Pinky's
+   deadpan roast, Sharma Aunty's dramatic half-truths, Papa's dry money jokes, Mummy's threats.
+5. **Specific desi detail beats generic:** "धूप में रखी लस्सी", "सदर बाज़ार", "बिजली का बिल",
+   "चार्जर कहाँ है" are funnier than "very hot" or "cheap shop". One concrete image per joke.
+6. **Escalate:** each beat raises the stakes or the absurdity; no two jokes of the same type in a row.
+7. **The underdog wins** (kid, Dadi, the "uneducated" idea) and the show-off loses; punch up,
+   never at a group, body, region, caste, religion or disability.
+8. **Short lines hit harder:** punch lines 3-8 words; setups up to 12. One idea per line.
+9. **Reaction after every punch:** give the next beat (or a 0.5-0.75 s `hold`) to a reaction
+   (`facepalm`, `laugh`, `shock`) with an `sfx` (`drum` for roasts, `scratch` for awkward reveals).
+10. **Science stays true and short:** Masterji explains in 2 lines max, the joke never bends the
+    fact, and the last word belongs to a character's punchline, not the lecture.
+Self-check before pushing: read the lines aloud in order; if a line would not get even a smile from
+a 12-year-old or a parent, cut or rewrite it. Report the 3 jokes in the run report.
 
 ## 2b. Relatable first (lessons from studying successful desi comedy Shorts)
 

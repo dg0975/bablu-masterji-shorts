@@ -4,7 +4,7 @@ A skit is a storyboard with `"kind": "skit"`. It reuses the voice, timing, music
 `make_short.py`, but draws full-screen sets with several characters (`assets/skit.html`).
 Status: **scheduled** Tue/Thu/Sat, run starts 18:21 IST (posts about 6:30-7:00 PM), following
 `SKIT_RUN.md`; first run (Thu 19 Nov 2026) posts the approved demo. Voices chosen by the owner: Google Gemini (free key `GEMINI_API_KEY`, model gemini-3.8-flash-tts with
-fallbacks) for Golu `Puck`, Mummy `Kore`, Papa `Algenib`, each with an acting `style`; Masterji = Gemini `Charon` in skits (the explainers keep his Sarvam channel voice). Per beat: `"style"` (emotion of that line) and optional inline tags in `say`:
+fallbacks) for Golu `Zephyr` (pitched to a kid), Bunty `Erinome`, Mummy `Kore`, Papa `Algenib`, each with an acting `style`; Masterji = Gemini `Charon` in skits (the explainers keep his Sarvam channel voice). Per beat: `"style"` (emotion of that line) and optional inline tags in `say`:
 `<laugh>`, `<sigh>`, `<gasp>`, `<short pause>` (hidden in subtitles). A cast member with
 `"engine":"gemini","gvoice":"<voice>"` uses Gemini; otherwise Sarvam `voice`/`pace`.
 
@@ -14,6 +14,11 @@ warm light + vignette, listeners look at whoever talks, audio lip-sync (`voice_f
 `TL.visO/visS` -> `lipMouth()` in player.html, also used by Masterji in explainers), auto camera
 (`"autocam": false` turns it off), voice polish in `voice_fx.polish` (pause squeeze, comedy tempo,
 kid pitch via rubberband, EQ/compressor, loudness match). Render takes ~3.5 min for a 30 s skit.
+
+Props: scene `"props":[{"kind":"matka|bottle|glass|chai","x":..,"y":..,"scale":..}]` (world
+coords; floor is y 1400) and a held `"item"` per cast member or per beat (`"item":{"golu":"glass"}`).
+Joke rules: `SKIT_RUN.md` section 2a (three laughs, punch word last, callback ending,
+character-driven, specific desi detail, reaction after every punch).
 
 Shape that works: 25-40 s, 5-7 shots, one relatable desi situation (home or class), a wrong idea
 from Golu, Mummy/Papa reaction, Masterji explains in 2 short lines, Golu's punchline, ending card

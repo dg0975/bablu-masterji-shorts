@@ -319,7 +319,7 @@ function renderAt(t){
   const vm=talk?visAt(t):null;
   if(id!=='masterji') defs+=charDefs(id);
   const body=id==='masterji'?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):drawPerson(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
-  chars+=`<g filter="url(#cshadow)" transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g>`;
+  chars+=`<g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g>`;
  }
  // effects for this beat
  let fxs='', back='';

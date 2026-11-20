@@ -54,7 +54,7 @@
   },
   {
    "set": "classroom",
-   "board": "Pankha = insaan ka AC, kamre ka nahi",
+   "board": "Pankha = pasina sukhao",
    "cast": [{"id": "masterji", "x": 540, "pose": "point", "enter": "pop"}],
    "beats": [
     {"who": "masterji", "say": "पंखा हवा को ठंडा नहीं करता, हमारा पसीना जल्दी सुखाता है।",
@@ -77,7 +77,7 @@
   },
   {
    "set": "classroom",
-   "board": "Fan sukhata hai pasina, kamra nahi",
+   "board": "Khaali kamra + pankha = bill",
    "cast": [{"id": "masterji", "x": 540, "pose": "wave"}],
    "card": {"kicker": "Science ka sach", "text": "Pankha hawa ko thanda nahi karta: wo pasina jaldi sukhata hai, isliye humein thanda lagta hai. Khaali kamre mein pankha = bijli barbaad.", "foot": "Aapke ghar mein pankha kaun chalu chhodta hai? Comment karo!"},
    "beats": [

@@ -33,6 +33,7 @@ SKIT_CAST = {"masterji", "golu", "mummy", "papa", "dadi", "pinky", "bunty", "aun
 SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", "bedroom"}
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
+SKIT_PROPS = {"matka", "bottle", "glass", "chai"}
 SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch"}
 
 
@@ -46,6 +47,12 @@ def validate_skit(sb):
         if s.get("set", "classroom") not in SKIT_SETS:
             errs.append(f"{tag}: unknown set {s.get('set')!r} (use {sorted(SKIT_SETS)})")
         ids = [c.get("id") for c in s.get("cast", [])]
+        for q in s.get("props") or []:
+            if q.get("kind") not in SKIT_PROPS:
+                errs.append(f"{tag}: unknown prop {q.get('kind')!r} (use {sorted(SKIT_PROPS)})")
+        for c in s.get("cast", []):
+            if c.get("item") and c["item"] not in SKIT_PROPS:
+                errs.append(f"{tag}: {c.get('id')} holds unknown item {c['item']!r} (use {sorted(SKIT_PROPS)})")
         for c in ids:
             if c not in SKIT_CAST:
                 errs.append(f"{tag}: unknown character {c!r} (use {sorted(SKIT_CAST)})")

@@ -219,6 +219,7 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(S.stick){const h2=L[2];props+=`<path d="M${h2[0]} ${h2[1]} L${h2[0]-10} 428" stroke="${OL}" stroke-width="12" stroke-linecap="round"/><path d="M${h2[0]} ${h2[1]} L${h2[0]-10} 428" stroke="#8a5c38" stroke-width="7" stroke-linecap="round"/><path d="M${h2[0]-18} ${h2[1]-4} q18 -22 30 0" stroke="#8a5c38" stroke-width="9" fill="none" stroke-linecap="round"/>`}
  if(S.phone&&!['dance','shock','hand'].includes(Pb)){const h2=R[2];props+=`<rect x="${h2[0]-16}" y="${h2[1]-48}" width="34" height="56" rx="7" fill="#1e1620"/><rect x="${h2[0]-12}" y="${h2[1]-43}" width="26" height="44" rx="4" fill="#8fd3ff"/><path d="M${h2[0]-10} ${h2[1]-40} l12 0" stroke="#fff" stroke-width="3" opacity=".6"/>`}
  if(S.books&&['idle','hold','talk'].includes(Pb)){const h2=L[2];props+=`<g transform="translate(${h2[0]-30} ${h2[1]-70})"><rect width="60" height="16" fill="#e8213a" stroke="${OL}" stroke-width="3"/><rect y="16" width="60" height="16" fill="#2f6bd8" stroke="${OL}" stroke-width="3"/><rect y="32" width="60" height="16" fill="#2bd67b" stroke="${OL}" stroke-width="3"/></g>`}
+ if(act.item){const h2=R[2];props+=`<g transform="translate(${h2[0].toFixed(1)} ${(h2[1]+8).toFixed(1)})">${propSvg(act.item,t,act.item==='matka'?.45:1.25)}</g>`}
  const armsSvg=arm(L,S.skin,S.saree?null:S.shirt,S.kurta?.85:.45)+arm(R,S.skin,S.saree?null:S.shirt,S.kurta?.85:.45);
  const bangles=S.bangles?`<circle cx="${L[2][0]}" cy="${L[2][1]-14}" r="10" fill="none" stroke="#E2B33C" stroke-width="5"/><circle cx="${R[2][0]}" cy="${R[2][1]-14}" r="10" fill="none" stroke="#E2B33C" stroke-width="5"/>`:'';
  // head
@@ -261,6 +262,19 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  return `<ellipse cx="160" cy="430" rx="${(110-hop*30).toFixed(1)}" ry="20" fill="url(#floorSh)"/><g transform="translate(0 ${(bob-hop*60).toFixed(1)}) rotate(${lean.toFixed(1)} 160 425)">${b}${props}<g transform="translate(160 330) scale(${(1+br*.008).toFixed(4)} ${(1+br*.014).toFixed(4)}) translate(-160 -330)">${armsSvg}${bangles}</g><g transform="translate(0 ${nod.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 205)">${h}</g></g>`;
 }
 
+
+/* ================= props: scene objects (world coords) and things a character holds ================= */
+function propSvg(kind,t,sc){const f=v=>v.toFixed(1);sc=sc||1;
+ if(kind==='matka'){const drip=[0,1,2].map(k=>{const q=((t*.5+k/3)%1);return `<ellipse cx="${f(-38+k*36)}" cy="${f(-10+q*70)}" rx="4" ry="6" fill="#8fd3ff" opacity="${(.8*(1-q)).toFixed(2)}"/>`}).join('');
+  return `<g transform="scale(${sc})"><ellipse cx="0" cy="92" rx="70" ry="12" fill="#000" opacity=".2"/><path d="M-70 92 L-50 40 L50 40 L70 92 Z" fill="#6b4a2e" stroke="${OL}" stroke-width="4"/>
+  <path d="M-34 -96 Q-62 -60 -66 -10 Q-66 50 0 58 Q66 50 66 -10 Q62 -60 34 -96 Z" fill="#b8643a" stroke="${OL}" stroke-width="5"/>
+  <path d="M-30 -96 h60 v-18 h-60 Z" fill="#a55a33" stroke="${OL}" stroke-width="4"/><path d="M-60 -20 Q0 0 60 -20" stroke="#8a4526" stroke-width="5" fill="none"/>
+  <path d="M-48 -60 Q-56 -20 -40 20" stroke="#fff" stroke-opacity=".25" stroke-width="8" fill="none" stroke-linecap="round"/>
+  <g fill="#7a3a1e" opacity=".55"><ellipse cx="-20" cy="10" rx="14" ry="10"/><ellipse cx="26" cy="24" rx="12" ry="8"/><ellipse cx="34" cy="-30" rx="9" ry="7"/></g>${drip}</g>`}
+ if(kind==='bottle') return `<g transform="scale(${sc})"><rect x="-13" y="-62" width="26" height="62" rx="9" fill="#8e9aa8" stroke="${OL}" stroke-width="3.5"/><rect x="2" y="-58" width="8" height="52" rx="3" fill="#5f6b78" opacity=".7"/><rect x="-9" y="-58" width="6" height="52" rx="3" fill="#fff" opacity=".7"/><rect x="-10" y="-76" width="20" height="16" rx="4" fill="#3a4250" stroke="${OL}" stroke-width="3"/></g>`;
+ if(kind==='glass') return `<g transform="scale(${sc})"><path d="M-16 -46 L16 -46 L12 0 L-12 0 Z" fill="#dff3ff" fill-opacity=".6" stroke="${OL}" stroke-width="3"/><path d="M-14 -30 L14 -30 L12 0 L-12 0 Z" fill="#8fd3ff" opacity=".8"/></g>`;
+ if(kind==='chai') return `<g transform="scale(${sc})"><path d="M-16 -40 L16 -40 L12 0 L-12 0 Z" fill="#fff8e6" stroke="${OL}" stroke-width="3"/><path d="M-15 -34 L15 -34 L14 -26 L-14 -26 Z" fill="#c8874a"/>${[0,1].map(k=>{const q=((t*.8+k/2)%1);return `<circle cx="${f(Math.sin(t*3+k)*5)}" cy="${f(-50-q*40)}" r="${f(6+q*8)}" fill="#fff" opacity="${(.6*(1-q)).toFixed(2)}"/>`}).join('')}</g>`;
+ return ''}
 /* ================= comic effects ================= */
 function fx(kind,x,y,p,t,text){const a=clamp(p*4)*clamp((1-p)*4+.0001), s=.6+.4*eOut(p*3);
  if(kind==='bulb') return `<g transform="translate(${x} ${y-40-eOut(p*3)*20}) scale(${s})" opacity="${clamp(p*5)}"><circle r="70" fill="#ffd54a" opacity=".35"/><path d="M-30 10 a40 40 0 1 1 60 0 q-10 12 -10 24 h-40 q0 -12 -10 -24 Z" fill="#ffe680" stroke="${INK}" stroke-width="6"/><rect x="-20" y="34" width="40" height="18" rx="4" fill="#9aa0a8" stroke="${INK}" stroke-width="5"/></g>`;
@@ -304,7 +318,7 @@ function renderAt(t){
   if(!talk&&spk&&spk!==id) gx=Math.sign(spkX-c.x)*5*flip, gy=1;
   const vm=talk?visAt(t):null;
   if(id!=='masterji') defs+=charDefs(id);
-  const body=id==='masterji'?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):drawPerson(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm});
+  const body=id==='masterji'?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):drawPerson(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
   chars+=`<g filter="url(#cshadow)" transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g>`;
  }
  // effects for this beat
@@ -314,12 +328,13 @@ function renderAt(t){
   const [x,y]=f.on?charPos(s,f.on):(f.at||[540,700]);
   const hy=f.on?headY(s,f.on):y;          // just above the character's head
   fxs+=fx(f.kind,x,f.kind==='pop'&&!f.on?y:hy,Math.min(1,bt/Math.max(.2,(TB.end-TB.start))),t,f.text)}
- $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+back+chars+fxs;
+ $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+fxs;
  // camera: zoom on a character or point, gentle push, shake on demand
  let auto=null;                                   // auto camera: cut to the speaker, wide for reactions
  if(SB.autocam!==false&&!s.cam&&!B.cam&&!s.card){
   const n=s.cast.length, who=B.who&&s.cast.find(c=>c.id===B.who)?B.who:null;
   if(who&&n>1) auto={zoom:1.42+((si+j)%2)*.12,on:who,push:.06};
+  else if(who&&s.board) auto={zoom:1.0,push:.05};          // keep the blackboard text readable
   else if(who) auto={zoom:1.18,on:who,push:.07};
   else if(B.act){const k=Object.keys(B.act).find(q=>s.cast.find(c=>c.id===q));auto=n>2?{zoom:1.06,push:.04}:(k?{zoom:1.3,on:k,push:.05}:null)}}
  const cam=Object.assign({zoom:1,on:null,push:0},s.cam||{}, B.cam||auto||{});

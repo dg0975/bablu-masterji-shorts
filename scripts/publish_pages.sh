@@ -4,7 +4,7 @@
 # The gh-pages branch is replaced with a single fresh commit each day, so old videos
 # do not pile up in the repo. Prints PUBLIC_URL and COVER_URL once the file is live.
 set -euo pipefail
-VID=$1; COVER=$2; SLUG=$3
+VID=$(realpath "$1"); COVER=$(realpath "$2"); SLUG=$3
 REPO_DIR=$(cd "$(dirname "$0")/.." && pwd)
 REMOTE=$(git -C "$REPO_DIR" remote get-url origin)
 OWNER_REPO=$(echo "$REMOTE" | sed -E 's#.*github.com[:/]##; s#\.git$##')

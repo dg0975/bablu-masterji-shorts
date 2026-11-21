@@ -1,0 +1,25 @@
+{
+ "storyboard": "storyboards/2026-11-21-skit-dadi-matka.json",
+ "storyboard_md5": "03406d3b67f34c788ea2d39b24b982e3",
+ "engine": "sarvam",
+ "model": "bulbul:v4-flash",
+ "speaker": "harpreet_pa_narration",
+ "pace": 0.97,
+ "ok": true,
+ "error": null,
+ "clips": {
+  "cec4f1dc9c151d28": "clips/cec4f1dc9c151d28.wav",
+  "2bbe0ec1c0436dd2": "clips/2bbe0ec1c0436dd2.wav",
+  "926d64f0bc60401e": "clips/926d64f0bc60401e.wav",
+  "b76dbdb89a7ae6ac": "clips/b76dbdb89a7ae6ac.wav",
+  "e9bc052e6474d83b": "clips/e9bc052e6474d83b.wav",
+  "4adfc5b44ca5a2b5": "clips/4adfc5b44ca5a2b5.wav",
+  "58056806162b7625": "clips/58056806162b7625.wav",
+  "886f07fdb4df9c5a": "clips/886f07fdb4df9c5a.wav",
+  "0b31ee70ec48a76d": "clips/0b31ee70ec48a76d.wav",
+  "c58b3c6186ba22cd": "clips/c58b3c6186ba22cd.wav",
+  "a83996ffff88f83d": "clips/a83996ffff88f83d.wav",
+  "1ff1443aca63f3c5": "clips/1ff1443aca63f3c5.wav",
+  "d5a2f1202b32255e": "clips/d5a2f1202b32255e.wav"
+ }
+}

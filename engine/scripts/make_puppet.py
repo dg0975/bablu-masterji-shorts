@@ -75,7 +75,7 @@ def cutout(path, floor_y=None):
     return np.dstack([rgb, al * 255]).astype(np.uint8)
 
 
-def lab(rgb):
+def to_lab(rgb):
     import cv2
     return cv2.cvtColor(np.clip(rgb, 0, 255).astype(np.uint8), cv2.COLOR_RGB2LAB).astype(float)
 
@@ -85,7 +85,7 @@ def auto_arms(c, R):
     closed vertically so the whole forearm comes out in one piece."""
     rgb, al = c[..., :3], c[..., 3]
     H, W = al.shape
-    L = lab(rgb)
+    L = to_lab(rgb)
     mx, my, mrx, mry = R["mouth"]
     ref = np.median(L[int(my) - 2:int(my) + 3, int(mx - mrx - 10):int(mx - mrx - 4)].reshape(-1, 3), axis=0)
     d = np.sqrt(((L[..., 0] - ref[0]) * .35) ** 2 + (L[..., 1] - ref[1]) ** 2 + (L[..., 2] - ref[2]) ** 2)
@@ -114,7 +114,8 @@ def auto_arms(c, R):
 
 
 def fill_behind(c, m, side):
-    """remove an arm from the body: inpaint cloth where the torso continues behind it, clear the rest"""
+    """remove an arm from the body: rebuild the cloth where the torso continues behind it, clear the rest,
+    and sweep away any leftover slivers of the old arm"""
     import cv2
     rgb, al = c[..., :3].copy(), c[..., 3].copy()
     H, W = al.shape
@@ -132,16 +133,33 @@ def fill_behind(c, m, side):
             else:
                 keep[y, x0:int(mid) + 1] = True
     keep &= m
-    hole = (m.astype(np.uint8) * 255)
-    src = rgb.astype(np.uint8).copy()
-    src[m] = 0
-    filled = cv2.inpaint(src, hole, 7, cv2.INPAINT_TELEA)
+    keep = ndimage.binary_opening(keep, iterations=2)
+    # colour source = body pixels only: transparent pixels get the nearest body colour first,
+    # so the inpaint never pulls in black from the empty background
+    solid = (al > 200) & ~m
+    idx = ndimage.distance_transform_edt(~solid, return_distances=False, return_indices=True)
+    src = rgb[idx[0], idx[1]].astype(np.uint8)
+    hole = (m | ~solid).astype(np.uint8) * 255
+    hole[ndimage.distance_transform_edt(~m) > 6] = 0                 # only rebuild near the arm
+    filled = cv2.inpaint(src, hole, 9, cv2.INPAINT_TELEA)
     c2 = c.copy()
     c2[..., :3] = np.where(keep[..., None], filled, c[..., :3])
-    a = al.copy(); a[m & ~keep] = 0
+    a = al.copy()
+    a[m & ~keep] = 0
+    # leftovers: thin slivers / small islands of the old arm near where it was
+    near = ndimage.binary_dilation(m, iterations=10)
+    body = a > 40
+    opened = ndimage.binary_opening(body, iterations=3)
+    a[near & body & ~opened] = 0
+    lab_, n = ndimage.label(a > 40)
+    if n > 1:
+        sizes = ndimage.sum(np.ones_like(a), lab_, range(1, n + 1))
+        big = np.argmax(sizes) + 1
+        for k in range(1, n + 1):
+            if k != big and sizes[k - 1] < 2500:
+                a[lab_ == k] = 0
     c2[..., 3] = a
     return c2
-
 
 def save(arr, path):
     Image.fromarray(arr.astype(np.uint8), "RGBA").save(path, optimize=True)
@@ -178,7 +196,12 @@ def main():
             pm = Image.new("L", (W, H), 0)
             ImageDraw.Draw(pm).polygon([tuple(q) for q in R["arm" + side + "_poly"]], fill=255)
             m = (np.asarray(pm) > 0) & (al > 20)
-            m = ndimage.binary_dilation(m, iterations=3) & (al > 20)
+            L_ = to_lab(rgb)
+            ref = np.median(L_[m & (al > 200)].reshape(-1, 3), axis=0)
+            dd = np.sqrt(((L_[..., 0] - ref[0]) * .3) ** 2 + (L_[..., 1] - ref[1]) ** 2 + (L_[..., 2] - ref[2]) ** 2)
+            ring = ndimage.binary_dilation(m, iterations=9) & ~m & (al > 20) & (dd < 14)
+            grow = ndimage.binary_propagation(m, mask=m | ring)
+            m = ndimage.binary_dilation(grow, iterations=2) & (al > 20)
             poly_masks[side] = m
     arm_sets = auto_arms(c, R).items() if R.get("arms") == "auto" else poly_masks.items()
     if arm_sets:

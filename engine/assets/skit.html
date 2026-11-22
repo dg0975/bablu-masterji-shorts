@@ -277,7 +277,7 @@ const PUP_H={golu:420,bunty:420,pinky:440,mummy:450,papa:470,dadi:430,aunty:455,
 function drawPuppet(id,Pa,Pb,p,t,talk,lv,act){
  const P=PUPPETS[id], m=P.meta, I=P.img, k=(PUP_H[id]||440)/m.h, f=v=>(+v).toFixed(2), lvs=act.lvs||0;
  const A=PUP_ARMS[Pa]||PUP_ARMS.idle, B=PUP_ARMS[Pb]||PUP_ARMS.idle, X=POSES[Pb]||POSES.idle;
- let aL=lerp(A[0],B[0],p), aR=lerp(A[1],B[1],p); const ar=m.armRange||1;
+ let aL=lerp(A[0],B[0],p), aR=lerp(A[1],B[1],p); const ar=m.armRange||(m.armsFront?.6:1);
  const dance=Pb==='dance'&&p>.5, wig=Math.sin(t*9);
  if(dance){aL+=wig*22;aR+=wig*22}
  if(talk&&Pb!=='shock'){const a=.6+lvs, calm=['idle','sly','hold','sad','think'].includes(Pb);

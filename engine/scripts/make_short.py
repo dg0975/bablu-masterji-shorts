@@ -33,7 +33,7 @@ SKIT_CAST = {"masterji", "golu", "mummy", "papa", "dadi", "pinky", "bunty", "aun
 SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", "bedroom"}
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
-SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw"}
+SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon"}
 SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch"}
 
 
@@ -652,8 +652,9 @@ def write_page(sb, tl, out):
                 if (d / "puppet.json").exists():
                     meta = json.loads((d / "puppet.json").read_text())
                     img = {}
-                    for part in ("head", "body", "armL", "armR", "browL", "browR"):
-                        img[part] = "data:image/png;base64," + base64.b64encode((d / f"{part}.png").read_bytes()).decode()
+                    for part in ("head", "body", "armL", "armR", "browL", "browR", "stache"):
+                        if (d / f"{part}.png").exists() and part in meta:
+                            img[part] = "data:image/png;base64," + base64.b64encode((d / f"{part}.png").read_bytes()).decode()
                     pup[cid] = {"meta": meta, "img": img}
         data += "\nconst PUPPETS=" + json.dumps(pup) + ";"
     libs = ""

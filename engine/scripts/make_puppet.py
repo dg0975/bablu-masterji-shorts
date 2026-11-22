@@ -18,7 +18,30 @@ from PIL import Image
 from scipy import ndimage
 
 
+def cutout_ai(path):
+    """AI matting (rembg isnet-general-use); handles white clothes on a white background"""
+    from rembg import remove, new_session
+    im = Image.open(path).convert("RGB")
+    al = np.asarray(remove(im, session=new_session("isnet-general-use"))).astype(float)[..., 3] / 255
+    a = np.asarray(im).astype(float)
+    edge = np.concatenate([a[:10].reshape(-1, 3), a[-10:].reshape(-1, 3)])
+    bgc = np.median(edge, axis=0)
+    lab, n = ndimage.label(al > .5)
+    if n > 1:
+        al *= ndimage.binary_dilation(lab == (np.argmax(ndimage.sum(np.ones_like(al), lab, range(1, n + 1))) + 1), iterations=3)
+    ys, xs = np.where(al > .5)
+    x0, x1, y0, y1 = max(0, xs.min() - 10), min(a.shape[1], xs.max() + 11), max(0, ys.min() - 8), min(a.shape[0], ys.max() + 9)
+    a, al = a[y0:y1, x0:x1], al[y0:y1, x0:x1]
+    A = al[..., None]
+    rgb = np.clip(np.where(A > .02, (a - (1 - A) * bgc) / np.maximum(A, .02), 0), 0, 255)
+    return np.dstack([rgb, al * 255]).astype(np.uint8)
+
+
 def cutout(path, floor_y=None):
+    try:
+        return cutout_ai(path)
+    except Exception as e:  # noqa  (rembg not installed: colour-key fallback)
+        print("rembg unavailable, colour-key cutout:", e)
     a = np.asarray(Image.open(path).convert("RGB")).astype(float)
     edge = np.concatenate([a[:10].reshape(-1, 3), a[-10:].reshape(-1, 3), a[:, :10].reshape(-1, 3), a[:, -10:].reshape(-1, 3)])
     bgc = np.median(edge, axis=0)
@@ -80,7 +103,8 @@ def main():
         return y > ya + (np.clip(x, min(xa, xb), max(xa, xb)) - xa) * (yb - ya) / (xb - xa) + 1
 
     body = c.copy()
-    for side, hem, cond in (("L", R["hemL"], xx <= R["armL_xmax"]), ("R", R["hemR"], xx >= R["armR_xmin"])):
+    arms = [] if "hemL" not in R else [("L", R["hemL"], xx <= R["armL_xmax"]), ("R", R["hemR"], xx >= R["armR_xmin"])]
+    for side, hem, cond in arms:
         m = skin & cond & below(hem, xx, yy)
         lab, n = ndimage.label(m)
         m = lab == (np.argmax(ndimage.sum(m, lab, range(1, n + 1))) + 1)
@@ -110,10 +134,10 @@ def main():
     import cv2
     hb = head[..., :3].astype(np.uint8).copy()
     holes = np.zeros((H, W), np.uint8)
-    for side in ("L", "R"):
+    for side in (("L", "R") if R.get("browL") else ()):
         x0, y0, x1, y1 = R["brow" + side]
         box = (xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1)
-        m = box & (rgb.mean(2) < 95) & (al > 0)
+        m = box & (rgb.mean(2) < R.get("brow_thr", 95)) & (al > 0)
         lab, n = ndimage.label(m)
         if n > 1:
             m = lab == (np.argmax(ndimage.sum(m, lab, range(1, n + 1))) + 1)
@@ -124,6 +148,17 @@ def main():
         meta["brow" + side] = {"center": [(x0 + x1) / 2, (y0 + y1) / 2]}
     hb = cv2.inpaint(hb, holes * 255, 9, cv2.INPAINT_NS)
     head[..., :3] = np.where(holes[..., None] > 0, hb, head[..., :3])
+    if R.get("stache"):
+        x0, y0, x1, y1 = R["stache"]
+        box = (xx >= x0) & (xx <= x1) & (yy >= y0) & (yy <= y1)
+        m = box & (rgb.mean(2) < R.get("stache_thr", 110)) & (al > 0)
+        lab, n = ndimage.label(m)
+        if n > 1:
+            m = lab == (np.argmax(ndimage.sum(m, lab, range(1, n + 1))) + 1)
+        m = ndimage.binary_closing(m, iterations=2) & box
+        st = np.zeros_like(c); st[m] = c[m]
+        st[..., 3] = (ndimage.gaussian_filter(m.astype(float), .7) * al).clip(0, 255)
+        parts["stache"] = st
     parts["head"], parts["body"] = head, body
     meta["headPivot"] = [(nx0 + nx1) / 2, ny0 + 8]
     # colours for lids / mouth patch, sampled from the skin
@@ -133,7 +168,7 @@ def main():
     ex, ey, erx, ery = R["eyeL"]
     fx, fy = (R["eyeL"][0] + R["eyeR"][0]) / 2, ey                  # between the eyes: clean, evenly lit skin
     meta["eyeL"], meta["eyeR"], meta["mouth"] = R["eyeL"], R["eyeR"], R["mouth"]
-    meta["lid"] = samp(fx, fy)
+    meta["lid"] = samp(*R["lid_at"]) if R.get("lid_at") else samp(fx, fy)
     meta["cheek"] = samp(ex, ey + ery + 8)
     mx, my, mrx, mry = R["mouth"]
     meta["skinMouth"] = [samp(mx - mrx - 6, my), samp(mx, my + mry + 10), samp(mx + mrx + 6, my)]

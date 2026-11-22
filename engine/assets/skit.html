@@ -268,8 +268,8 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
 
 
 /* ================= image puppets: Firefly-designed characters cut into parts by make_puppet.py ================= */
-const PUP_ARMS={idle:[0,0],talk:[0,-16],shock:[55,-55],happy:[34,-34],laugh:[10,-10],angry:[14,-72],sad:[-5,5],point:[0,-84],
- think:[0,-34],sly:[-6,6],dance:[30,-30],hand:[0,-125],facepalm:[-5,5],hold:[18,-22],wave:[0,-110]};
+const PUP_ARMS={idle:[0,0],talk:[0,-12],shock:[32,-32],happy:[24,-24],laugh:[8,-8],angry:[10,-45],sad:[-4,4],point:[0,-55],
+ think:[0,-22],sly:[-5,5],dance:[20,-20],hand:[0,-70],facepalm:[-5,5],hold:[14,-18],wave:[0,-65]};   // gentle: a rigid cut-out arm looks wrong when swung far
 const PUP_BROW={n:[0,0],up:[-7,0],angry:[2,13],sad:[-4,-13],think:[0,0],sly:[2,0]};
 const PUP_LID={n:[0,0],wide:[0,0],angry:[.36,0],sad:[.3,0],up:[0,0],sly:[.38,.1],happy:[.08,.24],shut:[1,0]};
 let PUPN=0;
@@ -281,8 +281,8 @@ function drawPuppet(id,Pa,Pb,p,t,talk,lv,act){
  const dance=Pb==='dance'&&p>.5, wig=Math.sin(t*9);
  if(dance){aL+=wig*22;aR+=wig*22}
  if(talk&&Pb!=='shock'){const a=.6+lvs, calm=['idle','sly','hold','sad','think'].includes(Pb);
-   if(calm){aR-=20;aL+=6}                                      // talking hands: lift and wave while speaking
-   aR+=Math.sin(t*4.3)*16*a+Math.sin(t*7.1)*4*lvs; aL+=Math.sin(t*3.1+1)*8*a}
+   if(calm){aR-=14;aL+=4}                                      // talking hands: lift and wave while speaking
+   aR+=Math.sin(t*4.3)*11*a+Math.sin(t*7.1)*3*lvs; aL+=Math.sin(t*3.1+1)*6*a}
  if(Pb==='angry'&&p>.5)aR+=Math.sin(t*14)*6;
  if(Pb==='wave'||Pb==='hand')aR+=Math.sin(t*8)*14;
  const img=(n,extra)=>{const q=m[n].at;return `<image href="${I[n]}" x="${q[0]}" y="${q[1]}" width="${q[2]}" height="${q[3]}"${extra||''}/>`};

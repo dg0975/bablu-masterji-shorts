@@ -6,7 +6,7 @@ everything it needs is in this repo. **Since 21 Nov 2026 the skit is the channel
 6:30-7:00 PM IST. The 3 PM explainer (DAILY_RUN.md) is paused; DAILY_RUN.md still holds the posting,
 monetisation and report rules this file points to.
 
-Channel: @bablu.masterji. Format: 20-28 s comedy with a science punchline (owner decision 22 Nov 2026,
+Channel: @bablu.masterji. Format: 30-35 s comedy with a science punchline (owner decision 22 Nov 2026,
 see 2c). Read
 `engine/references/skit.md` (format, sets, cast, poses, fx, sfx) and the demo
 `storyboards/2026-11-18-skit-fridge-jugaad.json` before writing.
@@ -36,7 +36,7 @@ see 2c). Read
 - Fact-check the science fact with web search; if unsure, pick another idea.
 
 ## 2. Write the skit
-- 20-28 s, 4-6 shots: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
+- 30-35 s, 5-7 shots: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
   (belan, newspaper, facepalm), Masterji's 2 short lines explaining the science, Golu's punchline,
   ending card (`card`) with the checked fact and a one-word comment question.
 - **Voices: Google Gemini for everyone in a skit, Masterji included (owner feedback 20 Nov: voices must fit the
@@ -139,8 +139,10 @@ almost zero. These rules fix that; every skit must follow them:
 2. **Cold open.** Shot 0 starts mid-action with the funniest/most surprising line: no entrances
    (`enter` is refused in shot 0), no greeting, no setup line; the first spoken line is at most 6
    words and lands on frame 1. Entrances are fine from shot 1 on.
-3. **20-28 s total** (render with `--max 30`). Cut anything that does not set up or land a joke;
-   Masterji gets one or two short lines. Short videos get watched to the end and replay.
+3. **30-35 s total** (owner decision 22 Nov 2026; render with `--min 28 --max 37`). Use the extra
+   time for one more joke beat (a second escalation, a reaction from the extra cast member or a
+   twist before the punchline), never for slow setup or longer explanations; every line still sets
+   up or lands a joke. Masterji gets one or two short lines.
 4. **Loop ending.** The last line should flow back into the first frame (e.g. ends on a question
    the opening line answers, or Golu starting the same jugaad again), and `outro` stays 0.7 so the
    loop comes quickly. Keep the end card short (`text` up to about 18 words).
@@ -166,9 +168,10 @@ almost zero. These rules fix that; every skit must follow them:
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`
-3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 15 --max 30`
+3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 28 --max 37`
    View the preview sheet: faces not cut off, effects above heads, subtitles readable, no
-   `PAGE ERROR`. If the total is over 30 s, cut a line or a shot (push + get_voice again); aim for 20-28 s.
+   `PAGE ERROR`. If the total is over 36 s, cut a line; under 29 s, add one joke beat (push + get_voice again);
+   aim for 30-35 s.
 4. Full render the same way without `--check` (detached, as SKILL.md says).
 
 ## 4. Post and report

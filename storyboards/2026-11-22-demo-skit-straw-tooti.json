@@ -1,0 +1,72 @@
+{
+ "kind": "skit",
+ "series": "PINKY KA ROAST · PART 1",
+ "title": "Straw tooti ya dimaag?",
+ "hook": "Golu ki straw *toot* gayi? 😱",
+ "handle": "@bablu.masterji",
+ "post_title": "Straw tooti ya dimaag? 😂 Pinky ka Roast, Part 1",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "golu": {"name": "Golu", "engine": "gemini", "gvoice": "Zephyr", "style": "a cheeky 10-year-old Indian boy, excited and mischievous"},
+  "pinky": {"name": "Pinky", "engine": "gemini", "gvoice": "Leda", "style": "Golu's sarcastic teenage elder sister, bored, deadpan, eyes on her phone"},
+  "bunty": {"name": "Bunty", "engine": "gemini", "gvoice": "Erinome", "style": "a polite know-it-all 11-year-old topper boy, precise and a bit smug"},
+  "masterji": {"name": "Masterji", "engine": "gemini", "gvoice": "Charon", "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}
+ },
+ "scenes": [
+  {
+   "set": "livingroom",
+   "cast": [{"id": "golu", "x": 360, "pose": "shock", "item": "straw"}, {"id": "pinky", "x": 780, "pose": "idle"}],
+   "beats": [
+    {"who": "golu", "say": "मम्मी! पानी ने मेरी स्ट्रॉ तोड़ दी!",
+     "act": {"golu": "shock", "pinky": "idle"}, "fx": {"kind": "lines", "on": "golu"}, "sfx": "crash",
+     "style": "a boy panicking and complaining loudly, high energy"},
+    {"who": "pinky", "say": "पानी ने नहीं, तेरे दिमाग ने।",
+     "act": {"pinky": "sly", "golu": "sad"}, "sfx": "drum",
+     "style": "a bored teenage sister roasting her brother without looking up from her phone, deadpan"}
+   ]
+  },
+  {
+   "set": "livingroom",
+   "cast": [{"id": "golu", "x": 330, "pose": "think", "item": "straw"}, {"id": "bunty", "x": 760, "pose": "idle", "enter": "right"}],
+   "beats": [
+    {"who": "golu", "say": "<gasp> बाहर निकाली तो जुड़ गई! जादू!",
+     "act": {"golu": "happy"}, "fx": {"kind": "stars", "on": "golu"}, "sfx": "ding",
+     "style": "a boy amazed, thinking he discovered magic"},
+    {"who": "bunty", "say": "जादू नहीं, रिफ्रैक्शन।",
+     "act": {"bunty": "talk", "golu": "facepalm"}, "sfx": "pop",
+     "style": "a smug topper correcting someone, quick and proud"}
+   ]
+  },
+  {
+   "set": "classroom",
+   "board": "Roshni mudi, straw nahi",
+   "cast": [{"id": "masterji", "x": 540, "pose": "point"}],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "Paani se hawa mein aate hi roshni mud jaati hai, isliye straw tooti dikhti hai.",
+    "foot": "Ghar ke Golu ko bhejo 😂"
+   },
+   "beats": [
+    {"who": "masterji", "say": "पानी से हवा में आते ही रोशनी मुड़ती है, इसलिए स्ट्रॉ टूटी दिखती है।",
+     "act": {"masterji": "point"}, "fx": {"kind": "bulb", "on": "masterji"}, "sfx": "bell"}
+   ]
+  },
+  {
+   "set": "livingroom",
+   "cast": [{"id": "golu", "x": 330, "pose": "sly", "item": "straw"}, {"id": "pinky", "x": 760, "pose": "idle"}],
+   "beats": [
+    {"who": "golu", "say": "दीदी, आपका दिमाग भी पानी में है क्या? टूटा दिख रहा है!",
+     "act": {"golu": "sly", "pinky": "shock"}, "sfx": "drum",
+     "style": "a cheeky boy getting revenge on his sister, grinning, perfect comic timing"},
+    {"who": "pinky", "say": "मम्मी!",
+     "act": {"pinky": "angry", "golu": "laugh"}, "hop": ["golu"], "fx": {"kind": "anger", "on": "pinky"}, "sfx": "boing",
+     "style": "an outraged teenage sister yelling for her mother"}
+   ]
+  }
+ ]
+}

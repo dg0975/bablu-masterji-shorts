@@ -13,65 +13,211 @@
  "duck": 0.65,
  "format": "skit",
  "cast": {
-  "golu": {"name": "Golu", "engine": "gemini", "gvoice": "Zephyr", "style": "a cheeky 10-year-old Indian boy, excited and mischievous"},
-  "mummy": {"name": "Mummy", "engine": "gemini", "gvoice": "Kore", "style": "an Indian mother, sharp, dramatic and witty"},
-  "dadi": {"name": "Dadi", "engine": "gemini", "gvoice": "Gacrux", "style": "a loving, witty Indian grandmother, warm and a little teasing"},
-  "papa": {"name": "Papa", "engine": "gemini", "gvoice": "Algenib", "style": "a tired Indian father, dry and sarcastic"},
-  "masterji": {"name": "Masterji", "engine": "gemini", "gvoice": "Charon", "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}
+  "golu": {
+   "name": "Golu",
+   "engine": "gemini",
+   "gvoice": "Zephyr",
+   "style": "a cheeky 10-year-old Indian boy, excited and mischievous"
+  },
+  "mummy": {
+   "name": "Mummy",
+   "engine": "gemini",
+   "gvoice": "Kore",
+   "style": "an Indian mother, sharp, dramatic and witty"
+  },
+  "dadi": {
+   "name": "Dadi",
+   "engine": "gemini",
+   "gvoice": "Gacrux",
+   "style": "a loving, witty Indian grandmother, warm and a little teasing"
+  },
+  "papa": {
+   "name": "Papa",
+   "engine": "gemini",
+   "gvoice": "Algenib",
+   "style": "a tired Indian father, dry and sarcastic"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
  },
  "scenes": [
   {
    "set": "kitchen",
-   "cast": [{"id": "golu", "x": 330, "pose": "shock", "item": "spoon"}, {"id": "mummy", "x": 770, "pose": "idle"}],
+   "cast": [
+    {
+     "id": "golu",
+     "x": 330,
+     "pose": "shock",
+     "item": "spoon"
+    },
+    {
+     "id": "mummy",
+     "x": 770,
+     "pose": "idle"
+    }
+   ],
    "beats": [
-    {"who": "golu", "say": "आह! मम्मी, चम्मच ने काट लिया!",
-     "act": {"golu": "shock", "mummy": "idle"}, "fx": {"kind": "lines", "on": "golu"}, "sfx": "crash",
-     "style": "a boy yelping in pain and complaining dramatically, high energy"},
-    {"who": "mummy", "say": "गरम दाल में छोड़ोगे, तो पप्पी थोड़ी देगा!",
-     "act": {"mummy": "sly", "golu": "sad"}, "sfx": "drum",
-     "style": "a sharp Indian mother, sarcastic and amused, quick comeback"}
+    {
+     "who": "golu",
+     "say": "आह! मम्मी, चम्मच ने काट लिया!",
+     "act": {
+      "golu": "shock",
+      "mummy": "idle"
+     },
+     "fx": {
+      "kind": "lines",
+      "on": "golu"
+     },
+     "sfx": "crash",
+     "style": "a boy yelping in pain and complaining dramatically, high energy"
+    },
+    {
+     "who": "mummy",
+     "say": "गरम दाल में छोड़ोगे, तो पप्पी थोड़ी देगा!",
+     "act": {
+      "mummy": "point",
+      "golu": "sad"
+     },
+     "sfx": "drum",
+     "style": "a sharp Indian mother, sarcastic and amused, quick comeback"
+    }
    ]
   },
   {
    "set": "kitchen",
-   "cast": [{"id": "dadi", "x": 320, "pose": "idle"}, {"id": "golu", "x": 770, "pose": "think"}],
+   "cast": [
+    {
+     "id": "dadi",
+     "x": 320,
+     "pose": "idle"
+    },
+    {
+     "id": "golu",
+     "x": 770,
+     "pose": "think"
+    }
+   ],
    "beats": [
-    {"who": "dadi", "say": "हमारी लकड़ी की कड़छी ने कभी नहीं काटा।",
-     "act": {"dadi": "happy", "golu": "think"}, "sfx": "bell",
-     "style": "a proud grandmother bragging about the old days"},
-    {"who": "golu", "say": "तो कड़छी में AC लगा है क्या?",
-     "act": {"golu": "talk", "dadi": "laugh"}, "fx": {"kind": "question", "on": "golu"}, "sfx": "scratch",
-     "style": "a confused boy asking a completely serious silly question"}
+    {
+     "who": "dadi",
+     "say": "हमारी लकड़ी की कड़छी ने कभी नहीं काटा।",
+     "act": {
+      "dadi": "happy",
+      "golu": "think"
+     },
+     "sfx": "bell",
+     "style": "a proud grandmother bragging about the old days"
+    },
+    {
+     "who": "golu",
+     "say": "तो कड़छी में AC लगा है क्या?",
+     "act": {
+      "golu": "talk",
+      "dadi": "laugh"
+     },
+     "fx": {
+      "kind": "question",
+      "on": "golu"
+     },
+     "sfx": "scratch",
+     "style": "a confused boy asking a completely serious silly question"
+    }
    ]
   },
   {
    "set": "classroom",
    "board": "Steel tez, lakdi dheemi",
-   "cast": [{"id": "masterji", "x": 540, "pose": "point"}],
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 540,
+     "pose": "point"
+    }
+   ],
    "card": {
     "kicker": "Science ka sach",
     "text": "Steel garmi ko jaldi aage bhejta hai, lakdi bahut dheere. Isliye steel ka chammach garam ho jaata hai.",
     "foot": "Ghar ki Mummy ko bhejo 😂"
    },
    "beats": [
-    {"who": "masterji", "say": "स्टील गर्मी को फटाफट आगे भेजता है, लकड़ी बहुत धीरे। इसलिए चम्मच गरम हो जाता है।",
-     "act": {"masterji": "point"}, "fx": {"kind": "bulb", "on": "masterji"}, "sfx": "ding"}
+    {
+     "who": "masterji",
+     "say": "स्टील गर्मी को फटाफट आगे भेजता है, लकड़ी बहुत धीरे। इसलिए चम्मच गरम हो जाता है।",
+     "act": {
+      "masterji": "point"
+     },
+     "fx": {
+      "kind": "bulb",
+      "on": "masterji"
+     },
+     "sfx": "ding"
+    }
    ]
   },
   {
    "set": "livingroom",
-   "cast": [{"id": "mummy", "x": 270, "pose": "sly"}, {"id": "golu", "x": 560, "pose": "idle"}, {"id": "papa", "x": 840, "pose": "idle"}],
+   "cast": [
+    {
+     "id": "mummy",
+     "x": 270,
+     "pose": "sly"
+    },
+    {
+     "id": "golu",
+     "x": 560,
+     "pose": "idle"
+    },
+    {
+     "id": "papa",
+     "x": 840,
+     "pose": "idle"
+    }
+   ],
    "scale": 0.86,
    "beats": [
-    {"who": "mummy", "say": "बिल्कुल तेरे दिमाग जैसा, उसमें भी कुछ आगे नहीं पहुँचता।",
-     "act": {"mummy": "sly", "golu": "shock"}, "sfx": "drum",
-     "style": "a mother roasting her son lovingly, deadpan"},
-    {"who": "papa", "say": "फ़ीस के पैसे भी नहीं पहुँचते।",
-     "act": {"papa": "sly", "golu": "sad", "mummy": "laugh"}, "sfx": "pop",
-     "style": "a dry sarcastic father, deadpan, not even looking up"},
-    {"who": "golu", "say": "पापा!",
-     "act": {"golu": "angry", "papa": "happy", "mummy": "laugh"}, "hop": ["golu"], "fx": {"kind": "anger", "on": "golu"}, "sfx": "boing",
-     "style": "an outraged boy"}
+    {
+     "who": "mummy",
+     "say": "बिल्कुल तेरे दिमाग जैसा, उसमें भी कुछ आगे नहीं पहुँचता।",
+     "act": {
+      "mummy": "point",
+      "golu": "shock"
+     },
+     "sfx": "drum",
+     "style": "a mother roasting her son lovingly, deadpan"
+    },
+    {
+     "who": "papa",
+     "say": "फ़ीस के पैसे भी नहीं पहुँचते।",
+     "act": {
+      "papa": "talk",
+      "golu": "sad",
+      "mummy": "laugh"
+     },
+     "sfx": "pop",
+     "style": "a dry sarcastic father, deadpan, not even looking up"
+    },
+    {
+     "who": "golu",
+     "say": "पापा!",
+     "act": {
+      "golu": "angry",
+      "papa": "happy",
+      "mummy": "laugh"
+     },
+     "hop": [
+      "golu"
+     ],
+     "fx": {
+      "kind": "anger",
+      "on": "golu"
+     },
+     "sfx": "boing",
+     "style": "an outraged boy"
+    }
    ]
   }
  ]

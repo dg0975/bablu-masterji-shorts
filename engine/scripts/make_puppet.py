@@ -75,6 +75,74 @@ def cutout(path, floor_y=None):
     return np.dstack([rgb, al * 255]).astype(np.uint8)
 
 
+def lab(rgb):
+    import cv2
+    return cv2.cvtColor(np.clip(rgb, 0, 255).astype(np.uint8), cv2.COLOR_RGB2LAB).astype(float)
+
+
+def auto_arms(c, R):
+    """find bare arms by the face's skin colour; returns {side: mask}. Bangles, watches and finger gaps are
+    closed vertically so the whole forearm comes out in one piece."""
+    rgb, al = c[..., :3], c[..., 3]
+    H, W = al.shape
+    L = lab(rgb)
+    mx, my, mrx, mry = R["mouth"]
+    ref = np.median(L[int(my) - 2:int(my) + 3, int(mx - mrx - 10):int(mx - mrx - 4)].reshape(-1, 3), axis=0)
+    d = np.sqrt(((L[..., 0] - ref[0]) * .35) ** 2 + (L[..., 1] - ref[1]) ** 2 + (L[..., 2] - ref[2]) ** 2)
+    skin = (d < R.get("arm_tol", 16)) & (al > 128)
+    yy, xx = np.mgrid[0:H, 0:W]
+    cx = R.get("center_x", W / 2)
+    y_lo, y_hi = R.get("arm_y", [int(H * .3), int(H * .82)])
+    out = {}
+    for side, cond in (("L", xx < cx - W * .08), ("R", xx > cx + W * .08)):
+        if R.get("arm" + side) is False:
+            continue
+        m = skin & cond & (yy > y_lo) & (yy < y_hi)
+        lab_, n = ndimage.label(m)
+        if n == 0:
+            continue
+        sizes = ndimage.sum(m, lab_, range(1, n + 1))
+        k = int(np.argmax(sizes)) + 1
+        if sizes[k - 1] < 300:
+            continue
+        m = lab_ == k
+        m = ndimage.binary_closing(m, structure=np.ones((23, 3)), iterations=1)
+        m = ndimage.binary_fill_holes(m) & (al > 20)
+        m = ndimage.binary_dilation(m, iterations=1) & (al > 20) & cond & (yy > y_lo)
+        out[side] = m
+    return out
+
+
+def fill_behind(c, m, side):
+    """remove an arm from the body: inpaint cloth where the torso continues behind it, clear the rest"""
+    import cv2
+    rgb, al = c[..., :3].copy(), c[..., 3].copy()
+    H, W = al.shape
+    keep = np.zeros_like(m)
+    for y in range(H):
+        xs = np.where(m[y])[0]
+        if len(xs) == 0:
+            continue
+        x0, x1 = xs.min(), xs.max()
+        inner = x1 + 2 if side == "L" else x0 - 2          # the torso side of the arm
+        if 0 <= inner < W and al[y, inner] > 200 and not m[y, inner]:
+            mid = (x0 + x1) / 2
+            if side == "L":
+                keep[y, int(mid):x1 + 1] = True
+            else:
+                keep[y, x0:int(mid) + 1] = True
+    keep &= m
+    hole = (m.astype(np.uint8) * 255)
+    src = rgb.astype(np.uint8).copy()
+    src[m] = 0
+    filled = cv2.inpaint(src, hole, 7, cv2.INPAINT_TELEA)
+    c2 = c.copy()
+    c2[..., :3] = np.where(keep[..., None], filled, c[..., :3])
+    a = al.copy(); a[m & ~keep] = 0
+    c2[..., 3] = a
+    return c2
+
+
 def save(arr, path):
     Image.fromarray(arr.astype(np.uint8), "RGBA").save(path, optimize=True)
 
@@ -103,6 +171,34 @@ def main():
         return y > ya + (np.clip(x, min(xa, xb), max(xa, xb)) - xa) * (yb - ya) / (xb - xa) + 1
 
     body = c.copy()
+    from PIL import ImageDraw
+    poly_masks = {}
+    for side in ("L", "R"):
+        if R.get("arm" + side + "_poly"):
+            pm = Image.new("L", (W, H), 0)
+            ImageDraw.Draw(pm).polygon([tuple(q) for q in R["arm" + side + "_poly"]], fill=255)
+            m = (np.asarray(pm) > 0) & (al > 20)
+            m = ndimage.binary_dilation(m, iterations=3) & (al > 20)
+            poly_masks[side] = m
+    arm_sets = auto_arms(c, R).items() if R.get("arms") == "auto" else poly_masks.items()
+    if arm_sets:
+        for side, m in arm_sets:
+            arm = np.zeros_like(c); arm[m] = c[m]
+            ys, xs = np.where(m)
+            top = ys.min()
+            tx = xs[ys < top + 6]
+            if not poly_masks:            # arms behind the body: grow the top under the sleeve
+                for y in range(top - 1, max(0, top - 14), -1):
+                    arm[y] = np.where(arm[y + 1, :, 3:4] > 0, arm[y + 1], arm[y])
+            parts["arm" + side] = arm
+            pl = R.get("arm" + side + "_poly")
+            pv = [(pl[0][0] + pl[1][0]) / 2, (pl[0][1] + pl[1][1]) / 2 + 4] if pl else [float(tx.mean()), float(top + 4)]
+            meta["arm" + side] = {"pivot": pv}
+            body = fill_behind(body, m, side)
+        if poly_masks:
+            meta["armsFront"] = True          # traced arms lie over the body, so they draw in front of it
+        if R.get("armRange"):
+            meta["armRange"] = R["armRange"]
     arms = [] if "hemL" not in R else [("L", R["hemL"], xx <= R["armL_xmax"]), ("R", R["hemR"], xx >= R["armR_xmin"])]
     for side, hem, cond in arms:
         m = skin & cond & below(hem, xx, yy)

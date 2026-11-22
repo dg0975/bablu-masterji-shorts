@@ -176,7 +176,8 @@ almost zero. These rules fix that; every skit must follow them:
    Not "like/share/subscribe" bait.
 6. **Series with part numbers.** Every skit belongs to one series, named after who drives the
    joke, and shows it as `"series"` (top-left badge): `GOLU KE JUGAAD`, `DADI KA GYAAN`,
-   `PINKY KA ROAST`, `BUNTY KO DEKHO`, `SHARMA AUNTY NEWS`, `MUMMY KA RULE`, `PAPA KA BUDGET`.
+   `PINKY KA ROAST`, `BUNTY KO DEKHO`, `SHARMA AUNTY NEWS`, `MUMMY KA RULE`, `PAPA KA BUDGET`, `CHUTKI KE SAWAAL`, `GUPTA JI KA SHOW-OFF`,
+   `DADAJI KE ZAMAANE MEIN`, `RAJU BHAIYA KE HACKS`.
    Part number = rows in `topics/skits_used.csv` with that series + 1, e.g.
    `"series":"GOLU KE JUGAAD · PART 3"`. Put "<Series>, Part N" in the post title/caption too.
 7. **Facebook too.** Post the same Reel to Facebook as DAILY_RUN.md step 4c says (it skips itself

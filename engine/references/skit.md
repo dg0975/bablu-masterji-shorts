@@ -74,3 +74,12 @@ channel voice). A beat may override with `"voice"`. Render with
 - `sfx` (made in code): boing, ding, whoosh, drum (ba-dum-tss), pop, crash, bell (school bell),
   slide (slide whistle), scratch. List form: `[{"s":"boing","at":0.3,"gain":0.8}]`.
 - Voices are trimmed of long silences automatically; slow voices can be sped up with `pace`.
+
+## Turning (2D cast, 360°)
+Code-drawn characters turn in depth: features ride the head sphere, the back view shows hair, bag,
+ponytail or bun, and the near/far arm swap sides. Beat fields: `"turn":{"<id>":deg}` holds a
+turn from that beat (+ turns toward screen-right; 90 profile, 180 back, 0 front);
+`"spin":["<id>"]` does one full 360° in 0.75 s. Listeners auto-face the speaker (eased 0.35 s);
+storyboard `"autoturn": false` disables it. Puppet (3D cutout) characters are opt-in with
+`"puppets": true` and do not turn.
+

@@ -165,8 +165,8 @@ function eye2(cx,cy,side,kind,blink,gx,gy,S){
   <path d="M${f(cx-rx-1)} ${f(cy+.5)} Q${cx} ${f(yT-1)} ${f(cx+rx+1)} ${f(cy+.5)}" stroke="${OL}" stroke-width="5.2" fill="none" stroke-linecap="round"/>
   <path d="M${f(cx-rx+3)} ${f(cy+2)} Q${cx} ${f(yB)} ${f(cx+rx-3)} ${f(cy+2)}" stroke="${OL}" stroke-width="1.6" fill="none" opacity=".45"/>${lash}</g>`}
 const BROW={n:[0,0,7],up:[-11,-7,9],angry:[9,-6,2],sad:[-11,5,3],think:[2,2,6],sly:[4,2,5]};
-function brows2(kind,raise,col){const f=v=>v.toFixed(1);let s='';
- for(const side of [-1,1]){let k=BROW[kind]||BROW.n; if(kind==='think'&&side>0)k=[-11,-9,9]; if(kind==='sly'&&side>0)k=[-9,-7,8];
+function brows2(kind,raise,col,only){const f=v=>v.toFixed(1);let s='';
+ for(const side of (only?[only]:[-1,1])){let k=BROW[kind]||BROW.n; if(kind==='think'&&side>0)k=[-11,-9,9]; if(kind==='sly'&&side>0)k=[-9,-7,8];
   const xi=160+side*11, xo=160+side*45, yi=114+k[0]-raise, yo=116+k[1]-raise, xm=(xi+xo)/2, ym=Math.min(yi,yo)-k[2];
   s+=`<path d="M${f(xi)} ${f(yi+4)} Q${f(xm)} ${f(ym+3)} ${f(xo)} ${f(yo+1)} Q${f(xm)} ${f(ym-3)} ${f(xi)} ${f(yi-4.5)} Z" fill="${col}" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>`}
  return s}
@@ -196,6 +196,10 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  // natural blinks (lid closes over ~0.16 s), at uneven intervals per character
  const bp=((t*1.0+id.length*.83)%(3.1+id.length*.21)), blink=bp<.16?1-Math.abs(bp/.08-1):0;
  const gx=act.gx||0, gy=act.gy||0;
+ const TH=(act.th||0)*Math.PI/180, cT=Math.cos(TH), sT=Math.sin(TH), fr=n=>(+n).toFixed(2);
+ // arms ride round the shoulders; side-on they hang straight, from behind they swap sides
+ const turnArm=(pts,x0,side)=>{const xs=160+side*48*cT;return pts.map(q=>[xs+(q[0]-x0)*cT,q[1]])};
+ if(Math.abs(TH)>1e-3){const L2=turnArm(L,112,-1), R2=turnArm(R,208,1);for(let k=0;k<3;k++){L[k]=L2[k];R[k]=R2[k]}}
  let b='';
  // legs
  const kneeL=dance?wig*16:0, kneeR=dance?-wig*16:0;
@@ -223,47 +227,87 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(S.stick){const h2=L[2];props+=`<path d="M${h2[0]} ${h2[1]} L${h2[0]-10} 428" stroke="${OL}" stroke-width="12" stroke-linecap="round"/><path d="M${h2[0]} ${h2[1]} L${h2[0]-10} 428" stroke="#8a5c38" stroke-width="7" stroke-linecap="round"/><path d="M${h2[0]-18} ${h2[1]-4} q18 -22 30 0" stroke="#8a5c38" stroke-width="9" fill="none" stroke-linecap="round"/>`}
  if(S.phone&&!['dance','shock','hand'].includes(Pb)){const h2=R[2];props+=`<rect x="${h2[0]-16}" y="${h2[1]-48}" width="34" height="56" rx="7" fill="#1e1620"/><rect x="${h2[0]-12}" y="${h2[1]-43}" width="26" height="44" rx="4" fill="#8fd3ff"/><path d="M${h2[0]-10} ${h2[1]-40} l12 0" stroke="#fff" stroke-width="3" opacity=".6"/>`}
  if(S.books&&['idle','hold','talk'].includes(Pb)){const h2=L[2];props+=`<g transform="translate(${h2[0]-30} ${h2[1]-70})"><rect width="60" height="16" fill="#e8213a" stroke="${OL}" stroke-width="3"/><rect y="16" width="60" height="16" fill="#2f6bd8" stroke="${OL}" stroke-width="3"/><rect y="32" width="60" height="16" fill="#2bd67b" stroke="${OL}" stroke-width="3"/></g>`}
+ if(Math.cos((act.th||0)*Math.PI/180)<-.3) props='';
  if(act.item){const h2=R[2];props+=`<g transform="translate(${h2[0].toFixed(1)} ${(h2[1]+8).toFixed(1)})">${propSvg(act.item,t,act.item==='matka'?.45:act.item==='straw'?2.2:1.25)}</g>`}
- const armsSvg=arm(L,S.skin,S.saree?null:S.shirt,S.kurta?.85:.45)+arm(R,S.skin,S.saree?null:S.shirt,S.kurta?.85:.45);
+ const armL=arm(L,S.skin,S.saree?null:S.shirt,S.kurta?.85:.45), armR=arm(R,S.skin,S.saree?null:S.shirt,S.kurta?.85:.45);
+ const nearL=sT>=-.05, farArm=Math.abs(sT)<.05?'':(nearL?armR:armL), armsSvg=Math.abs(sT)<.05?armL+armR:(nearL?armL:armR);
  const bangles=S.bangles?`<circle cx="${L[2][0]}" cy="${L[2][1]-14}" r="10" fill="none" stroke="#E2B33C" stroke-width="5"/><circle cx="${R[2][0]}" cy="${R[2][1]-14}" r="10" fill="none" stroke="#E2B33C" stroke-width="5"/>`:'';
  // head
  const hw=S.kid?71:66, hairC=S.hair==='greybun'?'#cfcbc4':'#1d1614';
- let h=`<path d="M144 182 L176 182 L178 214 L142 214 Z" fill="${S.skin}" stroke="${OL}" stroke-width="3"/><path d="M142 200 Q160 214 178 200 L178 214 L142 214 Z" fill="${skD}" opacity=".5"/>`;
+ const F={neck:'',hairTop:'',head:'',hairFront:'',center:'',mouth:'',specs:''}; F.neck=`<path d="M144 182 L176 182 L178 214 L142 214 Z" fill="${S.skin}" stroke="${OL}" stroke-width="3"/><path d="M142 200 Q160 214 178 200 L178 214 L142 214 Z" fill="${skD}" opacity=".5"/>`;
  const ear=x=>`<ellipse cx="${x}" cy="146" rx="13" ry="18" fill="${S.skin}" stroke="${OL}" stroke-width="3.5"/><path d="M${x+(x<160?3:-3)} 136 q${x<160?-6:6} 10 0 20" stroke="${skD}" stroke-width="3" fill="none"/>`;
- h+=ear(160-hw+2)+ear(160+hw-2);   // drawn before the face so it covers their inner edge
- if(S.hair==='greybun') h+=`<circle cx="160" cy="64" r="30" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><path d="M140 56 q16 -14 34 -4" stroke="#fff" stroke-opacity=".5" stroke-width="4" fill="none"/>`;
- if(S.hair==='ponytail') h+=`<path d="M206 96 Q262 120 250 200 Q240 240 222 250 Q236 190 214 130 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><path d="M226 130 Q246 170 236 220" stroke="#fff" stroke-opacity=".18" stroke-width="5" fill="none"/><circle cx="214" cy="104" r="10" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;
- if(S.hair==='curly') h+=[0,1,2,3,4,5,6,7,8].map(k=>`<circle cx="${(160+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(120+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="22" fill="#2a1e18" stroke="${OL}" stroke-width="3"/><circle cx="${(156+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(114+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="8" fill="#fff" opacity=".12"/>`).join('');
- if(S.hair==='bun') h+=`<circle cx="160" cy="62" r="34" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/>`+[0,1,2,3,4,5].map(k=>`<circle cx="${(160+Math.cos(k)*36).toFixed(1)}" cy="${(62+Math.sin(k)*36).toFixed(1)}" r="8" fill="#fff" stroke="#cfcab8" stroke-width="2"/>`).join('');
- h+=`<path d="M${160-hw} 132 C${160-hw} 86 ${160-hw*.55} 70 160 70 C${160+hw*.55} 70 ${160+hw} 86 ${160+hw} 132 C${160+hw} 176 ${160+hw*.45} 207 160 209 C${160-hw*.45} 207 ${160-hw} 176 ${160-hw} 132 Z" fill="${sk}" stroke="${skL}" stroke-width="4"/>`;
- h+=`<path d="M${160+hw-14} 112 C${160+hw-4} 150 ${160+hw-20} 186 ${160+16} 204" stroke="${skD}" stroke-width="10" fill="none" opacity=".28" stroke-linecap="round"/>`;
- if(S.hair==='spiky') h+=`<path d="M${160-hw-1} 134 Q${160-hw+2} 72 160 70 Q${160+hw-2} 72 ${160+hw+1} 134 Q${160+hw-16} 100 160 100 Q${160-hw+16} 100 ${160-hw-1} 134 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/>`;
- if(S.hair==='spiky') h+=`<path d="M98 108 L108 62 L128 90 L140 50 L156 86 L172 46 L186 86 L204 56 L212 98 L224 108 Q160 72 98 108 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path d="M132 84 L140 60 M168 80 L172 58" stroke="#fff" stroke-opacity=".22" stroke-width="4" stroke-linecap="round"/>`;
- if(S.hair==='bun'||S.hair==='greybun') h+=`<path d="M94 132 Q96 70 160 68 Q224 70 226 132 Q210 94 160 92 Q110 94 94 132 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M160 70 L160 94" stroke="${S.hair==='bun'?'#4a3a32':'#9a958e'}" stroke-width="3"/><path d="M118 92 Q136 76 156 74" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
- if(S.hair==='ponytail') h+=`<path d="M92 140 Q90 72 160 68 Q230 72 228 140 Q214 98 160 94 Q106 98 92 140 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M116 94 Q136 78 158 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
- if(S.hair==='neat') h+=`<path d="M90 130 Q92 70 160 66 Q230 70 230 128 Q204 90 130 96 Q108 102 90 130 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M128 74 Q150 96 210 96" stroke="#3a2c26" stroke-width="3" fill="none"/><path d="M110 98 Q124 80 146 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
- if(S.hair==='bald') h+=`<path d="M94 140 Q94 96 112 84 L118 96 Q104 110 106 140 Z M226 140 Q226 96 208 84 L202 96 Q216 110 214 140 Z" fill="#8f8a86" stroke="${OL}" stroke-width="3"/><ellipse cx="138" cy="90" rx="24" ry="9" fill="#fff" opacity=".35" transform="rotate(-18 138 90)"/>`;
- if(S.wrinkles) h+=`<path d="M138 98 Q160 92 182 98 M144 90 Q160 86 176 90 M104 160 q6 6 4 14 M216 160 q-6 6 -4 14" stroke="${skD}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
+ if(S.hair==='greybun') F.hairTop+=`<circle cx="160" cy="64" r="30" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><path d="M140 56 q16 -14 34 -4" stroke="#fff" stroke-opacity=".5" stroke-width="4" fill="none"/>`;
+ if(S.hair==='ponytail') F.hairTop+=`<path d="M206 96 Q262 120 250 200 Q240 240 222 250 Q236 190 214 130 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><path d="M226 130 Q246 170 236 220" stroke="#fff" stroke-opacity=".18" stroke-width="5" fill="none"/><circle cx="214" cy="104" r="10" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;
+ if(S.hair==='curly') F.hairTop+=[0,1,2,3,4,5,6,7,8].map(k=>`<circle cx="${(160+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(120+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="22" fill="#2a1e18" stroke="${OL}" stroke-width="3"/><circle cx="${(156+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(114+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="8" fill="#fff" opacity=".12"/>`).join('');
+ if(S.hair==='bun') F.hairTop+=`<circle cx="160" cy="62" r="34" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/>`+[0,1,2,3,4,5].map(k=>`<circle cx="${(160+Math.cos(k)*36).toFixed(1)}" cy="${(62+Math.sin(k)*36).toFixed(1)}" r="8" fill="#fff" stroke="#cfcab8" stroke-width="2"/>`).join('');
+ F.head+=`<path d="M${160-hw} 132 C${160-hw} 86 ${160-hw*.55} 70 160 70 C${160+hw*.55} 70 ${160+hw} 86 ${160+hw} 132 C${160+hw} 176 ${160+hw*.45} 207 160 209 C${160-hw*.45} 207 ${160-hw} 176 ${160-hw} 132 Z" fill="${sk}" stroke="${skL}" stroke-width="4"/>`;
+ F.head+=`<path d="M${160+hw-14} 112 C${160+hw-4} 150 ${160+hw-20} 186 ${160+16} 204" stroke="${skD}" stroke-width="10" fill="none" opacity=".28" stroke-linecap="round"/>`;
+ if(S.hair==='spiky') F.hairFront+=`<path d="M${160-hw-1} 134 Q${160-hw+2} 72 160 70 Q${160+hw-2} 72 ${160+hw+1} 134 Q${160+hw-16} 100 160 100 Q${160-hw+16} 100 ${160-hw-1} 134 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/>`;
+ if(S.hair==='spiky') F.hairFront+=`<path d="M98 108 L108 62 L128 90 L140 50 L156 86 L172 46 L186 86 L204 56 L212 98 L224 108 Q160 72 98 108 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path d="M132 84 L140 60 M168 80 L172 58" stroke="#fff" stroke-opacity=".22" stroke-width="4" stroke-linecap="round"/>`;
+ if(S.hair==='bun'||S.hair==='greybun') F.hairFront+=`<path d="M94 132 Q96 70 160 68 Q224 70 226 132 Q210 94 160 92 Q110 94 94 132 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M160 70 L160 94" stroke="${S.hair==='bun'?'#4a3a32':'#9a958e'}" stroke-width="3"/><path d="M118 92 Q136 76 156 74" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
+ if(S.hair==='ponytail') F.hairFront+=`<path d="M92 140 Q90 72 160 68 Q230 72 228 140 Q214 98 160 94 Q106 98 92 140 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M116 94 Q136 78 158 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
+ if(S.hair==='neat') F.hairFront+=`<path d="M90 130 Q92 70 160 66 Q230 70 230 128 Q204 90 130 96 Q108 102 90 130 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M128 74 Q150 96 210 96" stroke="#3a2c26" stroke-width="3" fill="none"/><path d="M110 98 Q124 80 146 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
+ if(S.hair==='bald') F.hairFront+=`<path d="M94 140 Q94 96 112 84 L118 96 Q104 110 106 140 Z M226 140 Q226 96 208 84 L202 96 Q216 110 214 140 Z" fill="#8f8a86" stroke="${OL}" stroke-width="3"/><ellipse cx="138" cy="90" rx="24" ry="9" fill="#fff" opacity=".35" transform="rotate(-18 138 90)"/>`;
+ if(S.wrinkles) F.center+=`<path d="M138 98 Q160 92 182 98 M144 90 Q160 86 176 90 M104 160 q6 6 4 14 M216 160 q-6 6 -4 14" stroke="${skD}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
  // cheeks, brows, eyes, nose
- h+=`<ellipse cx="116" cy="174" rx="17" ry="10" fill="url(#blushG)" opacity="${S.fem||S.kid?.85:.45}"/><ellipse cx="204" cy="174" rx="17" ry="10" fill="url(#blushG)" opacity="${S.fem||S.kid?.85:.45}"/>`;
+ F.blushL=`<ellipse cx="116" cy="174" rx="17" ry="10" fill="url(#blushG)" opacity="${S.fem||S.kid?.85:.45}"/>`; F.blushR=`<ellipse cx="204" cy="174" rx="17" ry="10" fill="url(#blushG)" opacity="${S.fem||S.kid?.85:.45}"/>`;
  const raise=talk?clamp((lvs-.35)*2.4)*5:0;
- h+=brows2(Pb==='talk'&&!talk?'n':P.b,raise,S.brow||'#24170f');
- h+=eye2(134,144,-1,P.e,blink,gx,gy,S)+eye2(186,144,1,P.e,blink,gx,gy,S);
- if(S.specsUp&&!(Pb==='shock'&&p>.5)) h+=`<g transform="translate(0 -54)"><rect x="114" y="128" width="40" height="27" rx="9" fill="#cfeaff" fill-opacity=".3" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="128" width="40" height="27" rx="9" fill="#cfeaff" fill-opacity=".3" stroke="${OL}" stroke-width="4.5"/><path d="M154 138 h12" stroke="${OL}" stroke-width="4"/></g>`;
- if(S.specsUp&&Pb==='shock'&&p>.5) h+=`<rect x="114" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><path d="M154 140 h12" stroke="${OL}" stroke-width="4"/>`;
- if(S.specs) h+=`<circle cx="134" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><circle cx="186" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><path d="M120 132 l10 -6 M172 132 l10 -6" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/><path d="M158 142 h4 M110 140 L96 136 M210 140 L224 136" stroke="${OL}" stroke-width="4"/>`;
- if(S.earrings) h+=`<circle cx="${160-hw+4}" cy="170" r="7" fill="#ffd54a" stroke="${OL}" stroke-width="2"/><circle cx="${160+hw-4}" cy="170" r="7" fill="#ffd54a" stroke="${OL}" stroke-width="2"/>`;
- h+=`<path d="M163 140 Q170 156 168 166" stroke="${skD}" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round"/><path d="M150 166 Q152 174 160 174 Q168 174 170 166" stroke="${skL}" stroke-width="3" fill="${shade(S.skin,-.08)}" stroke-linecap="round"/><circle cx="156" cy="160" r="3.4" fill="#fff" opacity=".35"/>`;
- if(S.bindi) h+=`<circle cx="160" cy="104" r="${S.bigBindi?11:6}" fill="#d2213a" stroke="${S.bigBindi?OL:'none'}" stroke-width="2"/>`;
- if(S.freckles) h+=`<g fill="${shade(S.skin,-.3)}" opacity=".7"><circle cx="112" cy="166" r="2.6"/><circle cx="121" cy="172" r="2.6"/><circle cx="104" cy="172" r="2.2"/><circle cx="199" cy="166" r="2.6"/><circle cx="208" cy="172" r="2.6"/><circle cx="216" cy="166" r="2.2"/></g>`;
- if(S.mooch) h+=`<path d="M160 174 C140 172 120 174 112 186 C130 184 146 184 160 182 C174 184 190 184 208 186 C200 174 180 172 160 174 Z" fill="#3a2c26" stroke="${OL}" stroke-width="3"/>`;
+ const bk=Pb==='talk'&&!talk?'n':P.b, bcol=S.brow||'#24170f'; F.browL=brows2(bk,raise,bcol,-1); F.browR=brows2(bk,raise,bcol,1);
+ F.eyeL=eye2(134,144,-1,P.e,blink,gx,gy,S); F.eyeR=eye2(186,144,1,P.e,blink,gx,gy,S);
+ if(S.specsUp&&!(Pb==='shock'&&p>.5)) F.specs+=`<g transform="translate(0 -54)"><rect x="114" y="128" width="40" height="27" rx="9" fill="#cfeaff" fill-opacity=".3" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="128" width="40" height="27" rx="9" fill="#cfeaff" fill-opacity=".3" stroke="${OL}" stroke-width="4.5"/><path d="M154 138 h12" stroke="${OL}" stroke-width="4"/></g>`;
+ if(S.specsUp&&Pb==='shock'&&p>.5) F.specs+=`<rect x="114" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><path d="M154 140 h12" stroke="${OL}" stroke-width="4"/>`;
+ if(S.specs) F.specs+=`<circle cx="134" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><circle cx="186" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><path d="M120 132 l10 -6 M172 132 l10 -6" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/><path d="M158 142 h4 M110 140 L96 136 M210 140 L224 136" stroke="${OL}" stroke-width="4"/>`;
+ const earring=S.earrings;
+ F.center+=`<path d="M163 140 Q170 156 168 166" stroke="${skD}" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round"/><path d="M150 166 Q152 174 160 174 Q168 174 170 166" stroke="${skL}" stroke-width="3" fill="${shade(S.skin,-.08)}" stroke-linecap="round"/><circle cx="156" cy="160" r="3.4" fill="#fff" opacity=".35"/>`;
+ if(S.bindi) F.center+=`<circle cx="160" cy="104" r="${S.bigBindi?11:6}" fill="#d2213a" stroke="${S.bigBindi?OL:'none'}" stroke-width="2"/>`;
+ if(S.freckles) F.center+=`<g fill="${shade(S.skin,-.3)}" opacity=".7"><circle cx="112" cy="166" r="2.6"/><circle cx="121" cy="172" r="2.6"/><circle cx="104" cy="172" r="2.2"/><circle cx="199" cy="166" r="2.6"/><circle cx="208" cy="172" r="2.6"/><circle cx="216" cy="166" r="2.2"/></g>`;
+ if(S.mooch) F.mouth+=`<path d="M160 174 C140 172 120 174 112 186 C130 184 146 184 160 182 C174 184 190 184 208 186 C200 174 180 172 160 174 Z" fill="#3a2c26" stroke="${OL}" stroke-width="3"/>`;
  const vm=talk?act.vm:null;
- h+= vm ? lipMouth(vm,160,S.mooch?190:188,1,S.lips||shade(S.skin,-.35),OL) : (talk?lipMouth({w:30,h:8+lv*20,r:0,teeth:.5},160,188,1,S.lips||skD,OL):mouth2(P.m,S));
+ F.mouth+= vm ? lipMouth(vm,160,S.mooch?190:188,1,S.lips||shade(S.skin,-.35),OL) : (talk?lipMouth({w:30,h:8+lv*20,r:0,teeth:.5},160,188,1,S.lips||skD,OL):mouth2(P.m,S));
+ // ---- turning: every front feature rides round the head (th degrees, + = turning toward screen-right)
+ const P3=(x0,r)=>{const a0=Math.asin(Math.max(-.999,Math.min(.999,(x0-160)/r))), a=a0+TH*.8;return {x:160+r*.9*Math.sin(a),k:Math.max(.5,Math.cos(a))/Math.max(.25,Math.cos(a0))*Math.min(1,Math.cos(a)/.2),v:Math.cos(a)}};
+ const place=(svg,x0,r,y0)=>{if(!svg)return '';const q=P3(x0,r||hw);if(q.v<=.03)return '';const o=Math.min(1,q.v/.22);
+   return `<g opacity="${fr(o)}" transform="translate(${fr(q.x)} 0) scale(${fr(q.k)} 1) translate(${-x0} 0)">${svg}</g>`};
+ const earAt=side=>{const a=side*Math.PI/2+TH, x=160+(hw-2)*Math.sin(a), v=Math.cos(a);
+   let e=`<g transform="translate(${fr(x)} 0) scale(${fr(.55+.45*Math.min(1,Math.abs(Math.sin(a))))} 1) translate(${fr(-x)} 0)">${ear(x)}</g>`;
+   if(earring) e+=`<circle cx="${fr(x+(side*-2))}" cy="170" r="7" fill="#ffd54a" stroke="${OL}" stroke-width="2"/>`;
+   return {svg:e,v}};
+ const eL=earAt(-1), eR=earAt(1);
+ const back=Math.max(0,Math.min(1,(.2-cT)/.5));                 // 0 = face visible, 1 = seen from behind
+ const uT=Math.abs(Math.atan2(sT,cT))*180/Math.PI, sgT=sT>=0?1:-1, hFrac=uT<12?0:Math.min(1,uT/180);
+ const BTAB=[[0,-1.05],[30,-.68],[60,-.3],[90,.1],[135,.6],[180,1.3]], bIx=BTAB.findIndex(q=>q[0]>=uT), bA=BTAB[Math.max(0,bIx-1)], bB=BTAB[Math.max(0,bIx)], hB=bA[1]+(bB[1]-bA[1])*((uT-bA[0])/Math.max(1,bB[0]-bA[0]));   // 0 front .. 1 back
+ let hairClip='';
+ if(hFrac>0){const bx=160+sgT*hw*hB, far=160-sgT*(hw+40), cid='hc'+(EYEN++);
+   hairClip=cid; var hairClipDef=`<clipPath id="${cid}"><path d="M${fr(far)} 20 L${fr(bx+sgT*8)} 20 Q${fr(bx+sgT*26)} 120 ${fr(bx+sgT*4)} 168 Q${fr(bx-sgT*6)} 210 ${fr(bx-sgT*16)} 262 L${fr(far)} 262 Z M${160-hw-40} 20 H${160+hw+40} V${fr(86+14*hFrac)} H${160-hw-40} Z"/></clipPath>`}
+ const hairShift=`translate(${fr(sT*hw*.22)} 0)`;
+ let backHair='';
+ if(hFrac>0){const long=['ponytail','curly','bun','greybun'].includes(S.hair), bot=long?196:182;
+   if(S.hair==='bald') backHair=`<path d="M${160-hw+4} 128 Q160 176 ${160+hw-4} 128" stroke="#8f8a86" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+   else backHair=`<path d="M${160-hw-3} 136 C${160-hw-3} 84 ${160-hw*.55} 64 160 64 C${160+hw*.55} 64 ${160+hw+3} 84 ${160+hw+3} 136 C${160+hw} ${bot-20} ${160+hw*.5} ${bot} 160 ${bot} C${160-hw*.5} ${bot} ${160-hw} ${bot-20} ${160-hw-3} 136 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M${160-hw*.5} 84 Q160 70 ${160+hw*.5} 84" stroke="#fff" stroke-opacity=".18" stroke-width="6" fill="none"/>`;
+   if(S.hair==='ponytail'&&back>.3) backHair+=`<path d="M150 90 Q132 170 148 252 Q160 262 172 252 Q188 170 170 90 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><circle cx="160" cy="96" r="11" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;
+   if(S.hair==='bun'||S.hair==='greybun') backHair+=`<circle cx="160" cy="70" r="30" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/>`;
+   backHair=hairClipDef+`<g clip-path="url(#${hairClip})">${backHair}</g>`}
+ // profile nose bump on the silhouette when side-on
+ let pnose='';
+ if(Math.abs(sT)>.35&&cT>-.2){const sg=Math.sign(sT), x=160+hw*.97*sT, w=11*Math.min(1,(Math.abs(sT)-.35)/.4);
+   pnose=`<path d="M${fr(x)} 146 Q${fr(x+sg*w*1.4)} 162 ${fr(x+sg*w*.4)} 170 Q${fr(x)} 172 ${fr(x-sg*2)} 170" fill="${S.skin}" stroke="${skL}" stroke-width="3" stroke-linejoin="round"/>`}
+ const kHead=1-.06*Math.abs(sT);
+ let h=F.neck.replace('M144 182','M144 182')+(eL.v<=.12?eL.svg:'')+(eR.v<=.12?eR.svg:'');
+ h+=`<g transform="${hairShift}">${F.hairTop}</g>`;
+ h+=`<g transform="translate(160 0) scale(${fr(kHead)} 1) translate(-160 0)">${F.head}</g>`;
+ h+=(eL.v>.12?eL.svg:'')+(eR.v>.12?eR.svg:'');
+ h+=place(F.blushL,116)+place(F.blushR,204)+place(F.center,160)+place(F.browL,138)+place(F.browR,182)+place(F.eyeL,134)+place(F.eyeR,186)+place(F.specs,160)+place(F.mouth,160,hw*.86)+pnose;
+ const shortHair=['spiky','neat','bald'].includes(S.hair);
+ h+=`<g transform="${hairShift}">${F.hairFront}</g>`+backHair+(shortHair&&hFrac>0&&hFrac<.75?(eL.v>.12?eL.svg:'')+(eR.v>.12?eR.svg:''):'');
+ // from behind: plain cloth hides the tie, collar and buttons
+ let backCover='';
+ if(back>0&&!S.saree){const d=S.kurta?`M108 206 Q160 194 212 206 Q${S.belly?248:234} 300 228 390 L92 390 Q${S.belly?72:86} 300 108 206 Z`:'M106 206 Q160 194 214 206 Q230 270 220 332 L100 332 Q90 270 106 206 Z';
+   backCover=`<path d="${d}" fill="url(#cl_${id})" stroke="${OL}" stroke-width="4.5" opacity="${fr(back)}"/>`+(S.bag?`<rect x="118" y="214" width="84" height="104" rx="18" fill="#ff8a3d" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')}
  // head motion: breathing, nods on loud words, tilt while talking
  const br=Math.sin(t*2.4+id.length), nod=talk?(lvs-.3)*7+Math.sin(t*6.1)*1.5*lvs:0;
  const bob=dance?Math.abs(Math.sin(t*9))*-16:br*2.5, tilt=(talk?Math.sin(t*3.7)*2.6:Math.sin(t*1.6)*1.4)+(dance?wig*6:0)+(Pb==='think'?6:0)+(gx*.35);
  const lean=dance?wig*4:(talk?Math.sin(t*1.9)*1.2:0), hop=act&&act.hop?act.hop:0;
- return `<ellipse cx="160" cy="430" rx="${(110-hop*30).toFixed(1)}" ry="20" fill="url(#floorSh)"/><g transform="translate(0 ${(bob-hop*60).toFixed(1)}) rotate(${lean.toFixed(1)} 160 425)">${b}${props}<g transform="translate(160 330) scale(${(1+br*.008).toFixed(4)} ${(1+br*.014).toFixed(4)}) translate(-160 -330)">${armsSvg}${bangles}</g><g transform="translate(0 ${nod.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 205)">${h}</g></g>`;
+ return `<ellipse cx="160" cy="430" rx="${(110-hop*30).toFixed(1)}" ry="20" fill="url(#floorSh)"/><g transform="translate(0 ${(bob-hop*60).toFixed(1)}) rotate(${lean.toFixed(1)} 160 425)">${farArm}<g transform="translate(160 0) scale(${fr(.62+.38*Math.abs(cT))} 1) translate(-160 0)">${b}${backCover}</g>${props}<g transform="translate(160 330) scale(${(1+br*.008).toFixed(4)} ${(1+br*.014).toFixed(4)}) translate(-160 -330)">${armsSvg}${bangles}</g><g transform="translate(0 ${nod.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 205)">${h}</g></g>`;
 }
 
 
@@ -396,8 +440,22 @@ function renderAt(t){
   let gx=((sg*37)%5-2)*.9, gy=((sg*53)%3-1)*.8;
   if(!talk&&spk&&spk!==id) gx=Math.sign(spkX-c.x)*5*flip, gy=1;
   const vm=talk?visAt(t):null;
+  // which way they face: toward whoever is talking (the speaker half-turns to the listener), or as the storyboard says
+  const faceAt=jj=>{const BB=s.beats[jj]; if(!BB) return c.turn||0;
+    if(BB.turn&&BB.turn[id]!==undefined) return +BB.turn[id];
+    if(SB.autoturn===false||id==='masterji') return c.turn||0;
+    const sp=BB.who&&s.cast.find(q=>q.id===BB.who)?BB.who:null;
+    if(!sp) return jj>0?faceAt(jj-1):(c.turn||0);
+    if(sp!==id) return Math.sign(charPos(s,sp)[0]-c.x)*38;
+    const others=s.cast.filter(q=>q.id!==id&&q.id!=='masterji');
+    if(!others.length) return c.turn||0;
+    const o=others.reduce((a,q)=>Math.abs(q.x-c.x)<Math.abs(a.x-c.x)?q:a);
+    return Math.sign(o.x-c.x)*20};
+  let th=faceAt(j); const th0=j>0?faceAt(j-1):th; th=lerp(th0,th,eIO(Math.min(1,bt/.35)));
+  if((B.spin||[]).includes(id)) th+=360*eIO(Math.min(1,bt/.75));
+  if(c.flip) th=-th;
   if(id!=='masterji') defs+=charDefs(id);
-  const body=(id==='masterji'&&!(typeof PUPPETS!=='undefined'&&PUPPETS.masterji))?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):(typeof PUPPETS!=='undefined'&&PUPPETS[id]?drawPuppet:drawPerson)(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
+  const body=(id==='masterji'&&!(typeof PUPPETS!=='undefined'&&PUPPETS.masterji))?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):(typeof PUPPETS!=='undefined'&&PUPPETS[id]?drawPuppet:drawPerson)(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,th,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
   chars+=`<g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g>`;
  }
  // effects for this beat

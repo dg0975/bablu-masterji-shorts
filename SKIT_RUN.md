@@ -156,6 +156,13 @@ almost zero. These rules fix that; every skit must follow them:
 7. **Facebook too.** Post the same Reel to Facebook as DAILY_RUN.md step 4c says (it skips itself
    while no Facebook Page is connected in Windsor).
 
+8. **Movement, not statues.** Characters now turn in 3D on their own: anyone not speaking turns
+   to face whoever is talking, so do not add facing directions by hand. For one comic moment per
+   skit, add `"spin":["golu"]` on a beat (a full 360° turn, e.g. a happy dance, dizzy shock or
+   showing off) or `"turn":{"dadi":180}` to turn someone fully away (sulking, hiding, ignoring;
+   90 = side profile, 180 = back view, 0 = front again). Use at most one spin and one turn per skit.
+   `"autoturn": false` at the top level switches auto-facing off.
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`

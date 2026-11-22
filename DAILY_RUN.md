@@ -252,7 +252,8 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
 1. Windsor `get_connectors` (include_options false): if `facebook_organic` has no `accounts`,
    skip this step and add one line to the report: "Facebook: Page not connected yet". Do not
    ask the user to connect it more than once a week (Mondays).
-2. Otherwise `execute_action` connector `facebook_organic`, account = that Page's id, action
+2. Otherwise `execute_action` connector `facebook_organic`, account = that Page's id (connected
+   22 Nov 2026: Page "Bablu Masterji", id `1473702775829521`), action
    `create_reel`, params `{"video_url": PUBLIC_URL, "description": <the Instagram caption>}`.
    Report the returned post id. If it fails, retry once after 2 minutes, then report the error.
 

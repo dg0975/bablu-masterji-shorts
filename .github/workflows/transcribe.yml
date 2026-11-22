@@ -1,0 +1,30 @@
+name: transcribe
+# Captions for videos made outside the engine: push transcribe/<name>.mp3, get transcribe/<name>.json back.
+on:
+  push:
+    paths: ["transcribe/*.mp3"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  transcribe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - name: Transcribe new audio
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+        run: |
+          for f in transcribe/*.mp3; do
+            [ -f "${f%.mp3}.json" ] && continue
+            python3 scripts/transcribe.py "$f" || true
+          done
+      - name: Commit transcripts
+        run: |
+          git config user.name "voice-bot"; git config user.email "voice-bot@users.noreply.github.com"
+          git add transcribe/*.json 2>/dev/null || true
+          git diff --cached --quiet || (git commit -m "transcripts" && git pull --rebase -q && git push)

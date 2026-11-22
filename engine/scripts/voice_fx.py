@@ -22,11 +22,12 @@ VIS_FPS = 30
 
 # lively but clear: syllables per second (whole clip, pauses included)
 TARGET_RATE = {"golu": 6.6, "bunty": 6.3, "pinky": 6.4, "mummy": 6.4, "aunty": 6.6,
-               "papa": 5.9, "dadi": 5.4, "masterji": 6.2}
+               "papa": 5.9, "dadi": 5.4, "masterji": 6.2,
+               "dadaji": 5.3, "chutki": 6.4, "gupta": 6.3, "raju": 6.2}
 # typical speaking pitch (Hz). Kid voices start from a light, bright voice model (Golu Zephyr, Bunty
 # Erinome) and are pitched up to this with their formants (voice size) shifted too,
 # so a grown-up voice model sounds like a 10-12 year old instead of a man/woman.
-KID_F0 = {"golu": 275, "bunty": 262}
+KID_F0 = {"golu": 275, "bunty": 262, "chutki": 300}
 MAX_PAUSE = 0.14          # longest silence kept inside a line (s)
 
 

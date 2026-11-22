@@ -29,8 +29,9 @@ def pip_install(pkg):
 
 
 # ----------------------------------------------------------------------------- validation
-SKIT_CAST = {"masterji", "golu", "mummy", "papa", "dadi", "pinky", "bunty", "aunty"}
-SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", "bedroom"}
+SKIT_CAST = {"masterji", "golu", "mummy", "papa", "dadi", "pinky", "bunty", "aunty", "dadaji", "chutki", "gupta", "raju"}
+SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", "bedroom", "park", "market"}
+SKIT_EXPLAIN = {"molecules", "evaporation", "heat", "pressure", "sound", "light", "gravity", "earth", "circuit", "magnet", "watercycle", "steps", "bars"}
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
 SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon"}
@@ -84,6 +85,16 @@ def validate_skit(sb):
                 name = x if isinstance(x, str) else x.get("s")
                 if name not in SFX_NAMES:
                     errs.append(f"{tag} beat {j}: unknown sfx {name!r} (use {sorted(SFX_NAMES)})")
+            ex = b.get("explain")
+            if ex:
+                if not isinstance(ex, dict) or ex.get("kind") not in SKIT_EXPLAIN:
+                    errs.append(f"{tag} beat {j}: explain needs a kind from {sorted(SKIT_EXPLAIN)}")
+                elif ex["kind"] == "steps" and not ex.get("steps"):
+                    errs.append(f"{tag} beat {j}: explain steps needs \"steps\": [2-4 short lines]")
+                elif ex["kind"] == "bars" and not ex.get("bars"):
+                    errs.append(f"{tag} beat {j}: explain bars needs \"bars\": [[label, number], ...]")
+                if i == 0 and j == 0:
+                    errs.append("shot 0 beat 0: no explain board on the first beat (the hook is there)")
             if not b.get("say") and not b.get("hold"):
                 warns.append(f"{tag} beat {j}: no line and no 'hold'; using 1.2 s")
     return errs, warns

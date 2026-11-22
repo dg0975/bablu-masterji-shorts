@@ -46,9 +46,14 @@ see 2c). Read
   `"dadi":{"name":"Dadi","engine":"gemini","gvoice":"Gacrux","style":"a loving, witty Indian grandmother, warm and a little teasing"}`,
   `"pinky":{"name":"Pinky","engine":"gemini","gvoice":"Leda","style":"a sarcastic teenage Indian elder sister, bored and unimpressed"}`,
   `"bunty":{"name":"Bunty","engine":"gemini","gvoice":"Erinome","style":"a polite know-it-all 11-year-old topper boy, precise and a bit smug"}`,
-  `"aunty":{"name":"Sharma Aunty","engine":"gemini","gvoice":"Laomedeia","style":"a nosy, gossipy neighbour aunty, loud and dramatic"}`.
+  `"aunty":{"name":"Sharma Aunty","engine":"gemini","gvoice":"Laomedeia","style":"a nosy, gossipy neighbour aunty, loud and dramatic"}`,
+  `"dadaji":{"name":"Dadaji","engine":"gemini","gvoice":"Enceladus","style":"a sweet, slightly forgetful Indian grandfather in his 70s, funny and full of old stories"}`,
+  `"chutki":{"name":"Chutki","engine":"gemini","gvoice":"Achernar","style":"a cute, dramatic 6-year-old Indian girl, high-pitched and excited"}`,
+  `"gupta":{"name":"Gupta Uncle","engine":"gemini","gvoice":"Fenrir","style":"a loud, show-off Indian neighbour uncle who brags about everything he owns"}`,
+  `"raju":{"name":"Raju Bhaiya","engine":"gemini","gvoice":"Puck","style":"a lazy, cool college-going cousin, laid back and casual"}`.
   Sarvam fallback for them: Dadi `roopa_hi_narration`, Pinky `kavya_hi_conversational`,
-  Bunty `aayan_hi_conversational`, Aunty `simran_hi_social_excited`.
+  Bunty `aayan_hi_conversational`, Aunty `simran_hi_social_excited`, Dadaji `ashok_hi_character`,
+  Chutki `kavya_hi_conversational`, Gupta Uncle `ashok_hi_character`, Raju `aayan_hi_conversational`.
   **Act every family line:** add a beat-level `"style"` describing the emotion of that moment
   ("shouting angrily", "embarrassed and sheepish", "thrilled, laughing"), and use at most one
   inline English tag in `say` where it fits: `<laugh>`, `<sigh>`, `<gasp>`, `<short pause>`.
@@ -74,7 +79,8 @@ see 2c). Read
 - Lines are short spoken Hindi in Devanagari, about 6-12 words each. Funny but family-friendly: roast situations, never groups; Mummy's belan is a joke
   prop, never actual hitting. No real people, brands or other creators' characters or songs.
 - Vary sets, shot order and gags from the last 3 skits. Save `"post_title"` and `"format":"skit"`.
-- **Cast:** use at least one of the extra cast (Dadi, Pinky, Bunty, Sharma Aunty) in every skit,
+- **Cast:** use at least one of the extra cast (Dadi, Pinky, Bunty, Sharma Aunty, Dadaji, Chutki,
+  Gupta Uncle, Raju Bhaiya) in every skit, and one of the four new ones at least every other day,
   rotating them; Golu, Mummy and Papa are not needed every time. Props for the gag: scene
   `"props":[{"kind":"matka","x":150,"y":1300,"scale":1.1}]` or a held `"item"` on a cast member
   (`bottle`, `glass`, `chai`, `matka`; change per beat with `"item":{"golu":"glass"}`).
@@ -124,9 +130,27 @@ studied for patterns only, never copy anyone's characters, jokes, scripts or son
   sharp, old-school wisdom that is often right, walking stick. Pinky: Golu's elder sister, glued to
   her phone, roasts him. Bunty: the neighbour's perfect topper ("Bunty ko dekho!"), glasses, books;
   sometimes he is wrong too. Sharma Aunty: nosy neighbour who spreads half-true "facts" Masterji
-  corrects. Use 2-3 characters per skit, rotate who appears; Masterji explains the science.
+  corrects. Dadaji: Dadi's husband, white hair and moustache, shawl; "humare zamaane mein" stories,
+  hard of hearing at the funniest moment. Chutki: Golu's 6-year-old sister in a frock with pigtails,
+  asks the innocent "kyun?" that stumps everyone, takes everything literally. Gupta Uncle: show-off
+  neighbour in a cap and gold chain, brags that his things are "imported" and loses to simple science.
+  Raju Bhaiya: lazy college cousin with headphones and stubble, says "bro", has a reel for everything
+  and a wrong "life hack". Use 2-3 characters per skit, rotate who appears; Masterji explains the science.
 - Sets: classroom, livingroom, kitchen, train (trees rush past the windows), tapri (street chai
-  stall), terrace (water tank, washing line, kite), bedroom (`"night":true` for a night window).
+  stall, birds on the wire, auto-rickshaw passing), terrace (water tank, washing line, kite, birds),
+  bedroom (fish bowl; `"night":true` for a night window), park (swing, trees, butterflies, kite),
+  market (sabzi/fruit/kirana stalls, flags, scooter passing). Every set has small moving things (paper
+  plane and globe in class, sleeping cat on the sofa, pressure cooker whistle in the kitchen).
+- **Explain with moving diagrams (owner request 22 Nov 2026):** when Masterji explains the science,
+  put an animated board on his first explaining beat with `"explain"` (it stays up until a beat sets
+  `"explain": false` or the shot ends; never on the first beat of the video). Pick the kind that
+  shows the actual mechanism: `molecules` (hot vs cold particles), `evaporation` (matka/sweat
+  cooling), `heat` (heat flows hot to cold), `pressure` (straw/air pushing), `sound` (waves to the
+  ear), `light` (mirror; `"mode":"refract"` for water bending), `gravity` (`"mode":"air"` for the
+  feather), `earth` (day/night; `"mode":"orbit"` for the year), `circuit`, `magnet`, `watercycle`,
+  or the generic `steps` (`"steps":["Paani garam","Bhaap bani","Badal bane"]`, 2-4 short lines) and
+  `bars` (`"bars":[["Cheeni",10],["Namak",4]],"unit":"g"`). Give it a `"title"` (3-5 words) and
+  `"labels"` in Hinglish, 1-4 words each (defaults exist). Use one board per skit, in the Masterji shot.
 
 ## 2c. Reach rules (owner decision 22 Nov 2026, from the channel's own numbers)
 

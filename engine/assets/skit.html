@@ -21,10 +21,11 @@ html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden;fo
 #card .f{margin-top:26px;color:#7a5a2e;font-weight:700;font-size:36px}
 #handle{position:absolute;right:40px;top:160px;color:#fff;font-weight:700;font-size:30px;text-shadow:0 3px 0 #1e1620;z-index:5}
 #light{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse 80% 62% at 50% 44%,rgba(0,0,0,0) 55%,rgba(20,8,0,.34) 100%),linear-gradient(160deg,rgba(255,226,180,.16),rgba(255,226,180,0) 45%)}
+#ex{position:absolute;left:98px;top:236px;width:900px;height:440px;overflow:visible;z-index:5;pointer-events:none}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:8;pointer-events:none}
 </style></head>
 <body><div id="frame"><div id="world"><svg id="w" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
-<div id="hook"></div><div id="title"><div class="series"></div><div class="ep"></div></div><div id="handle"></div>
+<svg id="ex" width="900" height="440" viewBox="0 0 900 440"></svg><div id="hook"></div><div id="title"><div class="series"></div><div class="ep"></div></div><div id="handle"></div>
 <div id="sub"><div class="who"></div><div class="line"></div></div>
 <div id="card"><div class="k"></div><div class="t"></div><div class="f"></div></div><div id="light"></div><div id="flash"></div></div>
 <script>
@@ -42,6 +43,81 @@ function fan(t){let s=''; for(let k=0;k<3;k++){const a=t*720+k*120; s+=`<g trans
   return `<line x1="540" y1="0" x2="540" y2="150" stroke="${INK}" stroke-width="8"/><g transform="translate(0 0) scale(1 .35) translate(0 315)">${s}</g><circle cx="540" cy="170" r="26" fill="#6b5137" stroke="${INK}" stroke-width="4"/>`}
 function clock(x,y,t){const m=t*30, h=t*2.5;return `<circle cx="${x}" cy="${y}" r="46" fill="#fff8e6" stroke="${INK}" stroke-width="6"/><line x1="${x}" y1="${y}" x2="${x}" y2="${y-32}" stroke="${INK}" stroke-width="4" transform="rotate(${m.toFixed(1)} ${x} ${y})"/><line x1="${x}" y1="${y}" x2="${x}" y2="${y-22}" stroke="${INK}" stroke-width="6" transform="rotate(${(h+120).toFixed(1)} ${x} ${y})"/><circle cx="${x}" cy="${y}" r="5" fill="${INK}"/>`}
 function floorPlanks(y0,c1,c2){let s=`<rect x="0" y="${y0}" width="1080" height="${1920-y0}" fill="${c1}"/>`;for(let k=0;k<10;k++){const y=y0+20+k*62;s+=`<line x1="0" y1="${y}" x2="1080" y2="${y}" stroke="${c2}" stroke-width="3"/>`;for(let j=0;j<4;j++){const x=((k*137+j*290)%1080);s+=`<line x1="${x}" y1="${y}" x2="${x}" y2="${y+62}" stroke="${c2}" stroke-width="3"/>`}}return s}
+/* ---- living backgrounds: small moving things in every set ---- */
+const r1=n=>(+n).toFixed(1);
+const tri=x=>1-Math.abs((((x%2)+2)%2)-1);
+function mixC(a,b,p){const A=parseInt(a.slice(1),16),B=parseInt(b.slice(1),16);p=clamp(p);
+ return '#'+[16,8,0].map(s=>Math.round(((A>>s)&255)*(1-p)+((B>>s)&255)*p).toString(16).padStart(2,'0')).join('')}
+function birdsFly(t,period,y0,n){const u=(t%period)/(period*.55);if(u>1)return '';let s='';
+ for(let k=0;k<(n||5);k++){const x=lerp(-160,1240,u)-k*44, y=y0+(k%2?1:-1)*Math.ceil(k/2)*24+Math.sin(t*1.5+k)*6, fl=Math.sin(t*12+k*1.3)*11;
+  s+=`<path d="M${r1(x-20)} ${r1(y+fl*.3)} Q${r1(x-9)} ${r1(y-fl)} ${r1(x)} ${r1(y)} Q${r1(x+9)} ${r1(y-fl)} ${r1(x+20)} ${r1(y+fl*.3)}" stroke="${INK}" stroke-width="4.5" fill="none" stroke-linecap="round"/>`}
+ return s}
+function paperPlane(t){const u=(t%7)/2.4;if(u>1)return '';const x=lerp(-90,1170,u), y=290+Math.sin(u*7)*28-u*40, r=Math.cos(u*7)*12;
+ return `<g transform="translate(${r1(x)} ${r1(y)}) rotate(${r1(r)})"><path d="M-46 0 L40 -4 L-30 -22 Z" fill="#fff" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/><path d="M-46 0 L40 -4 L-24 14 Z" fill="#e3e9f2" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/></g>`}
+function globe(x,y,t){let m='';for(let k=0;k<3;k++){const ph=(t*.5+k/3)%1, c=Math.cos(ph*Math.PI);m+=`<ellipse cx="${x}" cy="${y}" rx="${r1(Math.abs(c)*30)}" ry="30" fill="none" stroke="#2a6a8a" stroke-width="2.5" opacity=".6"/>`}
+ return `<path d="M${x-24} ${y+56} h48 l-8 -14 h-32 Z" fill="#6b4a2e" stroke="${INK}" stroke-width="3"/><path d="M${x} ${y+42} v-10" stroke="${INK}" stroke-width="5"/><circle cx="${x}" cy="${y}" r="32" fill="#6fc3ff" stroke="${INK}" stroke-width="4"/>
+ <clipPath id="gl${x}"><circle cx="${x}" cy="${y}" r="30"/></clipPath><g clip-path="url(#gl${x})">${[0,1,2].map(k=>{const u=((t*.12+k*.37)%1);return `<ellipse cx="${r1(x-70+u*140)}" cy="${y-10+k*11}" rx="${13+k*4}" ry="${8+k*2}" fill="#5cbf5a"/>`}).join('')}</g>${m}
+ <path d="M${x-40} ${y-16} A42 42 0 0 0 ${x+30} ${y+34}" stroke="#8a5c38" stroke-width="4" fill="none"/>`}
+function sleepyCat(x,y,t){const b=1+Math.sin(t*2.2)*.05, tail=Math.sin(t*1.7)*18;
+ return `<g transform="translate(${x} ${y})"><path d="M46 -2 q30 ${r1(-12+tail*.3)} ${r1(40+tail*.2)} ${r1(-36+tail)}" stroke="${INK}" stroke-width="16" fill="none" stroke-linecap="round"/><path d="M46 -2 q30 ${r1(-12+tail*.3)} ${r1(40+tail*.2)} ${r1(-36+tail)}" stroke="#f29b3a" stroke-width="10" fill="none" stroke-linecap="round"/>
+ <g transform="translate(0 0) scale(1 ${b.toFixed(3)})"><ellipse cx="0" cy="-16" rx="58" ry="28" fill="#f29b3a" stroke="${INK}" stroke-width="4"/><path d="M-24 -38 q8 -5 16 0 M4 -42 q8 -5 16 0 M30 -36 q7 -4 14 2" stroke="#c46a1c" stroke-width="4" fill="none"/></g>
+ <circle cx="-50" cy="-24" r="24" fill="#f29b3a" stroke="${INK}" stroke-width="4"/><path d="M-70 -38 L-66 -60 L-54 -46 Z M-46 -46 L-34 -60 L-30 -40 Z" fill="#f29b3a" stroke="${INK}" stroke-width="3.5" stroke-linejoin="round"/>
+ <path d="M-63 -25 q5 4 10 0 M-47 -25 q5 4 10 0" stroke="${INK}" stroke-width="3" fill="none"/><circle cx="-50" cy="-17" r="2.6" fill="#d2413a"/>
+ ${[0,1].map(k=>{const q=(t*.4+k*.5)%1;return `<text x="${r1(-64+q*34)}" y="${r1(-62-q*64)}" font-family="Poppins" font-weight="700" font-size="${r1(22+q*14)}" fill="#5b5fa8" opacity="${r1((1-q)*.9)}">z</text>`}).join('')}</g>`}
+function cooker(x,y,t){const ph=t%6, puff=ph>4.6?(ph-4.6)/1.4:0, jig=ph>4.1?Math.sin(t*60)*3:0;
+ let st='';if(puff>0)for(let k=0;k<4;k++){const q=clamp(puff*1.3-k*.12);st+=`<circle cx="${r1(x+Math.sin(k*2)*14)}" cy="${r1(y-112-q*150)}" r="${r1(12+q*30)}" fill="#fff" opacity="${r1(.8*(1-q))}"/>`}
+ return `<ellipse cx="${x}" cy="${y}" rx="70" ry="9" fill="#000" opacity=".18"/><path d="M${x-62} ${y} L${x-58} ${y-70} Q${x} ${y-84} ${x+58} ${y-70} L${x+62} ${y} Z" fill="#c9d0d8" stroke="${INK}" stroke-width="4.5"/><path d="M${x-62} ${y-70} Q${x} ${y-92} ${x+62} ${y-70} Q${x} ${y-62} ${x-62} ${y-70} Z" fill="#a9b1bb" stroke="${INK}" stroke-width="4"/>
+ <rect x="${x+56}" y="${y-82}" width="70" height="14" rx="7" fill="#2a2a2a"/><rect x="${r1(x-8+jig)}" y="${y-106}" width="16" height="22" rx="4" fill="#2a2a2a"/><path d="M${x-40} ${y-50} v36" stroke="#fff" stroke-width="5" opacity=".5"/>${st}`}
+function wireBirds(t){const yAt=x=>{const u=x/680;return (1-u)*(1-u)*360+2*u*(1-u)*400+u*u*372};
+ return `<path d="M0 360 Q340 400 680 372" stroke="#333" stroke-width="3" fill="none"/>`+[150,250,520].map((x,k)=>{const y=yAt(x), hp=Math.max(0,Math.sin(t*2.3+k*2.1))**8*14, lk=Math.sin(t*.7+k)>0?1:-1;
+  return `<g transform="translate(${x} ${r1(y-hp)}) scale(${lk} 1)"><path d="M-4 0 L-8 8 M4 0 L6 8" stroke="#c46a1c" stroke-width="2.5"/><ellipse cx="0" cy="-12" rx="17" ry="12" fill="#5a5f6b" stroke="${INK}" stroke-width="3"/><path d="M-14 -10 L-28 -2 L-16 -2 Z" fill="#3e424c" stroke="${INK}" stroke-width="2.5"/><circle cx="12" cy="-24" r="9" fill="#5a5f6b" stroke="${INK}" stroke-width="3"/><circle cx="15" cy="-26" r="2" fill="#fff"/><path d="M20 -24 l8 2 l-8 3 Z" fill="#ffb020"/></g>`}).join('')}
+function autoRick(t,period,yb){const u=(t%period)/3.2;if(u>1)return '';const x=lerp(1300,-300,u), w=t*-9;
+ const wheel=(cx)=>`<g transform="rotate(${r1(w*57)} ${cx} ${yb-24})"><circle cx="${cx}" cy="${yb-24}" r="24" fill="#222" stroke="${INK}" stroke-width="3"/><path d="M${cx-18} ${yb-24} h36 M${cx} ${yb-42} v36" stroke="#888" stroke-width="3"/></g>`;
+ return `<g transform="translate(${r1(x)} 0)"><ellipse cx="0" cy="${yb}" rx="130" ry="10" fill="#000" opacity=".2"/>
+ <path d="M-110 ${yb-40} L-110 ${yb-150} Q-104 ${yb-196} -40 ${yb-200} L100 ${yb-200} Q120 ${yb-196} 120 ${yb-170} L120 ${yb-40} Z" fill="#1e1e1e" stroke="${INK}" stroke-width="4"/>
+ <path d="M-120 ${yb-40} L-112 ${yb-120} Q-96 ${yb-136} -60 ${yb-130} L-40 ${yb-60} L120 ${yb-60} L120 ${yb-40} Z" fill="#ffd54a" stroke="${INK}" stroke-width="4"/><rect x="-40" y="${yb-130}" width="150" height="70" fill="#2e9e5b" stroke="${INK}" stroke-width="4"/>
+ <path d="M-104 ${yb-120} L-70 ${yb-170} L-56 ${yb-130} Z" fill="#cfeaff" stroke="${INK}" stroke-width="3"/><circle cx="-116" cy="${yb-76}" r="9" fill="#fff6b0" stroke="${INK}" stroke-width="3"/>${wheel(-80)}${wheel(80)}</g>`}
+function scooter(t,period,yb){const u=(t%period)/2.6;if(u>1)return '';const x=lerp(-260,1340,u), w=t*9;
+ const wheel=cx=>`<g transform="rotate(${r1(w*57)} ${cx} ${yb-20})"><circle cx="${cx}" cy="${yb-20}" r="20" fill="#222" stroke="${INK}" stroke-width="3"/><path d="M${cx-14} ${yb-20} h28" stroke="#888" stroke-width="3"/></g>`;
+ return `<g transform="translate(${r1(x)} 0)"><ellipse cx="0" cy="${yb}" rx="90" ry="8" fill="#000" opacity=".2"/><path d="M-70 ${yb-30} Q-70 ${yb-80} -20 ${yb-84} L30 ${yb-84} L52 ${yb-30} Z" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M40 ${yb-30} L62 ${yb-110} L80 ${yb-112}" stroke="${INK}" stroke-width="7" fill="none" stroke-linecap="round"/>
+ <path d="M-50 ${yb-84} L-50 ${yb-150} Q-30 ${yb-176} 0 ${yb-150} L10 ${yb-84}" fill="#2f6bd8" stroke="${INK}" stroke-width="4"/><circle cx="-22" cy="${yb-182}" r="22" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M-4 ${yb-120} L54 ${yb-110}" stroke="#c98b62" stroke-width="10" stroke-linecap="round"/>${wheel(-46)}${wheel(52)}</g>`}
+function fishBowl(x,y,t){const dir=Math.cos(t*.9)>0?1:-1, fx_=x+Math.sin(t*.9)*22, fy=y+12+Math.sin(t*1.7)*5;
+ const bub=[0,1,2].map(k=>{const q=(t*.6+k/3)%1;return `<circle cx="${r1(fx_+dir*16+Math.sin(q*9)*3)}" cy="${r1(fy-6-q*42)}" r="${r1(3+q*3)}" fill="none" stroke="#fff" stroke-width="2" opacity="${r1(1-q)}"/>`}).join('');
+ return `<rect x="${x-110}" y="${y+48}" width="220" height="16" rx="4" fill="#8a5c38" stroke="${INK}" stroke-width="4"/><clipPath id="fb${x}"><circle cx="${x}" cy="${y}" r="47"/></clipPath>
+ <circle cx="${x}" cy="${y}" r="50" fill="#e6f6ff" fill-opacity=".6" stroke="${INK}" stroke-width="4"/><g clip-path="url(#fb${x})"><rect x="${x-60}" y="${y-14}" width="120" height="80" fill="#59b8ea" opacity=".75"/><path d="M${x-40} ${y+44} q20 -14 40 0 q20 -14 40 0" fill="#3f8f4a"/>
+ <g transform="translate(${r1(fx_)} ${r1(fy)}) scale(${dir} 1)"><ellipse cx="0" cy="0" rx="16" ry="10" fill="#ff8a2a" stroke="${INK}" stroke-width="2.5"/><path d="M-14 0 L-28 ${r1(-9+Math.sin(t*14)*3)} L-28 ${r1(9+Math.sin(t*14)*3)} Z" fill="#ff8a2a" stroke="${INK}" stroke-width="2.5"/><circle cx="8" cy="-3" r="2.6" fill="${INK}"/></g>${bub}</g>
+ <path d="M${x-40} ${y-46} Q${x} ${y-56} ${x+40} ${y-46}" stroke="${INK}" stroke-width="4" fill="none"/><path d="M${x-34} ${y-20} q-6 20 0 34" stroke="#fff" stroke-width="5" fill="none" opacity=".7"/>`}
+function straps(t){return [0,1,2,3,4,5].map(k=>{const x=110+k*172, sw=Math.sin(t*2.1+k*.6)*9;return `<g transform="rotate(${r1(sw)} ${x} 340)"><line x1="${x}" y1="340" x2="${x}" y2="392" stroke="#555" stroke-width="5"/><circle cx="${x}" cy="408" r="16" fill="none" stroke="#f0f0f0" stroke-width="6"/><circle cx="${x}" cy="408" r="16" fill="none" stroke="${INK}" stroke-width="2"/></g>`}).join('')}
+function butterfly(x,y,t,c){const fl=Math.abs(Math.sin(t*14));return `<g transform="translate(${r1(x)} ${r1(y)})"><g transform="scale(${r1(.25+.75*fl)} 1)"><ellipse cx="-12" cy="-6" rx="13" ry="10" fill="${c}" stroke="${INK}" stroke-width="2.5"/><ellipse cx="12" cy="-6" rx="13" ry="10" fill="${c}" stroke="${INK}" stroke-width="2.5"/><ellipse cx="-9" cy="8" rx="9" ry="7" fill="${c}" stroke="${INK}" stroke-width="2.5"/><ellipse cx="9" cy="8" rx="9" ry="7" fill="${c}" stroke="${INK}" stroke-width="2.5"/></g><rect x="-2.5" y="-12" width="5" height="26" rx="2.5" fill="${INK}"/></g>`}
+function tree(x,y,s,t,k){const sw=Math.sin(t*1.2+k)*2.5;return `<g transform="rotate(${r1(sw)} ${x} ${y})"><rect x="${x-14*s}" y="${y-150*s}" width="${28*s}" height="${150*s}" fill="#7a5233" stroke="${INK}" stroke-width="4"/>
+ <circle cx="${x}" cy="${y-200*s}" r="${90*s}" fill="#3e8a3c" stroke="${INK}" stroke-width="4"/><circle cx="${x-70*s}" cy="${y-150*s}" r="${60*s}" fill="#4f9a4a" stroke="${INK}" stroke-width="4"/><circle cx="${x+70*s}" cy="${y-160*s}" r="${64*s}" fill="#4f9a4a" stroke="${INK}" stroke-width="4"/><circle cx="${x-24*s}" cy="${y-236*s}" r="${30*s}" fill="#68b25f" opacity=".7"/></g>`}
+function clouds(t){return [0,1].map(k=>{const x=((k*560+t*30)%1400)-200;return `<g transform="translate(${x.toFixed(0)} ${260+k*120})"><ellipse cx="0" cy="0" rx="90" ry="34" fill="#fff"/><ellipse cx="60" cy="-14" rx="60" ry="30" fill="#fff"/></g>`}).join('')}
+function kite(x,y,t){return `<g transform="translate(${(x+Math.sin(t*.8)*40).toFixed(0)} ${(y+Math.sin(t*1.3)*20).toFixed(0)}) rotate(${(Math.sin(t*1.6)*12).toFixed(1)})"><path d="M0 -50 L40 0 L0 50 L-40 0 Z" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M0 -50 L0 50 M-40 0 L40 0" stroke="${INK}" stroke-width="2"/><path d="M0 50 q-20 80 30 160" stroke="${INK}" stroke-width="2" fill="none"/></g>`}
+const SETS_NEW={
+ park(t,o){const ang=Math.sin(t*2.2)*24, rad=ang*Math.PI/180, sx=690+Math.sin(rad)*330, sy=760+Math.cos(rad)*330;
+  return `<rect width="1080" height="1300" fill="#9edcff"/><circle cx="880" cy="250" r="66" fill="#ffd54a"/>${clouds(t)}${kite(260,420,t)}${birdsFly(t,9,330,4)}
+  <ellipse cx="200" cy="1060" rx="520" ry="200" fill="#8fcf7a"/><ellipse cx="880" cy="1080" rx="480" ry="190" fill="#7cc26a"/>
+  ${tree(110,1190,1.1,t,0)}${tree(980,1170,.95,t,2)}
+  <g stroke="${INK}" stroke-width="7" fill="none"><path d="M520 1240 L560 760 L820 760 L860 1240" stroke="#c0392b" stroke-width="16"/><path d="M520 1240 L560 760 L820 760 L860 1240"/></g>
+  <path d="M690 760 L${r1(sx-36)} ${r1(sy)} M690 760 L${r1(sx+36)} ${r1(sy)}" stroke="#555" stroke-width="5"/><g transform="rotate(${r1(-ang)} ${r1(sx)} ${r1(sy)})"><rect x="${r1(sx-50)}" y="${r1(sy-4)}" width="100" height="18" rx="5" fill="#ffd54a" stroke="${INK}" stroke-width="4"/></g>
+  <rect x="0" y="1240" width="1080" height="680" fill="#9fd27c"/><path d="M0 1300 Q540 1260 1080 1300 L1080 1920 L0 1920 Z" fill="#d9c49a"/>
+  ${[0,1,2,3,4,5,6,7,8].map(k=>`<path d="M${40+k*125} 1262 l8 -20 l6 18 l8 -24 l6 26" stroke="#5aa24a" stroke-width="4" fill="none"/>`).join('')}
+  <g fill="#8a5c38" stroke="${INK}" stroke-width="5"><rect x="250" y="1120" width="230" height="26" rx="6"/><rect x="250" y="1080" width="230" height="22" rx="6"/><rect x="266" y="1146" width="16" height="90"/><rect x="448" y="1146" width="16" height="90"/></g>
+  ${butterfly(420+Math.sin(t*.9)*120,900+Math.sin(t*1.7)*60,t,'#ff9ac2')}${butterfly(900+Math.cos(t*.7)*90,980+Math.sin(t*1.3)*50,t+.5,'#ffd54a')}`},
+ market(t,o){const stall=(x,c1,c2,name,goods,k)=>{const sw=Math.sin(t*1.8+k)*3, gl=.75+.25*Math.sin(t*9+k*2)*(Math.sin(t*1.3+k)>.85?1:.1);
+   let sc='';for(let j=0;j<6;j++)sc+=`<path d="M${x+j*60} 520 q30 ${r1(36+sw)} 60 0" fill="${j%2?c1:c2}" stroke="${INK}" stroke-width="4"/>`;
+   let g='';for(let j=0;j<11;j++){const gx=x+34+(j%6)*58, gy=1060-Math.floor(j/6)*38;g+=`<circle cx="${gx}" cy="${gy}" r="22" fill="${goods[j%goods.length]}" stroke="${INK}" stroke-width="3"/><circle cx="${gx-7}" cy="${gy-7}" r="6" fill="#fff" opacity=".35"/>`}
+   return `<rect x="${x}" y="420" width="360" height="680" fill="${['#f4d9a8','#e9c6a0','#f1e1b9'][k]}" stroke="${INK}" stroke-width="5"/><rect x="${x+30}" y="560" width="300" height="320" fill="#5a3a24" opacity=".85"/>
+   ${[0,1,2].map(j=>`<rect x="${x+30}" y="${630+j*90}" width="300" height="12" fill="#8a5c38"/>${[0,1,2,3,4].map(i=>`<rect x="${x+44+i*56}" y="${596+j*90}" width="38" height="34" rx="6" fill="${['#e8213a','#ffd54a','#2bd67b','#8fd3ff','#ff9ac2'][(i+j+k)%5]}" stroke="${INK}" stroke-width="2.5"/>`).join('')}`).join('')}
+   <rect x="${x}" y="420" width="360" height="100" fill="${c2}" stroke="${INK}" stroke-width="5"/>${sc}<rect x="${x+70}" y="440" width="220" height="56" rx="10" fill="#fffaf0" stroke="${INK}" stroke-width="4"/><text x="${x+180}" y="482" text-anchor="middle" font-family="Poppins" font-weight="700" font-size="36" fill="${INK}">${name}</text>
+   <line x1="${x+180}" y1="560" x2="${x+180}" y2="600" stroke="${INK}" stroke-width="3"/><circle cx="${x+180}" cy="612" r="40" fill="#ffe680" opacity="${r1(.35*gl)}"/><circle cx="${x+180}" cy="612" r="14" fill="#fff6b0" stroke="${INK}" stroke-width="3" opacity="${r1(gl)}"/>
+   <rect x="${x+14}" y="1000" width="332" height="100" rx="8" fill="#b07a4f" stroke="${INK}" stroke-width="5"/>${g}`};
+  const flags=[...Array(12)].map((_,k)=>{const x=20+k*90, y=330+Math.sin(k*.5)*30+Math.sin(t*2+k)*4;return `<path d="M${x} ${r1(y)} L${x+70} ${r1(y+6)} L${x+35} ${r1(y+56)} Z" fill="${['#e8213a','#ffd54a','#2bd67b','#2f6bd8'][k%4]}" stroke="${INK}" stroke-width="3"/>`}).join('');
+  return `<rect width="1080" height="1300" fill="#ffc98a"/><circle cx="540" cy="210" r="90" fill="#ff9a4a" opacity=".8"/>${birdsFly(t,10,220,5)}
+  <path d="M0 330 Q540 400 1080 330" stroke="#333" stroke-width="3" fill="none"/>${flags}
+  ${stall(0,'#e8213a','#fffaf0','SABZI',['#e8413a','#8e3a8a','#5cbf5a','#ff8a2a'],0)}${stall(360,'#2bd67b','#fffaf0','FRUITS',['#ffd54a','#ff8a2a','#e8413a','#7fbf6a'],1)}${stall(720,'#2f6bd8','#fffaf0','KIRANA',['#f3efe4','#c8874a','#ffd54a'],2)}
+  <rect x="0" y="1100" width="1080" height="200" fill="#b8b0a2"/>${scooter(t,11,1296)}<rect x="0" y="1300" width="1080" height="620" fill="#8f8a84"/><g stroke="#fff" stroke-width="10" stroke-dasharray="60 50" opacity=".5"><line x1="0" y1="1720" x2="1080" y2="1720"/></g>`},
+};
 const SETS={
  classroom(t,o){const board=(o.board||'').replace(/</g,'&lt;');
   return `<rect width="1080" height="1300" fill="#e7d9b8"/><rect y="1240" width="1080" height="60" fill="#c9b48c"/>${floorPlanks(1300,'#b98a5c','#9c7046')}
@@ -53,7 +129,8 @@ const SETS={
   <rect x="10" y="420" width="90" height="300" fill="#bfe3ff" stroke="${INK}" stroke-width="6"/><line x1="55" y1="420" x2="55" y2="720" stroke="${INK}" stroke-width="5"/>
   <g fill="#9c6b3f" stroke="${INK}" stroke-width="5"><rect x="60" y="1060" width="250" height="40" rx="6"/><rect x="80" y="1100" width="20" height="160"/><rect x="270" y="1100" width="20" height="160"/>
   <rect x="770" y="1060" width="250" height="40" rx="6"/><rect x="790" y="1100" width="20" height="160"/><rect x="980" y="1100" width="20" height="160"/></g>
-  <rect x="110" y="1030" width="70" height="30" rx="4" fill="#d2413a" stroke="${INK}" stroke-width="4"/><rect x="840" y="1028" width="60" height="32" rx="4" fill="#2f6bd8" stroke="${INK}" stroke-width="4"/>`},
+  <rect x="110" y="1030" width="70" height="30" rx="4" fill="#d2413a" stroke="${INK}" stroke-width="4"/><rect x="840" y="1028" width="60" height="32" rx="4" fill="#2f6bd8" stroke="${INK}" stroke-width="4"/>
+  ${paperPlane(t)}${globe(250,1004,t)}`},
  livingroom(t,o){return `<rect width="1080" height="1300" fill="#f1d6b0"/><rect y="1260" width="1080" height="40" fill="#d8b98d"/>${floorPlanks(1300,'#a8744a','#8a5c38')}
   <ellipse cx="540" cy="1560" rx="430" ry="120" fill="#b2433f" opacity=".55"/>
   <rect x="660" y="360" width="300" height="380" fill="#cfe9ff" stroke="${INK}" stroke-width="7"/><line x1="810" y1="360" x2="810" y2="740" stroke="${INK}" stroke-width="5"/>
@@ -62,7 +139,8 @@ const SETS={
   ${clock(540,330,t)}
   <path d="M90 1000 q0 -70 70 -70 h760 q70 0 70 70 v190 h-900 Z" fill="#3d6fa8" stroke="${INK}" stroke-width="7"/><rect x="70" y="1060" width="940" height="150" rx="40" fill="#4a7fbb" stroke="${INK}" stroke-width="7"/>
   <rect x="120" y="1200" width="26" height="70" fill="#5a3a24"/><rect x="934" y="1200" width="26" height="70" fill="#5a3a24"/>
-  <rect x="180" y="990" width="140" height="80" rx="20" fill="#ffd54a" stroke="${INK}" stroke-width="5"/><rect x="760" y="990" width="140" height="80" rx="20" fill="#e86c9a" stroke="${INK}" stroke-width="5"/>`},
+  <rect x="180" y="990" width="140" height="80" rx="20" fill="#ffd54a" stroke="${INK}" stroke-width="5"/><rect x="760" y="990" width="140" height="80" rx="20" fill="#e86c9a" stroke="${INK}" stroke-width="5"/>
+  ${sleepyCat(840,930,t)}`},
  kitchen(t,o){let tiles='';for(let y=360;y<1000;y+=80)for(let x=0;x<1080;x+=80)tiles+=`<rect x="${x}" y="${y}" width="80" height="80" fill="${((x+y)/80)%2?'#e4f1f2':'#d3e8ea'}" stroke="#b9d3d6" stroke-width="2"/>`;
   const steam=[0,1,2].map(k=>{const p=((t*.7+k/3)%1);return `<circle cx="${(330+Math.sin(t*2+k)*14).toFixed(1)}" cy="${(880-p*240).toFixed(1)}" r="${(16+p*30).toFixed(1)}" fill="#fff" opacity="${(.55*(1-p)).toFixed(2)}"/>`}).join('');
   return `<rect width="1080" height="1300" fill="#f6efe2"/>${tiles}${floorPlanks(1300,'#c8b28f','#a8916c')}
@@ -71,7 +149,8 @@ const SETS={
   <rect x="200" y="975" width="260" height="30" rx="6" fill="#2a2a2a"/><path d="M270 975 L270 900 Q330 870 390 900 L390 975 Z" fill="#c0c6cf" stroke="${INK}" stroke-width="5"/><rect x="318" y="872" width="24" height="26" rx="4" fill="#2a2a2a"/>${steam}
   <rect x="60" y="430" width="380" height="20" fill="#8a5c38"/><rect x="80" y="370" width="60" height="60" rx="8" fill="#ffb020" stroke="${INK}" stroke-width="4"/><rect x="160" y="380" width="50" height="50" rx="8" fill="#d2413a" stroke="${INK}" stroke-width="4"/><rect x="230" y="360" width="70" height="70" rx="8" fill="#7fbf6a" stroke="${INK}" stroke-width="4"/>
   <rect x="800" y="420" width="220" height="580" rx="16" fill="#eef3f8" stroke="${INK}" stroke-width="7"/><line x1="800" y1="620" x2="1020" y2="620" stroke="${INK}" stroke-width="5"/><rect x="830" y="480" width="12" height="90" rx="6" fill="#8a8f98"/>
-  ${clock(600,330,t)}`},
+  ${clock(600,330,t)}
+  ${[[850,700,"#e8213a"],[930,760,"#ffd54a"],[870,840,"#2bd67b"]].map(m=>`<circle cx="${m[0]}" cy="${m[1]}" r="12" fill="${m[2]}" stroke="${INK}" stroke-width="3"/>`).join("")}${cooker(610,1004,t)}`},
 
  train(t,o){let trees='';for(let k=0;k<7;k++){const x=((k*190-t*420)%1330+1330)%1330-120;trees+=`<g transform="translate(${x.toFixed(0)} 0)"><rect x="-8" y="560" width="16" height="70" fill="#6b4a2e"/><circle cx="0" cy="545" r="${38+(k%3)*10}" fill="${k%2?'#4f9a4a':'#3e8a3c'}"/></g>`}
   const poles=[0,1,2].map(k=>{const x=((k*480-t*900)%1440+1440)%1440-150;return `<rect x="${x.toFixed(0)}" y="470" width="10" height="170" fill="#555"/>`}).join('');
@@ -79,7 +158,8 @@ const SETS={
   return `<rect width="1080" height="1300" fill="#7fb6a6"/><rect y="1080" width="1080" height="220" fill="#5d8f80"/>${win(120)}${win(660)}
   <rect x="0" y="300" width="1080" height="40" fill="#8a8f98" stroke="${INK}" stroke-width="5"/><rect x="60" y="250" width="380" height="50" rx="8" fill="#3a3f52"/><rect x="640" y="250" width="380" height="50" rx="8" fill="#3a3f52"/>
   <rect x="0" y="1300" width="1080" height="620" fill="#9aa0a8"/><g stroke="#7d838c" stroke-width="3">${[0,1,2,3,4,5,6].map(k=>`<line x1="0" y1="${1340+k*80}" x2="1080" y2="${1340+k*80}"/>`).join('')}</g>
-  <rect x="40" y="980" width="440" height="110" rx="20" fill="#2f6b9a" stroke="${INK}" stroke-width="6"/><rect x="600" y="980" width="440" height="110" rx="20" fill="#2f6b9a" stroke="${INK}" stroke-width="6"/>`},
+  <rect x="40" y="980" width="440" height="110" rx="20" fill="#2f6b9a" stroke="${INK}" stroke-width="6"/><rect x="600" y="980" width="440" height="110" rx="20" fill="#2f6b9a" stroke="${INK}" stroke-width="6"/>
+  ${straps(t)}`},
  tapri(t,o){const steam=[0,1,2].map(k=>{const q=((t*.6+k/3)%1);return `<circle cx="${(820+Math.sin(t*2+k)*12).toFixed(1)}" cy="${(830-q*200).toFixed(1)}" r="${(14+q*26).toFixed(1)}" fill="#fff" opacity="${(.6*(1-q)).toFixed(2)}"/>`}).join('');
   return `<rect width="1080" height="1300" fill="#ffd9a8"/><circle cx="160" cy="330" r="80" fill="#ffb347"/>
   <g fill="#c9a27e" stroke="${INK}" stroke-width="4"><rect x="0" y="420" width="260" height="700"/><rect x="250" y="520" width="220" height="600"/><rect x="460" y="380" width="200" height="740"/></g>
@@ -88,21 +168,25 @@ const SETS={
   <rect x="680" y="760" width="360" height="40" fill="#d2413a" stroke="${INK}" stroke-width="5"/><path d="M680 760 L700 700 L1020 700 L1040 760 Z" fill="#ffd54a" stroke="${INK}" stroke-width="5"/><text x="860" y="745" text-anchor="middle" font-family="Poppins" font-weight="700" font-size="40" fill="${INK}">CHAI</text>
   <rect x="700" y="800" width="320" height="260" fill="#8a5c38" stroke="${INK}" stroke-width="5"/><rect x="790" y="830" width="60" height="50" rx="8" fill="#c0c6cf" stroke="${INK}" stroke-width="4"/>${steam}
   ${[0,1,2,3].map(k=>`<rect x="${880+k*30}" y="850" width="20" height="30" rx="3" fill="#fff8e6" stroke="${INK}" stroke-width="3"/>`).join('')}
-  <rect x="60" y="1150" width="380" height="30" rx="8" fill="#6b4a2e" stroke="${INK}" stroke-width="4"/><rect x="80" y="1180" width="20" height="100" fill="#6b4a2e"/><rect x="400" y="1180" width="20" height="100" fill="#6b4a2e"/>`},
+  <rect x="60" y="1150" width="380" height="30" rx="8" fill="#6b4a2e" stroke="${INK}" stroke-width="4"/><rect x="80" y="1180" width="20" height="100" fill="#6b4a2e"/><rect x="400" y="1180" width="20" height="100" fill="#6b4a2e"/>
+  ${wireBirds(t)}${autoRick(t,9,1296)}`},
  terrace(t,o){const sway=Math.sin(t*2)*6;
   return `<rect width="1080" height="1300" fill="#8fd0ff"/><circle cx="900" cy="300" r="70" fill="#ffd54a"/>
   ${[0,1].map(k=>{const x=((k*560+t*30)%1400)-200;return `<g transform="translate(${x.toFixed(0)} ${260+k*120})"><ellipse cx="0" cy="0" rx="90" ry="34" fill="#fff"/><ellipse cx="60" cy="-14" rx="60" ry="30" fill="#fff"/></g>`}).join('')}
   <g transform="translate(${(220+Math.sin(t*.8)*40).toFixed(0)} ${(420+Math.sin(t*1.3)*20).toFixed(0)}) rotate(${(Math.sin(t*1.6)*12).toFixed(1)})"><path d="M0 -50 L40 0 L0 50 L-40 0 Z" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M0 50 q-20 80 30 160" stroke="${INK}" stroke-width="2" fill="none"/></g>
   <rect x="700" y="760" width="230" height="260" rx="30" fill="#2a2a2a" stroke="${INK}" stroke-width="6"/><rect x="760" y="730" width="110" height="40" rx="10" fill="#2a2a2a"/>
   <line x1="40" y1="860" x2="640" y2="830" stroke="#555" stroke-width="4"/>${[0,1,2,3].map(k=>`<g transform="translate(${100+k*140} ${860-k*7}) rotate(${(sway*(k%2?1:-1)).toFixed(1)})"><rect x="-40" y="0" width="80" height="${90+(k%2)*30}" rx="6" fill="${['#ff9ac2','#ffd54a','#8fd3ff','#c6f08a'][k]}" stroke="${INK}" stroke-width="4"/></g>`).join('')}
-  <rect x="0" y="1100" width="1080" height="200" fill="#d9c7a8" stroke="${INK}" stroke-width="5"/><rect x="0" y="1300" width="1080" height="620" fill="#c9b591"/>`},
+  <rect x="0" y="1100" width="1080" height="200" fill="#d9c7a8" stroke="${INK}" stroke-width="5"/><rect x="0" y="1300" width="1080" height="620" fill="#c9b591"/>
+  ${birdsFly(t,8,200,5)}`},
  bedroom(t,o){return `<rect width="1080" height="1300" fill="#d8ccef"/><rect y="1260" width="1080" height="40" fill="#b8a9d8"/>${floorPlanks(1300,'#b98a5c','#9c7046')}
   <rect x="640" y="380" width="300" height="300" fill="${o.night?'#1d2a5a':'#bfe3ff'}" stroke="${INK}" stroke-width="7"/><line x1="790" y1="380" x2="790" y2="680" stroke="${INK}" stroke-width="5"/>${o.night?'<circle cx="880" cy="450" r="30" fill="#f3efe4"/>':''}
   <rect x="140" y="420" width="200" height="140" fill="#ffd54a" stroke="${INK}" stroke-width="5" transform="rotate(-4 240 490)"/><path d="M190 520 L240 450 L290 520 Z" fill="#e8213a" transform="rotate(-4 240 490)"/>
   <rect x="40" y="1000" width="560" height="160" rx="20" fill="#5e7ce2" stroke="${INK}" stroke-width="6"/><rect x="40" y="940" width="160" height="90" rx="30" fill="#fff" stroke="${INK}" stroke-width="5"/><rect x="60" y="1160" width="20" height="120" fill="#6b4a2e"/><rect x="560" y="1160" width="20" height="120" fill="#6b4a2e"/>
   <rect x="700" y="980" width="320" height="30" fill="#8a5c38" stroke="${INK}" stroke-width="5"/><rect x="720" y="1010" width="20" height="270" fill="#8a5c38"/><rect x="980" y="1010" width="20" height="270" fill="#8a5c38"/>
-  <rect x="740" y="930" width="90" height="50" fill="#2f6bd8" stroke="${INK}" stroke-width="4"/><rect x="750" y="890" width="70" height="40" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M950 980 L950 880 L900 850" stroke="${INK}" stroke-width="8" fill="none"/><path d="M870 830 L940 830 L920 870 L890 870 Z" fill="#ffd54a" stroke="${INK}" stroke-width="4"/>`},
+  <rect x="740" y="930" width="90" height="50" fill="#2f6bd8" stroke="${INK}" stroke-width="4"/><rect x="750" y="890" width="70" height="40" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M950 980 L950 880 L900 850" stroke="${INK}" stroke-width="8" fill="none"/><path d="M870 830 L940 830 L920 870 L890 870 Z" fill="#ffd54a" stroke="${INK}" stroke-width="4"/>
+  ${fishBowl(490,640,t)}`},
 };
+Object.assign(SETS,SETS_NEW);
 
 /* ================= original cast (same 380x460 drawing box as Masterji), shaded "2.5D" style ================= */
 const OL='#2A1A16';
@@ -131,6 +215,10 @@ const SPEC={
  dadi :{skin:'#C68E64',shirt:'#F3EFE4',saree:'#F7F3EA',border:'#2F6BD8',hair:'greybun',specs:true,stick:true,wrinkles:true,scale:.9,fem:true,brow:'#bdb8b0'},
  pinky:{skin:'#D9A07A',shirt:'#FF7AA8',pants:'#3B5BA9',hair:'ponytail',phone:true,earrings:true,scale:.93,fem:true,lips:'#c4505f'},
  bunty:{skin:'#E0A77A',shirt:'#FFFFFF',pants:'#22314F',hair:'neat',tie:true,specs:true,books:true,scale:.86,kid:true},
+ dadaji:{skin:'#BF865C',shirt:'#F7F3EA',kurta:true,pants:'#EDE8DA',hair:'whiteside',mooch:true,moochC:'#ECE8E0',specs:true,shawl:'#8A5A3C',wrinkles:true,scale:.95,brow:'#e6e2da'},
+ chutki:{skin:'#E6AE82',shirt:'#FF6FA0',frock:true,frockC:'#FFD54A',hair:'pigtails',scale:.72,kid:true,fem:true,lips:'#d0606e'},
+ gupta:{skin:'#C48A5E',shirt:'#F2A23A',pants:'#5A4632',hair:'cap',capC:'#2F6BD8',mooch:true,curlyMooch:true,belly:true,chain:true,checks:true,scale:1.0},
+ raju:{skin:'#C99068',shirt:'#3C8C7A',pants:'#2B3A55',hair:'messy',beard:true,headphones:true,hoodie:true,scale:.98},
  aunty:{skin:'#C98B62',shirt:'#3BAA6A',saree:'#E8418A',border:'#3BAA6A',hair:'curly',bindi:true,bigBindi:true,bangles:true,scale:.98,belly:true,fem:true,lips:'#b03a52'},
 };
 const GDEFS=`<radialGradient id="irisG" cx=".42" cy=".38" r=".62"><stop offset="0" stop-color="#9a6638"/><stop offset=".62" stop-color="#4f2f19"/><stop offset="1" stop-color="#1e110a"/></radialGradient>
@@ -208,17 +296,25 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  else{const leg=(x,kx,c)=>`<path d="M${x} 330 L${x+kx} 376 L${x} 418" stroke="${OL}" stroke-width="37" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${x} 330 L${x+kx} 376 L${x} 418" stroke="${c}" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${x+7} 334 L${x+7+kx} 376 L${x+7} 414" stroke="${shade(c,-.25)}" stroke-width="9" fill="none" stroke-linecap="round" opacity=".7"/>`;
    if(S.shorts){b+=leg(134,kneeL,S.skin)+leg(186,kneeR,S.skin)+`<path d="M104 322 L216 322 L222 370 L166 370 L160 352 L154 370 L98 370 Z" fill="${S.pants}" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/><path d="M196 326 L204 368" stroke="${shade(S.pants,.25)}" stroke-width="3" opacity=".6"/>`+
      `<rect x="${118+kneeL*.6}" y="392" width="32" height="22" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/><rect x="${170+kneeR*.6}" y="392" width="32" height="22" rx="6" fill="#d2413a" stroke="${OL}" stroke-width="3"/>`}
+   else if(S.frock) b+=leg(134,kneeL,S.skin)+leg(186,kneeR,S.skin)+`<rect x="${118+kneeL*.6}" y="394" width="32" height="18" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/><rect x="${170+kneeR*.6}" y="394" width="32" height="18" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/>`;
    else b+=leg(134,kneeL,S.pants)+leg(186,kneeR,S.pants);
    b+=`<path d="M${96+kneeL*.2} 426 Q${100+kneeL*.2} 410 ${126+kneeL*.2} 410 Q${152+kneeL*.2} 410 ${156+kneeL*.2} 426 Z" fill="#2a2420" stroke="${OL}" stroke-width="3"/><path d="M${164+kneeR*.2} 426 Q${168+kneeR*.2} 410 ${194+kneeR*.2} 410 Q${220+kneeR*.2} 410 ${224+kneeR*.2} 426 Z" fill="#2a2420" stroke="${OL}" stroke-width="3"/><path d="M${108+kneeL*.2} 416 q14 -4 26 0 M${176+kneeR*.2} 416 q14 -4 26 0" stroke="#fff" stroke-opacity=".25" stroke-width="3" fill="none"/>`}
  // torso (shaded cloth, collar, shadow under the chin)
  const cl=`url(#cl_${id})`;
+ const shirtD=`M106 206 Q160 194 214 206 Q${S.belly?250:230} 280 ${S.belly?226:220} 332 L${S.belly?94:100} 332 Q${S.belly?70:90} 280 106 206 Z`, frockD='M110 206 Q160 196 210 206 Q218 252 212 286 L246 372 Q160 388 74 372 L108 286 Q102 252 110 206 Z';
  if(S.saree){b+=`<path d="M108 206 Q160 196 212 206 Q232 270 222 336 Q160 348 98 336 Q88 270 108 206 Z" fill="${cl}" stroke="${OL}" stroke-width="4.5"/>
    <path d="M210 204 Q150 250 104 336 L150 340 Q186 270 224 230 Z" fill="url(#sa_${id})" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/><path d="M212 206 Q152 252 106 334" stroke="${S.border}" stroke-width="8" fill="none"/><path d="M196 236 Q166 270 140 320" stroke="${shade(S.saree,.25)}" stroke-width="3" fill="none" opacity=".6"/>`}
  else if(S.kurta){b+=`<path d="M108 206 Q160 194 212 206 Q${S.belly?248:234} 300 228 390 L92 390 Q${S.belly?72:86} 300 108 206 Z" fill="${cl}" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/>
    <path d="M160 206 L160 270" stroke="${OL}" stroke-width="3"/><circle cx="160" cy="226" r="4" fill="${OL}"/><circle cx="160" cy="248" r="4" fill="${OL}"/><path d="M128 300 Q134 340 126 384 M196 300 Q192 344 200 384" stroke="${shade(S.shirt,-.18)}" stroke-width="3" fill="none"/>`}
- else{b+=`<path d="M106 206 Q160 194 214 206 Q230 270 220 332 L100 332 Q90 270 106 206 Z" fill="${cl}" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/><path d="M136 204 L160 230 L184 204" fill="${shade(S.shirt,.25)}" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/><path d="M128 300 Q140 312 154 306 M178 292 Q192 304 204 296" stroke="${shade(S.shirt,-.2)}" stroke-width="3" fill="none"/>`;
+ else if(S.frock){b+=`<path d="${frockD}" fill="${cl}" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/><path d="M108 286 Q160 300 212 286" stroke="${S.frockC}" stroke-width="11" fill="none"/><path d="M80 362 Q160 378 240 362" stroke="#fff" stroke-width="7" fill="none" stroke-dasharray="14 10"/><path d="M138 206 Q160 228 182 206" fill="#fff" stroke="${OL}" stroke-width="3"/>${[0,1,2].map(k=>`<circle cx="${112+k*48}" cy="${328+(k%2)*16}" r="6" fill="#fff" opacity=".8"/>`).join('')}`}
+ else{b+=`<path d="${shirtD}" fill="${cl}" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/>`;
+   if(S.checks){const cid='ck'+(EYEN++);b+=`<clipPath id="${cid}"><path d="${shirtD}"/></clipPath><g clip-path="url(#${cid})" stroke="${shade(S.shirt,-.3)}" stroke-width="5" opacity=".5">${[0,1,2,3,4,5,6].map(k=>`<path d="M${72+k*28} 196 V340 M60 ${216+k*20} H262"/>`).join('')}</g>`}
+   b+=(S.hoodie?'':`<path d="M136 204 L160 230 L184 204" fill="${shade(S.shirt,.25)}" stroke="${OL}" stroke-width="3" stroke-linejoin="round"/>`)+`<path d="M128 300 Q140 312 154 306 M178 292 Q192 304 204 296" stroke="${shade(S.shirt,-.2)}" stroke-width="3" fill="none"/>`;
    if(S.tie) b+=`<path d="M154 214 L166 214 L172 232 L${(166+Math.sin(t*3)*3).toFixed(1)} 292 L156 300 L150 232 Z" fill="#d2413a" stroke="${OL}" stroke-width="3"/><path d="M152 240 L170 234 M151 262 L170 256 M152 284 L168 278" stroke="#ffd54a" stroke-width="4"/>`;
+   if(S.hoodie) b+=`<path d="M110 212 Q160 186 210 212 Q204 240 160 242 Q116 240 110 212 Z" fill="${shade(S.shirt,-.14)}" stroke="${OL}" stroke-width="4"/><path d="M148 238 v36 M172 238 v36" stroke="#f3efe4" stroke-width="4" stroke-linecap="round"/><path d="M122 288 h76 l8 34 h-92 Z" fill="${shade(S.shirt,-.12)}" stroke="${OL}" stroke-width="3"/>`;
+   if(S.chain) b+=`<path d="M136 210 Q160 250 184 210" stroke="#e2b33c" stroke-width="5" fill="none"/><circle cx="160" cy="238" r="7" fill="#e2b33c" stroke="${OL}" stroke-width="2.5"/>`;
    if(S.bag) b+=`<path d="M112 210 L112 330" stroke="#ff8a3d" stroke-width="12"/><path d="M208 210 L208 330" stroke="#ff8a3d" stroke-width="12"/><path d="M115 210 L115 330 M211 210 L211 330" stroke="#c45f1d" stroke-width="3"/>`;}
+ if(S.shawl) b+=`<path d="M98 208 Q160 238 222 208 L234 262 Q160 288 86 262 Z" fill="${S.shawl}" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/><path d="M92 252 Q160 278 228 252" stroke="#e2b33c" stroke-width="4" fill="none"/><path d="M120 268 L114 340 L142 340 L144 274 Z" fill="${S.shawl}" stroke="${OL}" stroke-width="4" stroke-linejoin="round"/><path d="M116 336 h26" stroke="#e2b33c" stroke-width="4"/>`;
  b+=`<ellipse cx="160" cy="210" rx="40" ry="11" fill="#000" opacity=".13"/>`;
  // props held in hands
  let props='';
@@ -233,12 +329,13 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  const nearL=sT>=-.05, farArm=Math.abs(sT)<.05?'':(nearL?armR:armL), armsSvg=Math.abs(sT)<.05?armL+armR:(nearL?armL:armR);
  const bangles=S.bangles?`<circle cx="${L[2][0]}" cy="${L[2][1]-14}" r="10" fill="none" stroke="#E2B33C" stroke-width="5"/><circle cx="${R[2][0]}" cy="${R[2][1]-14}" r="10" fill="none" stroke="#E2B33C" stroke-width="5"/>`:'';
  // head
- const hw=S.kid?71:66, hairC=S.hair==='greybun'?'#cfcbc4':'#1d1614';
+ const hw=S.kid?71:66, hairC=S.hair==='greybun'?'#cfcbc4':S.hair==='whiteside'?'#eeebe5':'#1d1614';
  const F={neck:'',hairTop:'',head:'',hairFront:'',center:'',mouth:'',specs:''}; F.neck=`<path d="M144 182 L176 182 L178 214 L142 214 Z" fill="${S.skin}" stroke="${OL}" stroke-width="3"/><path d="M142 200 Q160 214 178 200 L178 214 L142 214 Z" fill="${skD}" opacity=".5"/>`;
  const ear=x=>`<ellipse cx="${x}" cy="146" rx="13" ry="18" fill="${S.skin}" stroke="${OL}" stroke-width="3.5"/><path d="M${x+(x<160?3:-3)} 136 q${x<160?-6:6} 10 0 20" stroke="${skD}" stroke-width="3" fill="none"/>`;
  if(S.hair==='greybun') F.hairTop+=`<circle cx="160" cy="64" r="30" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><path d="M140 56 q16 -14 34 -4" stroke="#fff" stroke-opacity=".5" stroke-width="4" fill="none"/>`;
  if(S.hair==='ponytail') F.hairTop+=`<path d="M206 96 Q262 120 250 200 Q240 240 222 250 Q236 190 214 130 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><path d="M226 130 Q246 170 236 220" stroke="#fff" stroke-opacity=".18" stroke-width="5" fill="none"/><circle cx="214" cy="104" r="10" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;
  if(S.hair==='curly') F.hairTop+=[0,1,2,3,4,5,6,7,8].map(k=>`<circle cx="${(160+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(120+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="22" fill="#2a1e18" stroke="${OL}" stroke-width="3"/><circle cx="${(156+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(114+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="8" fill="#fff" opacity=".12"/>`).join('');
+ if(S.hair==='pigtails'){const pig=(x,sg)=>`<path d="M${x} 112 Q${x+sg*46} ${fr(100+Math.sin(t*4)*3)} ${x+sg*52} 150 Q${x+sg*48} 196 ${x+sg*20} 202 Q${x+sg*34} 160 ${x} 140 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><circle cx="${x+sg*8}" cy="118" r="12" fill="#ff4d8d" stroke="${OL}" stroke-width="2.5"/><path d="M${x+sg*8} 118 l${sg*-14} -10 l0 20 Z M${x+sg*8} 118 l${sg*14} -10 l0 20 Z" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;F.hairTop+=pig(100,-1)+pig(220,1)}
  if(S.hair==='bun') F.hairTop+=`<circle cx="160" cy="62" r="34" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/>`+[0,1,2,3,4,5].map(k=>`<circle cx="${(160+Math.cos(k)*36).toFixed(1)}" cy="${(62+Math.sin(k)*36).toFixed(1)}" r="8" fill="#fff" stroke="#cfcab8" stroke-width="2"/>`).join('');
  F.head+=`<path d="M${160-hw} 132 C${160-hw} 86 ${160-hw*.55} 70 160 70 C${160+hw*.55} 70 ${160+hw} 86 ${160+hw} 132 C${160+hw} 176 ${160+hw*.45} 207 160 209 C${160-hw*.45} 207 ${160-hw} 176 ${160-hw} 132 Z" fill="${sk}" stroke="${skL}" stroke-width="4"/>`;
  F.head+=`<path d="M${160+hw-14} 112 C${160+hw-4} 150 ${160+hw-20} 186 ${160+16} 204" stroke="${skD}" stroke-width="10" fill="none" opacity=".28" stroke-linecap="round"/>`;
@@ -247,6 +344,10 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(S.hair==='bun'||S.hair==='greybun') F.hairFront+=`<path d="M94 132 Q96 70 160 68 Q224 70 226 132 Q210 94 160 92 Q110 94 94 132 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M160 70 L160 94" stroke="${S.hair==='bun'?'#4a3a32':'#9a958e'}" stroke-width="3"/><path d="M118 92 Q136 76 156 74" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
  if(S.hair==='ponytail') F.hairFront+=`<path d="M92 140 Q90 72 160 68 Q230 72 228 140 Q214 98 160 94 Q106 98 92 140 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M116 94 Q136 78 158 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
  if(S.hair==='neat') F.hairFront+=`<path d="M90 130 Q92 70 160 66 Q230 70 230 128 Q204 90 130 96 Q108 102 90 130 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M128 74 Q150 96 210 96" stroke="#3a2c26" stroke-width="3" fill="none"/><path d="M110 98 Q124 80 146 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
+ if(S.hair==='pigtails') F.hairFront+=`<path d="M92 140 Q90 72 160 68 Q230 72 228 140 Q214 98 160 94 Q106 98 92 140 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M160 70 L160 94" stroke="#4a3a32" stroke-width="3"/><path d="M116 94 Q136 78 156 76" stroke="#fff" stroke-opacity=".22" stroke-width="5" fill="none"/>`;
+ if(S.hair==='messy') F.hairFront+=`<path d="M90 136 Q84 88 110 70 L116 46 L136 66 L148 38 L164 62 L184 40 L190 66 L214 52 L214 80 Q236 98 230 136 Q218 104 190 100 Q172 114 146 102 Q114 106 90 136 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5" stroke-linejoin="round"/><path d="M130 70 L138 54 M170 64 L180 50" stroke="#fff" stroke-opacity=".22" stroke-width="4" stroke-linecap="round"/>`;
+ if(S.hair==='cap') F.hairFront+=`<path d="M${160-hw-1} 152 Q${160-hw} 118 ${160-hw+10} 106 L${160-hw+16} 152 Z M${160+hw+1} 152 Q${160+hw} 118 ${160+hw-10} 106 L${160+hw-16} 152 Z" fill="#1d1614"/><path d="M${160-hw-4} 104 Q${160-hw+2} 48 160 46 Q${160+hw-2} 48 ${160+hw+4} 104 Z" fill="${S.capC}" stroke="${OL}" stroke-width="3.5"/><path d="M${160-hw-8} 104 Q160 90 ${160+hw+8} 104 Q${160+hw+12} 116 ${160+hw-6} 118 Q160 106 ${160-hw+6} 118 Q${160-hw-12} 116 ${160-hw-8} 104 Z" fill="${shade(S.capC,-.25)}" stroke="${OL}" stroke-width="3.5"/><circle cx="160" cy="48" r="7" fill="${shade(S.capC,-.3)}" stroke="${OL}" stroke-width="2.5"/><path d="M126 62 Q146 52 166 52" stroke="#fff" stroke-opacity=".3" stroke-width="6" fill="none"/>`;
+ if(S.hair==='whiteside') F.hairFront+=`<path d="M92 144 Q86 96 112 78 L124 96 Q106 112 108 146 Z M228 144 Q234 96 208 78 L196 96 Q214 112 212 146 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M150 72 q4 -16 18 -10 M162 72 q8 -12 18 -4" stroke="${hairC}" stroke-width="5" fill="none" stroke-linecap="round"/><ellipse cx="138" cy="90" rx="24" ry="9" fill="#fff" opacity=".35" transform="rotate(-18 138 90)"/>`;
  if(S.hair==='bald') F.hairFront+=`<path d="M94 140 Q94 96 112 84 L118 96 Q104 110 106 140 Z M226 140 Q226 96 208 84 L202 96 Q216 110 214 140 Z" fill="#8f8a86" stroke="${OL}" stroke-width="3"/><ellipse cx="138" cy="90" rx="24" ry="9" fill="#fff" opacity=".35" transform="rotate(-18 138 90)"/>`;
  if(S.wrinkles) F.center+=`<path d="M138 98 Q160 92 182 98 M144 90 Q160 86 176 90 M104 160 q6 6 4 14 M216 160 q-6 6 -4 14" stroke="${skD}" stroke-width="2.5" fill="none" stroke-linecap="round"/>`;
  // cheeks, brows, eyes, nose
@@ -260,8 +361,9 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  const earring=S.earrings;
  F.center+=`<path d="M163 140 Q170 156 168 166" stroke="${skD}" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round"/><path d="M150 166 Q152 174 160 174 Q168 174 170 166" stroke="${skL}" stroke-width="3" fill="${shade(S.skin,-.08)}" stroke-linecap="round"/><circle cx="156" cy="160" r="3.4" fill="#fff" opacity=".35"/>`;
  if(S.bindi) F.center+=`<circle cx="160" cy="104" r="${S.bigBindi?11:6}" fill="#d2213a" stroke="${S.bigBindi?OL:'none'}" stroke-width="2"/>`;
+ if(S.beard) F.center+=`<path d="M104 148 Q104 204 160 216 Q216 204 216 148 Q208 190 184 196 Q172 186 160 188 Q148 186 136 196 Q112 190 104 148 Z" fill="#2a1e18" opacity=".55"/><path d="M142 176 Q160 170 178 176" stroke="#2a1e18" stroke-width="6" opacity=".5" fill="none" stroke-linecap="round"/>`;
  if(S.freckles) F.center+=`<g fill="${shade(S.skin,-.3)}" opacity=".7"><circle cx="112" cy="166" r="2.6"/><circle cx="121" cy="172" r="2.6"/><circle cx="104" cy="172" r="2.2"/><circle cx="199" cy="166" r="2.6"/><circle cx="208" cy="172" r="2.6"/><circle cx="216" cy="166" r="2.2"/></g>`;
- if(S.mooch) F.mouth+=`<path d="M160 174 C140 172 120 174 112 186 C130 184 146 184 160 182 C174 184 190 184 208 186 C200 174 180 172 160 174 Z" fill="#3a2c26" stroke="${OL}" stroke-width="3"/>`;
+ if(S.mooch) F.mouth+=`<path d="M160 174 C140 172 120 174 112 186 C130 184 146 184 160 182 C174 184 190 184 208 186 C200 174 180 172 160 174 Z" fill="${S.moochC||'#3a2c26'}" stroke="${OL}" stroke-width="3"/>`+(S.curlyMooch?`<path d="M112 186 q-16 -2 -12 -18 q4 -6 11 -2 M208 186 q16 -2 12 -18 q-4 -6 -11 -2" stroke="${OL}" stroke-width="3" fill="${S.moochC||'#3a2c26'}"/>`:'');
  const vm=talk?act.vm:null;
  F.mouth+= vm ? lipMouth(vm,160,S.mooch?190:188,1,S.lips||shade(S.skin,-.35),OL) : (talk?lipMouth({w:30,h:8+lv*20,r:0,teeth:.5},160,188,1,S.lips||skD,OL):mouth2(P.m,S));
  // ---- turning: every front feature rides round the head (th degrees, + = turning toward screen-right)
@@ -282,9 +384,10 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  const hairShift=`translate(${fr(sT*hw*.22)} 0)`;
  let backHair='';
  if(hFrac>0){const long=['ponytail','curly','bun','greybun'].includes(S.hair), bot=long?196:182;
-   if(S.hair==='bald') backHair=`<path d="M${160-hw+4} 128 Q160 176 ${160+hw-4} 128" stroke="#8f8a86" stroke-width="16" fill="none" stroke-linecap="round"/>`;
+   if(S.hair==='bald'||S.hair==='whiteside') backHair=`<path d="M${160-hw+4} 128 Q160 176 ${160+hw-4} 128" stroke="${S.hair==='whiteside'?hairC:'#8f8a86'}" stroke-width="16" fill="none" stroke-linecap="round"/>`;
    else backHair=`<path d="M${160-hw-3} 136 C${160-hw-3} 84 ${160-hw*.55} 64 160 64 C${160+hw*.55} 64 ${160+hw+3} 84 ${160+hw+3} 136 C${160+hw} ${bot-20} ${160+hw*.5} ${bot} 160 ${bot} C${160-hw*.5} ${bot} ${160-hw} ${bot-20} ${160-hw-3} 136 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><path d="M${160-hw*.5} 84 Q160 70 ${160+hw*.5} 84" stroke="#fff" stroke-opacity=".18" stroke-width="6" fill="none"/>`;
    if(S.hair==='ponytail'&&back>.3) backHair+=`<path d="M150 90 Q132 170 148 252 Q160 262 172 252 Q188 170 170 90 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/><circle cx="160" cy="96" r="11" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;
+   if(S.hair==='cap') backHair+=`<path d="M${160-hw-4} 106 Q${160-hw+2} 48 160 46 Q${160+hw-2} 48 ${160+hw+4} 106 Z" fill="${S.capC}" stroke="${OL}" stroke-width="3.5"/><path d="M${160-hw-2} 104 Q160 118 ${160+hw+2} 104" stroke="${shade(S.capC,-.3)}" stroke-width="6" fill="none"/>`;
    if(S.hair==='bun'||S.hair==='greybun') backHair+=`<circle cx="160" cy="70" r="30" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/>`;
    backHair=hairClipDef+`<g clip-path="url(#${hairClip})">${backHair}</g>`}
  // profile nose bump on the silhouette when side-on
@@ -292,17 +395,18 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(Math.abs(sT)>.35&&cT>-.2){const sg=Math.sign(sT), x=160+hw*.97*sT, w=11*Math.min(1,(Math.abs(sT)-.35)/.4);
    pnose=`<path d="M${fr(x)} 146 Q${fr(x+sg*w*1.4)} 162 ${fr(x+sg*w*.4)} 170 Q${fr(x)} 172 ${fr(x-sg*2)} 170" fill="${S.skin}" stroke="${skL}" stroke-width="3" stroke-linejoin="round"/>`}
  const kHead=1-.06*Math.abs(sT);
- let h=F.neck.replace('M144 182','M144 182')+(eL.v<=.12?eL.svg:'')+(eR.v<=.12?eR.svg:'');
+ const hph=S.headphones?`<path d="M${fr(160-50*cT)} 222 Q160 254 ${fr(160+50*cT)} 222" stroke="#222" stroke-width="9" fill="none"/>`+[-1,1].map(sd=>`<ellipse cx="${fr(160+sd*50*cT)}" cy="220" rx="${fr(7+9*Math.abs(cT))}" ry="19" fill="#e8213a" stroke="${OL}" stroke-width="3.5"/>`).join(''):'';
+ let h=F.neck+hph+(eL.v<=.12?eL.svg:'')+(eR.v<=.12?eR.svg:'');
  h+=`<g transform="${hairShift}">${F.hairTop}</g>`;
  h+=`<g transform="translate(160 0) scale(${fr(kHead)} 1) translate(-160 0)">${F.head}</g>`;
  h+=(eL.v>.12?eL.svg:'')+(eR.v>.12?eR.svg:'');
  h+=place(F.blushL,116)+place(F.blushR,204)+place(F.center,160)+place(F.browL,138)+place(F.browR,182)+place(F.eyeL,134)+place(F.eyeR,186)+place(F.specs,160)+place(F.mouth,160,hw*.86)+pnose;
- const shortHair=['spiky','neat','bald'].includes(S.hair);
+ const shortHair=['spiky','neat','bald','whiteside','cap','messy','pigtails'].includes(S.hair);
  h+=`<g transform="${hairShift}">${F.hairFront}</g>`+backHair+(shortHair&&hFrac>0&&hFrac<.75?(eL.v>.12?eL.svg:'')+(eR.v>.12?eR.svg:''):'');
  // from behind: plain cloth hides the tie, collar and buttons
  let backCover='';
- if(back>0&&!S.saree){const d=S.kurta?`M108 206 Q160 194 212 206 Q${S.belly?248:234} 300 228 390 L92 390 Q${S.belly?72:86} 300 108 206 Z`:'M106 206 Q160 194 214 206 Q230 270 220 332 L100 332 Q90 270 106 206 Z';
-   backCover=`<path d="${d}" fill="url(#cl_${id})" stroke="${OL}" stroke-width="4.5" opacity="${fr(back)}"/>`+(S.bag?`<rect x="118" y="214" width="84" height="104" rx="18" fill="#ff8a3d" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')}
+ if(back>0&&!S.saree){const d=S.kurta?`M108 206 Q160 194 212 206 Q${S.belly?248:234} 300 228 390 L92 390 Q${S.belly?72:86} 300 108 206 Z`:S.frock?frockD:shirtD;
+   backCover=`<path d="${d}" fill="url(#cl_${id})" stroke="${OL}" stroke-width="4.5" opacity="${fr(back)}"/>`+(S.shawl?`<path d="M98 208 Q160 230 222 208 L234 270 Q160 290 86 270 Z" fill="${S.shawl}" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')+(S.hoodie?`<path d="M112 206 Q160 196 208 206 Q204 262 160 270 Q116 262 112 206 Z" fill="${shade(S.shirt,-.14)}" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')+(S.bag?`<rect x="118" y="214" width="84" height="104" rx="18" fill="#ff8a3d" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')}
  // head motion: breathing, nods on loud words, tilt while talking
  const br=Math.sin(t*2.4+id.length), nod=talk?(lvs-.3)*7+Math.sin(t*6.1)*1.5*lvs:0;
  const bob=dance?Math.abs(Math.sin(t*9))*-16:br*2.5, tilt=(talk?Math.sin(t*3.7)*2.6:Math.sin(t*1.6)*1.4)+(dance?wig*6:0)+(Pb==='think'?6:0)+(gx*.35);
@@ -405,9 +509,155 @@ function fx(kind,x,y,p,t,text){const a=clamp(p*4)*clamp((1-p)*4+.0001), s=.6+.4*
  if(kind==='lines'){let s='';for(let k=0;k<28;k++){const an=k/28*6.283+t*.4, r1=360+((k*53)%5)*40;s+=`<line x1="${(540+Math.cos(an)*r1).toFixed(0)}" y1="${(900+Math.sin(an)*r1).toFixed(0)}" x2="${(540+Math.cos(an)*1400).toFixed(0)}" y2="${(900+Math.sin(an)*1400).toFixed(0)}" stroke="#fff" stroke-width="${8+(k%3)*6}" opacity=".55"/>`}return `<g opacity="${clamp(p*6)}">${s}</g>`}
  return '';}
 
+/* ================= explainers: moving science diagrams on a board at the top of the screen ================= */
+function exText(x,y,s,o){o=o||{};return `<text x="${r1(x)}" y="${r1(y)}" text-anchor="${o.a||'middle'}" font-family="Poppins,'Noto Sans Devanagari',sans-serif" font-weight="700" font-size="${o.size||30}" fill="${o.col||INK}" stroke="${o.halo||'#fffaf0'}" stroke-width="${o.sw===undefined?8:o.sw}" paint-order="stroke" stroke-linejoin="round" opacity="${o.op===undefined?1:r1(o.op)}">${String(s).replace(/[<>&]/g,'')}</text>`}
+function exArrow(x1,y1,x2,y2,col,w,op){const a=Math.atan2(y2-y1,x2-x1),h=w*2.4;
+ return `<g opacity="${op===undefined?1:r1(op)}"><line x1="${r1(x1)}" y1="${r1(y1)}" x2="${r1(x2-Math.cos(a)*h*.7)}" y2="${r1(y2-Math.sin(a)*h*.7)}" stroke="${col}" stroke-width="${w}" stroke-linecap="round"/><path d="M${r1(x2)} ${r1(y2)} L${r1(x2-Math.cos(a-.55)*h)} ${r1(y2-Math.sin(a-.55)*h)} L${r1(x2-Math.cos(a+.55)*h)} ${r1(y2-Math.sin(a+.55)*h)} Z" fill="${col}"/></g>`}
+const exIn=(e,k,gap)=>clamp((e-.35-k*(gap||.9))/.35);       // the k-th label pops in about k*0.9 s after the board
+const exL=(E,def)=>{const L=(E.labels&&E.labels.length?E.labels:def).slice();while(L.length<def.length)L.push(def[L.length]);return L};
+function exList(L,x,y0,dy,e,col){return L.map((s,k)=>{const o=exIn(e,k);return `<g opacity="${r1(o)}" transform="translate(${r1((1-eOut(o))*30)} 0)"><circle cx="${x}" cy="${y0+k*dy-10}" r="17" fill="${col||'#2bd67b'}" stroke="${INK}" stroke-width="4"/>${exText(x,y0+k*dy-1,k+1,{size:22,sw:0})}${exText(x+30,y0+k*dy,s,{a:'start',size:30})}</g>`}).join('')}
+function bz(p,u){const v=1-u;return [v*v*v*p[0]+3*v*v*u*p[2]+3*v*u*u*p[4]+u*u*u*p[6], v*v*v*p[1]+3*v*v*u*p[3]+3*v*u*u*p[5]+u*u*u*p[7]]}
+function wrap(s,n){const w=String(s).split(/\s+/),L=[''];for(const x of w){if((L[L.length-1]+' '+x).trim().length>n&&L[L.length-1])L.push(x);else L[L.length-1]=(L[L.length-1]+' '+x).trim()}return L.slice(0,3)}
+const EXPLAIN={
+ // particles: slow and cold vs fast and hot
+ molecules(E,e,t){const L=exL(E,['Thanda: dheere','Garam: tez']);let s='';
+  [[34,'#2f8bd8',.16,'#dff0ff'],[466,'#e8413a',.7,'#ffe3dc']].forEach(([x0,c,v,bg],b)=>{
+   s+=`<rect x="${x0}" y="60" width="384" height="262" rx="22" fill="${bg}" stroke="${INK}" stroke-width="5"/>`;
+   for(let k=0;k<11;k++){const ax=.35+((k*7)%11)*.06, ay=.3+((k*5)%11)*.055, px=x0+28+328*tri(k*.37+t*v*ax*2.2), py=88+206*tri(k*.61+t*v*ay*2.2);
+    if(b) s+=`<circle cx="${r1(px-9)}" cy="${r1(py+2)}" r="11" fill="${c}" opacity=".22"/>`;
+    s+=`<circle cx="${r1(px)}" cy="${r1(py)}" r="15" fill="${c}" stroke="${INK}" stroke-width="3"/><circle cx="${r1(px-5)}" cy="${r1(py-5)}" r="4" fill="#fff" opacity=".7"/>`}
+   s+=exText(x0+192,368,L[b],{size:32,op:exIn(e,b)})});
+  return s},
+ // clay pot: water seeps out, evaporates and carries heat away
+ evaporation(E,e,t){const L=exL(E,['Paani chhedon se bahar','Bhaap garmi le jaati','Andar paani thanda']), cx=200;
+  let s=`<path d="M${cx-60} 64 Q${cx-160} 112 ${cx-160} 222 Q${cx-150} 356 ${cx} 364 Q${cx+150} 356 ${cx+160} 222 Q${cx+160} 112 ${cx+60} 64 Z" fill="#b8643a" stroke="${INK}" stroke-width="5"/>
+  <path d="M${cx-50} 88 Q${cx-130} 126 ${cx-130} 222 Q${cx-122} 330 ${cx} 338 Q${cx+122} 330 ${cx+130} 222 Q${cx+130} 126 ${cx+50} 88 Z" fill="#8fd3ff"/><path d="M${cx-122} 150 Q${cx} 138 ${cx+122} 150" stroke="#fff" stroke-width="4" fill="none" opacity=".7"/>`;
+  for(let k=0;k<8;k++){const side=k%2?1:-1, a=-.7+Math.floor(k/2)*.45, ca=Math.cos(a), sa=Math.sin(a);
+   const ix=cx+side*130*ca, iy=225+115*sa, ox=cx+side*160*ca, oy=225+138*sa, q=((t*.55+k*.23)%1);
+   s+=`<circle cx="${r1((ix+ox)/2)}" cy="${r1((iy+oy)/2)}" r="4" fill="#e6b08a"/>`;
+   if(q<.45){const u=q/.45;s+=`<circle cx="${r1(lerp(ix,ox,u))}" cy="${r1(lerp(iy,oy,u))}" r="7" fill="#3aa0e8" stroke="${INK}" stroke-width="2"/>`}
+   else{const u=(q-.45)/.55, x=ox+side*u*40, y=oy-u*110;
+    s+=`<circle cx="${r1(x)}" cy="${r1(y)}" r="${r1(8+u*12)}" fill="#fff" stroke="#9ab" stroke-width="2" opacity="${r1(.95*(1-u))}"/><circle cx="${r1(x+4)}" cy="${r1(y-3)}" r="4" fill="#e8413a" opacity="${r1(1-u)}"/>`}}
+  const lv=lerp(.85,.32,clamp(e/4.5)), tc=mixC('#e8413a','#2f8bd8',clamp(e/4.5));
+  s+=`<rect x="${cx-12}" y="150" width="24" height="150" rx="12" fill="#fff" stroke="${INK}" stroke-width="4"/><rect x="${cx-6}" y="${r1(156+138*(1-lv))}" width="12" height="${r1(138*lv)}" rx="6" fill="${tc}"/><circle cx="${cx}" cy="306" r="18" fill="${tc}" stroke="${INK}" stroke-width="4"/>`;
+  return s+exList(L,420,130,100,e)},
+ // heat flows from hot to cold until both are equal
+ heat(E,e,t){const L=exL(E,['Garam','Thanda','Garmi ka safar']), q=clamp(e/5);
+  const hc=mixC('#ff3b2f','#ff9a5a',q), cc=mixC('#3a8dff','#f39a6a',q*.85);
+  let s=`<rect x="40" y="110" width="200" height="200" rx="26" fill="${hc}" stroke="${INK}" stroke-width="5"/><rect x="644" y="110" width="200" height="200" rx="26" fill="${cc}" stroke="${INK}" stroke-width="5"/>`;
+  for(let k=0;k<3;k++){const x=90+k*50, w=Math.sin(t*5+k)*8;s+=`<path d="M${x} 96 q${r1(10+w)} -20 0 -36 q${r1(-10-w)} -16 0 -36" stroke="#e8413a" stroke-width="5" fill="none" opacity="${r1(1-q*.7)}" stroke-linecap="round"/>`}
+  for(let row=0;row<3;row++)for(let k=0;k<4;k++){const u=((t*.45+k/4+row*.13)%1), x=270+u*344, y=160+row*52;
+   s+=`<path d="M${r1(x-12)} ${y-14} L${r1(x+6)} ${y} L${r1(x-12)} ${y+14}" stroke="${mixC('#e8413a','#3a8dff',u)}" stroke-width="8" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="${r1(Math.sin(u*Math.PI)*(1-q*.6))}"/>`}
+  return s+exText(140,354,L[0],{size:34,op:exIn(e,0)})+exText(744,354,L[1],{size:34,op:exIn(e,1)})+exText(442,354,L[2],{size:28,op:exIn(e,2)})},
+ // drinking straw: outside air pushes the drink up
+ pressure(E,e,t){const L=exL(E,['Hawa neeche dhakelti','Straw mein hawa kam','Juice upar!']), cyc=(t%3.2)/3.2, rise=eIO(clamp(cyc*1.7)), lq=228;
+  const gx=y=>90+(y-100)/280*28;
+  let s=`<clipPath id="exg"><path d="M90 100 L370 100 L342 380 L118 380 Z"/></clipPath><path d="M90 100 L370 100 L342 380 L118 380 Z" fill="#e8f6ff" stroke="${INK}" stroke-width="5"/>
+  <g clip-path="url(#exg)"><rect x="60" y="${lq}" width="340" height="170" fill="#ff9a3a"/><path d="M60 ${lq} q40 -6 80 0 t80 0 t80 0 t80 0" stroke="#fff" stroke-width="4" fill="none" opacity=".6"/></g>`;
+  const top=lq-rise*178; s+=`<rect x="236" y="50" width="30" height="320" fill="#fff" fill-opacity=".5"/><rect x="236" y="${r1(top)}" width="30" height="${r1(370-top)}" fill="#ff9a3a"/><rect x="236" y="50" width="30" height="320" fill="none" stroke="${INK}" stroke-width="4.5"/>`;
+  for(let k=0;k<9;k++){const x=k<5?108+k*26:288+(k-5)*20, y=128+((k*37)%5)*18+Math.sin(t*6+k)*6;s+=`<circle cx="${r1(x+Math.sin(t*4+k*2)*4)}" cy="${r1(y)}" r="7" fill="#8aa0b8"/>`}
+  s+=exArrow(140,120,140,lq-6,'#2f6bd8',7,.6+.4*Math.sin(t*6))+exArrow(330,120,330,lq-6,'#2f6bd8',7,.6+.4*Math.sin(t*6+1));
+  s+=`<circle cx="251" cy="${r1(90+Math.sin(t*3)*20)}" r="6" fill="#8aa0b8"/>`+exArrow(251,54,251,14,'#e8413a',6,.5+.5*Math.sin(t*5));
+  return s+exList(L,420,130,100,e)},
+ // sound: the source pushes air, rings of pressure travel to the ear
+ sound(E,e,t){const L=exL(E,['Awaaz','Hawa ke kan hilte','Kaan tak pahunchi']);
+  let s=`<path d="M50 190 h40 l50 -50 v190 l-50 -50 h-40 Z" fill="#5a5f6b" stroke="${INK}" stroke-width="5" stroke-linejoin="round"/>`;
+  for(let x=200;x<=690;x+=34)for(let y=110;y<=340;y+=46){const dx=11*Math.sin(2*Math.PI*(x/150-t*1.1));s+=`<circle cx="${r1(x+dx)}" cy="${y}" r="6" fill="#8aa0b8"/>`}
+  for(let k=0;k<4;k++){const u=(t*.55+k/4)%1, r=40+u*560;s+=`<path d="M${r1(140+r*Math.cos(-.55))} ${r1(235+r*Math.sin(-.55))} A${r1(r)} ${r1(r)} 0 0 1 ${r1(140+r*Math.cos(.55))} ${r1(235+r*Math.sin(.55))}" stroke="#e8413a" stroke-width="7" fill="none" opacity="${r1(.85*(1-u))}" stroke-linecap="round"/>`}
+  s+=`<path d="M770 150 Q840 120 850 200 Q856 260 800 300 Q790 330 760 318" fill="#e0a77a" stroke="${INK}" stroke-width="5"/><path d="M790 180 Q824 170 820 220 Q816 244 796 250" stroke="${INK}" stroke-width="4" fill="none"/>`;
+  return s+exText(96,384,L[0],{size:30,op:exIn(e,0)})+exText(446,384,L[1],{size:30,op:exIn(e,1)})+exText(770,384,L[2],{size:24,op:exIn(e,2)})},
+ // light: reflection in a mirror, or bending in water (mode:"refract")
+ light(E,e,t){const R=E.mode==='refract';
+  const L=exL(E,R?['Hawa','Paani','Roshni mud gayi']:['Roshni','Sheesha','Ulti disha mein waapas']);
+  const P=R?[[110,60],[420,220],[560,380]]:[[120,80],[442,330],[764,80]];
+  let s=R?`<rect x="30" y="220" width="824" height="170" fill="#59b8ea" opacity=".55"/><path d="M30 220 h824" stroke="#2f6bd8" stroke-width="5"/>`:
+   `<path d="M300 340 h284" stroke="${INK}" stroke-width="10"/><path d="M300 334 h284" stroke="#cfeaff" stroke-width="6"/>${[0,1,2,3,4,5,6,7].map(k=>`<path d="M${310+k*36} 346 l-18 20" stroke="${INK}" stroke-width="3"/>`).join('')}<path d="M442 334 V120" stroke="${INK}" stroke-width="3" stroke-dasharray="10 9" opacity=".5"/>`;
+  if(R) s+=`<path d="M420 60 V380" stroke="${INK}" stroke-width="3" stroke-dasharray="10 9" opacity=".45"/>`;
+  else s+=`<g transform="translate(120 80) rotate(38)"><rect x="-70" y="-20" width="80" height="40" rx="8" fill="#ffd54a" stroke="${INK}" stroke-width="4"/><rect x="8" y="-26" width="20" height="52" rx="5" fill="#5a5f6b" stroke="${INK}" stroke-width="4"/></g>`;
+  const seg=[Math.hypot(P[1][0]-P[0][0],P[1][1]-P[0][1]),Math.hypot(P[2][0]-P[1][0],P[2][1]-P[1][1])], tot=seg[0]+seg[1], reach=eOut(clamp((e-.2)/1.2))*tot;
+  const at=d=>d<=seg[0]?[lerp(P[0][0],P[1][0],d/seg[0]),lerp(P[0][1],P[1][1],d/seg[0])]:[lerp(P[1][0],P[2][0],(d-seg[0])/seg[1]),lerp(P[1][1],P[2][1],(d-seg[0])/seg[1])];
+  const end=at(reach); s+=`<path d="M${P[0][0]} ${P[0][1]} L${r1(reach>seg[0]?P[1][0]:end[0])} ${r1(reach>seg[0]?P[1][1]:end[1])}${reach>seg[0]?` L${r1(end[0])} ${r1(end[1])}`:''}" stroke="#ffd54a" stroke-width="16" fill="none" stroke-linecap="round" opacity=".55"/><path d="M${P[0][0]} ${P[0][1]} L${r1(reach>seg[0]?P[1][0]:end[0])} ${r1(reach>seg[0]?P[1][1]:end[1])}${reach>seg[0]?` L${r1(end[0])} ${r1(end[1])}`:''}" stroke="#ff9a1a" stroke-width="5" fill="none" stroke-linecap="round"/>`;
+  for(let k=0;k<6;k++){const d=((t*.5+k/6)%1)*reach, q=at(d);s+=`<circle cx="${r1(q[0])}" cy="${r1(q[1])}" r="8" fill="#fff6b0" stroke="#ff9a1a" stroke-width="3"/>`}
+  if(reach>=tot*.98&&!R) s+=exArrow(P[2][0]-60,P[2][1]+60,P[2][0]-14,P[2][1]+14,'#ff9a1a',6);
+  return s+(R?exText(160,190,L[0],{size:32,op:exIn(e,0)})+exText(160,330,L[1],{size:32,col:'#fff',halo:'#2f6bd8',op:exIn(e,1)})+exText(690,330,L[2],{size:30,op:exIn(e,2)})
+   :exText(150,190,L[0],{size:30,op:exIn(e,0)})+exText(442,392,L[1],{size:30,op:exIn(e,1)})+exText(690,190,L[2],{size:28,op:exIn(e,2)}))},
+ // falling: two things fall together (or the feather lags when mode:"air")
+ gravity(E,e,t){const air=E.mode==='air', L=exL(E,air?['Patthar','Pankh','Hawa pankh ko rokti']:['Bhaari','Halka','Dono saath girte']);
+  const fall=u=>u<.72?(u/.72)**2:1, y0=80, y1=300;
+  let s=`<path d="M30 336 h824" stroke="${INK}" stroke-width="6"/><path d="M30 344 h824 v40 h-824 Z" fill="#c9b591" opacity=".6"/>`;
+  const obj=(x,kind,u)=>{const yy=kind==='feather'?y0+(y1-y0)*Math.min(1,u*.75):y0+(y1-y0)*fall(u), xx=kind==='feather'?x+Math.sin(u*14)*24:x;
+   if(kind==='feather') return `<g transform="translate(${r1(xx)} ${r1(yy)}) rotate(${r1(Math.sin(u*14)*30)})"><path d="M0 -34 Q22 0 0 34 Q-22 0 0 -34 Z" fill="#fff" stroke="${INK}" stroke-width="3.5"/><path d="M0 -34 V40" stroke="${INK}" stroke-width="2.5"/></g>`;
+   const r=kind==='big'?34:20;return `<circle cx="${r1(xx)}" cy="${r1(yy+(36-r))}" r="${r}" fill="${kind==='big'?'#6b6f7b':'#e8413a'}" stroke="${INK}" stroke-width="4"/><circle cx="${r1(xx-r*.35)}" cy="${r1(yy+(36-r)-r*.35)}" r="${r1(r*.25)}" fill="#fff" opacity=".5"/>`};
+  const u=(t%2.6)/2.6;
+  [[220,'big'],[600,air?'feather':'small']].forEach(([x,k])=>{for(let g=4;g>=1;g--){const ug=u-g*.07;if(ug>0&&ug<.72&&k!=='feather')s+=`<g opacity="${r1(.12*(5-g))}">${obj(x,k,ug)}</g>`}
+   s+=obj(x,k,u);if(k!=='feather'&&u<.72){const yy=y0+(y1-y0)*fall(u);s+=exArrow(x+56,yy,x+56,yy+18+u*90,'#2bd67b',6)}});
+  return s+exText(330,120,L[0],{a:'start',size:30,op:exIn(e,0)})+exText(700,120,L[1],{a:'start',size:30,op:exIn(e,1)})+exText(442,386,L[2],{size:28,op:exIn(e,2)})},
+ // the earth spins (day and night) or goes round the sun (mode:"orbit")
+ earth(E,e,t){if(E.mode==='orbit'){const L=exL(E,['Suraj','Prithvi','Ek chakkar = ek saal']), a=t*.7, ex=442+330*Math.cos(a), ey=215+120*Math.sin(a);
+   let s=`<ellipse cx="442" cy="215" rx="330" ry="120" fill="none" stroke="${INK}" stroke-width="3" stroke-dasharray="10 10" opacity=".45"/>`;
+   const sun=`<circle cx="442" cy="215" r="80" fill="#ffd54a" opacity=".35"/><circle cx="442" cy="215" r="58" fill="#ffc640" stroke="${INK}" stroke-width="5"/>`;
+   const earthS=`<circle cx="${r1(ex)}" cy="${r1(ey)}" r="30" fill="#3a8dff" stroke="${INK}" stroke-width="4"/><ellipse cx="${r1(ex-6)}" cy="${r1(ey-4)}" rx="12" ry="8" fill="#5cbf5a"/><circle cx="${r1(ex+48*Math.cos(t*3))}" cy="${r1(ey+20*Math.sin(t*3))}" r="9" fill="#ddd" stroke="${INK}" stroke-width="3"/>`;
+   s+=Math.sin(a)<0?earthS+sun:sun+earthS;
+   return s+exText(442,330,L[0],{size:30,op:exIn(e,0)})+exText(r1(ex),r1(ey-44),L[1],{size:26,op:exIn(e,1)})+exText(442,392,L[2],{size:28,op:exIn(e,2)})}
+  const L=exL(E,['Suraj','Din','Raat']);let s=`<circle cx="120" cy="215" r="98" fill="#ffd54a" opacity=".3"/>`;
+  for(let k=0;k<10;k++){const a=k/10*6.283+t*.6;s+=`<path d="M${r1(120+Math.cos(a)*82)} ${r1(215+Math.sin(a)*82)} L${r1(120+Math.cos(a)*104)} ${r1(215+Math.sin(a)*104)}" stroke="#ff9a1a" stroke-width="7" stroke-linecap="round"/>`}
+  s+=`<circle cx="120" cy="215" r="70" fill="#ffc640" stroke="${INK}" stroke-width="5"/><clipPath id="exe"><circle cx="580" cy="215" r="150"/></clipPath><circle cx="580" cy="215" r="152" fill="#3a8dff" stroke="${INK}" stroke-width="6"/><g clip-path="url(#exe)">`;
+  for(let k=0;k<5;k++){const u=((t*.06+k/5)%1), x=380+u*420, y=120+((k*67)%5)*44;s+=`<ellipse cx="${r1(x)}" cy="${y}" rx="${44+(k%3)*16}" ry="${24+(k%2)*12}" fill="#5cbf5a" stroke="#2e7a3a" stroke-width="3"/>`}
+  s+=`<rect x="600" y="40" width="150" height="360" fill="#0b1640" opacity=".55"/><rect x="580" y="40" width="22" height="360" fill="#0b1640" opacity=".25"/></g>`;
+  s+=`<path d="M470 60 Q580 20 690 60" stroke="${INK}" stroke-width="5" fill="none"/>`+exArrow(670,50,700,66,INK,5);
+  for(let k=0;k<4;k++)s+=`<text x="${660+(k%2)*40}" y="${130+k*60}" font-size="22" fill="#fff" opacity="${r1(.5+.5*Math.sin(t*3+k))}">★</text>`;
+  return s+exText(120,360,L[0],{size:30,op:exIn(e,0)})+exText(500,225,L[1],{size:32,op:exIn(e,1)})+exText(680,225,L[2],{size:32,col:'#fff',halo:'#0b1640',op:exIn(e,2)})},
+ // electric circuit: charges flow round the loop and the bulb lights
+ circuit(E,e,t){const L=exL(E,['Battery','Bijli ka bahaav','Bulb jala!']), x0=110,y0=80,x1=760,y1=330, W=x1-x0, H=y1-y0, per=2*(W+H);
+  const pt=d=>{d=((d%per)+per)%per;if(d<W)return [x0+d,y0];d-=W;if(d<H)return [x1,y0+d];d-=H;if(d<W)return [x1-d,y1];d-=W;return [x0,y1-d]};
+  const on=clamp((e-.3)/.6), gl=on*(.8+.2*Math.sin(t*8));
+  let s=`<rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="none" stroke="${INK}" stroke-width="12" rx="10"/><rect x="${x0}" y="${y0}" width="${W}" height="${H}" fill="none" stroke="#e08a3a" stroke-width="5" rx="10"/>`;
+  s+=`<rect x="${x0-34}" y="160" width="68" height="110" rx="10" fill="#2a2a2a" stroke="${INK}" stroke-width="4"/><rect x="${x0-34}" y="160" width="68" height="40" rx="8" fill="#e8b33a"/><rect x="${x0-12}" y="146" width="24" height="16" rx="4" fill="#c9d0d8" stroke="${INK}" stroke-width="3"/>${exText(x0,250,'+',{size:34,col:'#fff',sw:0})}`;
+  s+=`<circle cx="${x1+48}" cy="205" r="${r1(60+gl*20)}" fill="#ffe680" opacity="${r1(gl*.6)}"/><rect x="${x1-6}" y="186" width="24" height="38" fill="#c9d0d8" stroke="${INK}" stroke-width="3"/><circle cx="${x1+50}" cy="205" r="36" fill="${mixC('#eef3f8','#fff3a0',gl)}" stroke="${INK}" stroke-width="4"/><path d="M${x1+34} 205 q8 -14 16 0 q8 14 16 0" stroke="${gl>.3?'#ff9a1a':'#888'}" stroke-width="4" fill="none"/>`;
+  for(let k=0;k<16;k++){const q=pt(k/16*per+t*130*on);s+=`<circle cx="${r1(q[0])}" cy="${r1(q[1])}" r="8" fill="#ffd54a" stroke="${INK}" stroke-width="2.5"/>`}
+  return s+exText(x0+20,376,L[0],{size:30,op:exIn(e,0)})+exText(435,215,L[1],{size:32,op:exIn(e,1)})+exText(x1+50,290,L[2],{size:28,op:exIn(e,2)})},
+ // bar magnet with moving field lines
+ magnet(E,e,t){const L=exL(E,['N','S','Chumbak ki taakat']);let s='';
+  for(const sg of [-1,1])for(let k=1;k<=3;k++){const p=[292,215,292-52*k,215+sg*62*k,592+52*k,215+sg*62*k,592,215];
+   s+=`<path d="M${p[0]} ${p[1]} C${p[2]} ${p[3]} ${p[4]} ${p[5]} ${p[6]} ${p[7]}" stroke="#8aa0b8" stroke-width="3.5" fill="none" stroke-dasharray="8 8"/>`;
+   for(let j=0;j<3;j++){const u=(t*.25+j/3+k*.1)%1, q=bz(p,u), q2=bz(p,Math.min(1,u+.02));s+=exArrow(q[0],q[1],q2[0]+(q2[0]-q[0])*3,q2[1]+(q2[1]-q[1])*3,'#2f6bd8',4)}}
+  s+=`<rect x="292" y="180" width="150" height="70" fill="#e8413a" stroke="${INK}" stroke-width="5"/><rect x="442" y="180" width="150" height="70" fill="#2f6bd8" stroke="${INK}" stroke-width="5"/>`+exText(367,230,L[0],{size:40,col:'#fff',sw:0})+exText(517,230,L[1],{size:40,col:'#fff',sw:0});
+  const pull=eOut(clamp(((t%3)/3)*1.6));for(let k=0;k<3;k++){const x=lerp(820,620,pull)+k*10, y=190+k*24;s+=`<rect x="${r1(x)}" y="${y}" width="40" height="10" rx="5" fill="none" stroke="#5a5f6b" stroke-width="4"/>`}
+  return s+exText(442,392,L[2],{size:30,op:exIn(e,0)})},
+ // water cycle: sea -> vapour -> cloud -> rain -> river -> sea
+ watercycle(E,e,t){const L=exL(E,['Bhaap','Badal','Baarish']), g=clamp(e/3);
+  let s=`<path d="M560 380 L700 150 L860 380 Z" fill="#8fbf6a" stroke="${INK}" stroke-width="4"/><path d="M670 196 L700 150 L728 194 L712 186 L700 200 L688 186 Z" fill="#fff"/>`;
+  s+=`<path d="M0 320 ${[...Array(10)].map((_,k)=>`q25 ${r1(-10+Math.sin(t*3+k)*4)} 50 0`).join(' ')} V410 H0 Z" fill="#3a8dff" stroke="${INK}" stroke-width="3"/>`;
+  s+=`<circle cx="80" cy="80" r="46" fill="#ffc640" stroke="${INK}" stroke-width="4"/>`;
+  for(let k=0;k<8;k++){const u=(t*.35+k/8)%1, x=140+k*40+u*120, y=300-u*200;s+=`<path d="M${r1(x)} ${r1(y)} q8 -10 0 -20 q-8 -10 0 -20" stroke="#8fd3ff" stroke-width="5" fill="none" opacity="${r1(Math.sin(u*Math.PI))}" stroke-linecap="round"/>`}
+  const cc=mixC('#ffffff','#8a93a6',g), cs=.7+.3*g;
+  s+=`<g transform="translate(640 80) scale(${r1(cs)})"><ellipse cx="0" cy="10" rx="110" ry="40" fill="${cc}" stroke="${INK}" stroke-width="4"/><ellipse cx="-40" cy="-14" rx="50" ry="38" fill="${cc}" stroke="${INK}" stroke-width="4"/><ellipse cx="34" cy="-20" rx="56" ry="42" fill="${cc}" stroke="${INK}" stroke-width="4"/><ellipse cx="0" cy="14" rx="104" ry="32" fill="${cc}"/></g>`;
+  if(g>.5)for(let k=0;k<10;k++){const u=(t*1.2+k/10)%1, x=570+(k*37)%150, y=130+u*150;s+=`<path d="M${x} ${r1(y)} l-6 18" stroke="#2f6bd8" stroke-width="4" stroke-linecap="round" opacity="${r1(1-u*.6)}"/>`}
+  s+=`<path d="M650 330 Q560 340 520 316" stroke="#3a8dff" stroke-width="12" fill="none" stroke-linecap="round"/>`;
+  return s+exText(270,190,L[0],{size:32,op:exIn(e,0)})+exText(800,40,L[1],{size:30,op:exIn(e,1)})+exText(780,262,L[2],{size:28,op:exIn(e,2)})},
+ // generic: up to 4 steps appearing one by one with moving arrows between them
+ steps(E,e,t){const S=(E.steps||E.labels||[]).slice(0,4), n=Math.max(1,S.length), gap=46, w=(824-(n-1)*gap)/n;let s='';
+  S.forEach((txt,k)=>{const x=30+k*(w+gap), o=exIn(e,k,1.0), sc=.6+.4*eOut(o), fs=n>=4?25:30, ln=wrap(txt,Math.max(5,Math.floor(w/(fs*.6))));
+   s+=`<g opacity="${r1(o)}" transform="translate(${r1(x+w/2)} 215) scale(${r1(sc)}) translate(${r1(-x-w/2)} -215)"><rect x="${r1(x)}" y="110" width="${r1(w)}" height="210" rx="24" fill="${['#ffe7a8','#d8f3e2','#dfeaff','#ffd8e6'][k]}" stroke="${INK}" stroke-width="5"/>
+    <circle cx="${r1(x+26)}" cy="112" r="22" fill="${INK}"/>${exText(x+26,121,k+1,{size:26,col:'#fff',sw:0})}${ln.map((l,i)=>exText(x+w/2,222+(i-(ln.length-1)/2)*(fs+8),l,{size:fs,sw:0})).join('')}</g>`;
+   if(k<n-1&&exIn(e,k+1,1.0)>0){const ax=x+w+4;for(let j=0;j<2;j++){const u=(t*1.4+j/2)%1;s+=`<path d="M${r1(ax+u*30)} 200 l12 15 l-12 15" stroke="#e8413a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="${r1(Math.sin(u*Math.PI))}"/>`}}});
+  return s},
+ // generic: growing bars, e.g. "bars":[["Cheeni",10],["Namak",4]], "unit":"g"
+ bars(E,e,t){const B=(E.bars||[]).slice(0,4), n=Math.max(1,B.length), mx=Math.max(1,...B.map(b=>+b[1]||0)), w=Math.min(150,(760-(n-1)*40)/n), x0=442-(n*w+(n-1)*40)/2;let s=`<path d="M40 330 h804" stroke="${INK}" stroke-width="5"/>`;
+  B.forEach((b,k)=>{const g=eOut(clamp((e-.3-k*.5)/.9)), h=230*(+b[1]||0)/mx*g, x=x0+k*(w+40), v=(+b[1]||0)*g;
+   s+=`<rect x="${r1(x)}" y="${r1(330-h)}" width="${r1(w)}" height="${r1(h)}" rx="10" fill="${['#e8413a','#2f6bd8','#2bd67b','#ffb020'][k]}" stroke="${INK}" stroke-width="4"/>`+
+    exText(x+w/2,320-h,(Number.isInteger(+b[1])?Math.round(v):v.toFixed(1))+(E.unit?' '+E.unit:''),{size:28,op:g})+exText(x+w/2,372,b[0],{size:28})});
+  return s},
+};
+const EXPLAIN_KINDS=Object.keys(EXPLAIN);
+function explainSvg(E,e,t){const f=EXPLAIN[E.kind];if(!f)return '';const s=.72+.28*eOut(e/.35), o=clamp(e/.25);
+ const tl=E.title||'', tw=Math.min(820,tl.length*19+70);
+ return `<g opacity="${r1(o)}" transform="translate(442 205) scale(${s.toFixed(3)}) translate(-442 -205)"><rect x="8" y="14" width="884" height="410" rx="34" fill="${INK}"/><rect x="0" y="0" width="884" height="410" rx="34" fill="#fffaf0" stroke="${INK}" stroke-width="6"/>
+ ${tl?`<rect x="26" y="-30" width="${tw}" height="60" rx="30" fill="#2bd67b" stroke="${INK}" stroke-width="5"/>${exText(26+tw/2,12,tl,{size:32,sw:0,col:'#0b2416'})}`:''}<g>${f(E,e,t)}</g></g>`}
+
 /* ================= timeline / state ================= */
 const SC=SB.scenes, CAST=SB.cast||{};
-const NAME={masterji:'Masterji',golu:'Golu',mummy:'Mummy',papa:'Papa',dadi:'Dadi',pinky:'Pinky',bunty:'Bunty',aunty:'Sharma Aunty'}, TAG={masterji:'#ffd54a',golu:'#8fd3ff',mummy:'#ff9ac2',papa:'#c6f08a',dadi:'#f3efe4',pinky:'#ffb3d1',bunty:'#d6c8ff',aunty:'#9ff0c4'};
+const NAME={masterji:'Masterji',golu:'Golu',mummy:'Mummy',papa:'Papa',dadi:'Dadi',pinky:'Pinky',bunty:'Bunty',aunty:'Sharma Aunty',dadaji:'Dadaji',chutki:'Chutki',gupta:'Gupta Uncle',raju:'Raju Bhaiya'}, TAG={masterji:'#ffd54a',golu:'#8fd3ff',mummy:'#ff9ac2',papa:'#c6f08a',dadi:'#f3efe4',pinky:'#ffb3d1',bunty:'#d6c8ff',aunty:'#9ff0c4',dadaji:'#e6e2da',chutki:'#ffd54a',gupta:'#ffc27a',raju:'#9fe0d0'};
 document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); window.__ready=true; });
 function sceneAt(t){let i=0;TL.scenes.forEach((s,k)=>{if(t>=s.start)i=k});return i}
 function beatAt(si,t){const bs=TL.scenes[si].beats;let j=0;bs.forEach((b,k)=>{if(t>=b.start)j=k});return j}
@@ -420,11 +670,13 @@ function charPos(s,id){const c=s.cast.find(c=>c.id===id);return c?[c.x,c.y||FLOO
 function headY(s,id){const c=s.cast.find(c=>c.id===id);if(!c)return 700;if(typeof PUPPETS!=='undefined'&&PUPPETS[id])return (c.y||FLOOR)-((PUP_H[id]||440)+30)*charScale(s,c);return (c.y||FLOOR)-430*charScale(s,c)*.92}
 function renderAt(t){
  const si=sceneAt(t), s=SC[si], T=TL.scenes[si], j=beatAt(si,t), B=s.beats[j], TB=T.beats[j], lt=t-T.start, bt=t-TB.start;
+ let EX=null, exT0=0; for(let k=0;k<=j;k++){const bb=s.beats[k]; if(bb.explain!==undefined){EX=bb.explain||null; exT0=T.beats[k].start}}   // a board stays up until a beat sets "explain": false
  { const hk=$('#hook'), hu=Number(SB.hook_until)||Math.min(3.2,Math.max(2.2,(TL.scenes[0].beats[0].audioEnd||2)+.4));
    if(!SB.hook||t>hu+.3) hk.style.opacity=0;
    else { const sc=1+.06*Math.sin(Math.min(1,t/.5)*Math.PI)+.015*Math.sin(t*7), o=t<hu?1:1-(t-hu)/.3;
      hk.style.opacity=o.toFixed(3); hk.style.transform=`scale(${sc.toFixed(3)}) rotate(${(-1.5+Math.sin(t*3)*.6).toFixed(2)}deg)`; }
-   $('#title').style.opacity=SB.hook&&t<hu?0:1; }
+   $('#title').style.opacity=(SB.hook&&t<hu)||EX?0:1; }
+ $('#ex').innerHTML=EX&&EX.kind?explainSvg(EX,t-exT0,t):'';
  const set=(SETS[s.set]||SETS.classroom)(t,s);
  let chars='', defs=GDEFS;
  const spk=B.who&&t<TB.audioEnd?B.who:null, spkX=spk?charPos(s,spk)[0]:null;
@@ -475,6 +727,7 @@ function renderAt(t){
   else if(who&&s.board) auto={zoom:1.0,push:.05};          // keep the blackboard text readable
   else if(who) auto={zoom:1.18,on:who,push:.07};
   else if(B.act){const k=Object.keys(B.act).find(q=>s.cast.find(c=>c.id===q));auto=n>2?{zoom:1.06,push:.04}:(k?{zoom:1.3,on:k,push:.05}:null)}}
+ if(EX&&SB.autocam!==false&&!s.cam&&!B.cam) auto={zoom:1.0,push:.02};          // wide while the board explains
  const cam=Object.assign({zoom:1,on:null,push:0},s.cam||{}, B.cam||auto||{});
  let [fx_,fy_]=cam.on?(typeof cam.on==='string'?[charPos(s,cam.on)[0],headY(s,cam.on)+170]:cam.on):[540,960];
  const z=cam.zoom*(1+cam.push*(auto&&!s.cam&&!B.cam?eOut(clamp(bt/Math.max(.8,TB.end-TB.start))):clamp(lt/Math.max(1,T.end-T.start))));

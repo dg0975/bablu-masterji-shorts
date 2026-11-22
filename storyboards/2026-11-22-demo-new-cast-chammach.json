@@ -1,0 +1,235 @@
+{
+ "kind": "skit",
+ "series": "CHUTKI KE SAWAAL · PART 1",
+ "title": "Chammach toota ya roshni?",
+ "hook": "Chutki ka chammach *toota*? 😱",
+ "handle": "@bablu.masterji",
+ "post_title": "Paani mein chammach toota kyun dikhta hai? 😂 Chutki ke Sawaal, Part 1",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "chutki": {
+   "name": "Chutki",
+   "engine": "gemini",
+   "gvoice": "Achernar",
+   "style": "a cute, dramatic 6-year-old Indian girl, high-pitched and excited"
+  },
+  "raju": {
+   "name": "Raju Bhaiya",
+   "engine": "gemini",
+   "gvoice": "Puck",
+   "style": "a lazy, cool college-going cousin, laid back and casual"
+  },
+  "dadaji": {
+   "name": "Dadaji",
+   "engine": "gemini",
+   "gvoice": "Enceladus",
+   "style": "a sweet, slightly forgetful Indian grandfather in his 70s, funny and full of old stories"
+  },
+  "gupta": {
+   "name": "Gupta Uncle",
+   "engine": "gemini",
+   "gvoice": "Fenrir",
+   "style": "a loud, show-off Indian neighbour uncle who brags about everything he owns"
+  },
+  "golu": {
+   "name": "Golu",
+   "engine": "gemini",
+   "gvoice": "Zephyr",
+   "style": "a cheeky 10-year-old Indian boy, excited and mischievous"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
+ },
+ "scenes": [
+  {
+   "set": "park",
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "chutki",
+     "x": 230,
+     "pose": "shock",
+     "item": "glass"
+    },
+    {
+     "id": "dadaji",
+     "x": 560
+    },
+    {
+     "id": "raju",
+     "x": 880,
+     "pose": "sly"
+    }
+   ],
+   "beats": [
+    {
+     "who": "chutki",
+     "say": "भैया ने मेरा चम्मच तोड़ दिया!",
+     "act": {
+      "chutki": "shock"
+     },
+     "fx": {
+      "kind": "lines"
+     },
+     "sfx": "crash",
+     "style": "a little girl wailing dramatically, complaining loudly"
+    },
+    {
+     "who": "raju",
+     "say": "ब्रो, मैं तो रील देख रहा था।",
+     "act": {
+      "raju": "sly"
+     },
+     "style": "a lazy cousin shrugging, totally unbothered"
+    },
+    {
+     "who": "dadaji",
+     "say": "हमारे ज़माने में चम्मच सीधे रहते थे!",
+     "act": {
+      "dadaji": "talk",
+      "chutki": "think"
+     },
+     "sfx": "drum",
+     "style": "a grandpa proudly remembering the old days, funny"
+    }
+   ]
+  },
+  {
+   "set": "market",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "gupta",
+     "x": 300,
+     "pose": "point"
+    },
+    {
+     "id": "golu",
+     "x": 790,
+     "pose": "idle"
+    }
+   ],
+   "beats": [
+    {
+     "who": "gupta",
+     "say": "मेरे इम्पोर्टेड गिलास में चम्मच सीधा दिखेगा!",
+     "act": {
+      "gupta": "point"
+     },
+     "style": "a show-off uncle bragging loudly"
+    },
+    {
+     "who": "golu",
+     "say": "अंकल, गिलास इम्पोर्टेड है, रोशनी तो देसी है!",
+     "act": {
+      "golu": "sly",
+      "gupta": "shock"
+     },
+     "spin": [
+      "gupta"
+     ],
+     "sfx": "boing",
+     "style": "a cheeky boy roasting the uncle, perfect comic timing"
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "board": "",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 300
+    },
+    {
+     "id": "chutki",
+     "x": 800,
+     "pose": "think"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "चम्मच टूटा नहीं बेटा, रोशनी मुड़ गई।",
+     "act": {
+      "masterji": "point"
+     },
+     "explain": {
+      "kind": "light",
+      "mode": "refract",
+      "title": "Chammach toota kyun?",
+      "labels": [
+       "Hawa",
+       "Paani",
+       "Roshni mud gayi"
+      ]
+     },
+     "style": "a teacher smiling and explaining with excitement"
+    },
+    {
+     "who": "masterji",
+     "say": "हवा से पानी में जाते ही रोशनी रास्ता बदलती है।",
+     "act": {
+      "masterji": "talk"
+     },
+     "style": "a teacher explaining clearly, lively"
+    },
+    {
+     "who": "chutki",
+     "say": "तो रोशनी भी भैया जैसी आलसी है, सीधे नहीं चलती?",
+     "act": {
+      "chutki": "laugh"
+     },
+     "hop": [
+      "chutki"
+     ],
+     "sfx": "drum",
+     "style": "a little girl giggling, cheeky and innocent"
+    }
+   ]
+  },
+  {
+   "set": "park",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "raju",
+     "x": 300,
+     "pose": "happy"
+    },
+    {
+     "id": "chutki",
+     "x": 760,
+     "pose": "sly",
+     "item": "glass"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "रोशनी हवा से पानी में जाते ही मुड़ जाती है। इसलिए पानी में चम्मच टूटा हुआ दिखता है।",
+    "foot": "आपने ये देखा है? 👇"
+   },
+   "beats": [
+    {
+     "who": "raju",
+     "say": "ब्रो, चल चम्मच डुबा के रील बनाते हैं!",
+     "act": {
+      "raju": "happy",
+      "chutki": "shock"
+     },
+     "style": "an excited lazy cousin who just got a content idea"
+    }
+   ]
+  }
+ ]
+}

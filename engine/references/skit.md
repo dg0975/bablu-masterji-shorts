@@ -53,9 +53,11 @@ channel voice). A beat may override with `"voice"`. Render with
  "card":{"kicker":"Science ka sach","text":"...","foot":"comment question"},
  "beats":[ ... ]}
 ```
-- `set`: `classroom`, `livingroom`, `kitchen`, `train`, `tapri`, `terrace`, `bedroom` (`"night":true` on the shot
+- `set`: `classroom`, `livingroom`, `kitchen`, `train`, `tapri`, `terrace`, `bedroom`, `park`, `market` (`"night":true` on the shot
   for a night window). Characters: `masterji`, `golu`, `mummy`, `papa`, `dadi` (stick, glasses), `pinky`
-  (phone), `bunty` (glasses, books), `aunty` (Sharma Aunty, big bindi).
+  (phone), `bunty` (glasses, books), `aunty` (Sharma Aunty, big bindi), `dadaji` (white hair, shawl),
+  `chutki` (small girl, pigtails, frock), `gupta` (Gupta Uncle: cap, gold chain, checked shirt),
+  `raju` (Raju Bhaiya: hoodie, headphones, stubble).
 - `x` = centre on the 1080-wide frame; 3 people: x 220/540/860 with shot `"scale":0.78`; 2 people: `0.9`.
 - `enter`: `left`, `right`, `pop`, `drop`. `flip:true` mirrors a character.
 - `cam.on` = character id (close-up on the face) or `[x,y]`; `zoom` 1-2; `push` slow zoom-in.
@@ -70,6 +72,10 @@ channel voice). A beat may override with `"voice"`. Render with
 - A beat without `say` needs `"hold": seconds` (reaction or dance moments).
 - Poses: idle, talk, shock, happy, laugh, angry (Mummy's belan), sad, point, think, sly, dance,
   hand (raise hand), facepalm, hold (Papa's newspaper), wave. Masterji also uses his own poses.
+- `explain`: animated science board at the top of the screen, `{"kind":"evaporation","title":"Matka thanda kyun?","labels":["..."]}`.
+  Kinds: molecules, evaporation, heat, pressure, sound, light (`mode` refract), gravity (`mode` air),
+  earth (`mode` orbit), circuit, magnet, watercycle, steps (`steps`: 2-4 lines), bars (`bars`: [[label, n]], `unit`).
+  It stays until a beat sets `"explain": false` or the shot ends; the camera goes wide while it is up.
 - `fx`: bulb (idea), sweat, question, stars, anger, hearts, pop (`"text":"DHADAAM!"`), lines (speed lines).
 - `sfx` (made in code): boing, ding, whoosh, drum (ba-dum-tss), pop, crash, bell (school bell),
   slide (slide whistle), scratch. List form: `[{"s":"boing","at":0.3,"gain":0.8}]`.

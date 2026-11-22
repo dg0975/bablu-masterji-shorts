@@ -368,7 +368,7 @@ function poseOf(si,j,id){const s=SC[si];let p=(s.cast.find(c=>c.id===id)||{}).po
 const FLOOR=1400;
 function charScale(s,c){return (c.scale||1)*(s.scale||1)*(c.id==='masterji'?1.72:1.85*(SPEC[c.id]?SPEC[c.id].scale:1))}
 function charPos(s,id){const c=s.cast.find(c=>c.id===id);return c?[c.x,c.y||FLOOR]:[540,FLOOR]}
-function headY(s,id){const c=s.cast.find(c=>c.id===id);if(!c)return 700;return (c.y||FLOOR)-430*charScale(s,c)*.92}
+function headY(s,id){const c=s.cast.find(c=>c.id===id);if(!c)return 700;if(typeof PUPPETS!=='undefined'&&PUPPETS[id])return (c.y||FLOOR)-((PUP_H[id]||440)+30)*charScale(s,c);return (c.y||FLOOR)-430*charScale(s,c)*.92}
 function renderAt(t){
  const si=sceneAt(t), s=SC[si], T=TL.scenes[si], j=beatAt(si,t), B=s.beats[j], TB=T.beats[j], lt=t-T.start, bt=t-TB.start;
  { const hk=$('#hook'), hu=Number(SB.hook_until)||Math.min(3.2,Math.max(2.2,(TL.scenes[0].beats[0].audioEnd||2)+.4));
@@ -405,7 +405,8 @@ function renderAt(t){
  $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+fxs;
  // camera: zoom on a character or point, gentle push, shake on demand
  let auto=null;                                   // auto camera: cut to the speaker, wide for reactions
- if(SB.autocam!==false&&!s.cam&&!B.cam&&!s.card){
+ if(SB.autocam!==false&&!s.cam&&!B.cam&&s.card&&B.who&&typeof PUPPETS!=='undefined'&&PUPPETS[B.who]) auto={zoom:1.22,on:B.who,push:.04};
+ else if(SB.autocam!==false&&!s.cam&&!B.cam&&!s.card){
   const n=s.cast.length, who=B.who&&s.cast.find(c=>c.id===B.who)?B.who:null;
   if(who&&n>1) auto={zoom:1.42+((si+j)%2)*.12,on:who,push:.06};
   else if(who&&s.board) auto={zoom:1.0,push:.05};          // keep the blackboard text readable
@@ -425,7 +426,7 @@ function renderAt(t){
  if(showSub){const w=$('#sub .who');w.textContent=(CAST[B.who]&&CAST[B.who].name)||NAME[B.who]||B.who;w.style.background=TAG[B.who]||'#fff';$('#sub .line').textContent=(B.caption||B.say).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim()}
  // ending card
  const card=s.card; const C=$('#card');
- if(card){C.style.opacity=clamp((lt-.2)/.4);C.style.transform=`translateY(${((1-eOut((lt-.2)/.5))*60).toFixed(1)}px)`;C.querySelector('.k').textContent=card.kicker||'Science ka sach';C.querySelector('.t').textContent=card.text||'';C.querySelector('.f').textContent=card.foot||''}
+ if(card){if(typeof PUPPETS!=='undefined'&&Object.keys(PUPPETS).length)C.style.top='1000px';C.style.padding='30px 40px';C.querySelector('.t').style.fontSize='44px';C.style.opacity=clamp((lt-.2)/.4);C.style.transform=`translateY(${((1-eOut((lt-.2)/.5))*60).toFixed(1)}px)`;C.querySelector('.k').textContent=card.kicker||'Science ka sach';C.querySelector('.t').textContent=card.text||'';C.querySelector('.f').textContent=card.foot||''}
  else C.style.opacity=0;
 }
 window.renderAt=renderAt;

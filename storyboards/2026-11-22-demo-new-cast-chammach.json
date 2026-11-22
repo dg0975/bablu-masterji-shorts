@@ -100,6 +100,15 @@
      },
      "sfx": "drum",
      "style": "a grandpa proudly remembering the old days, funny"
+    },
+    {
+     "who": "raju",
+     "say": "दादाजी, आपके ज़माने में तो रील भी नहीं थी।",
+     "act": {
+      "raju": "sly",
+      "dadaji": "shock"
+     },
+     "style": "a cool cousin teasing grandpa, smug"
     }
    ]
   },
@@ -139,6 +148,16 @@
      ],
      "sfx": "boing",
      "style": "a cheeky boy roasting the uncle, perfect comic timing"
+    },
+    {
+     "who": "gupta",
+     "say": "अरे, ये गिलास दुबई से आया है, दुबई से!",
+     "act": {
+      "gupta": "angry",
+      "golu": "laugh"
+     },
+     "shake": true,
+     "style": "an offended show-off uncle insisting loudly"
     }
    ]
   },

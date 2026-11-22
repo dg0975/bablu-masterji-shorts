@@ -1,0 +1,149 @@
+{
+ "lines": [
+  {
+   "start": 0.0,
+   "end": 0.6,
+   "speaker": "Golu",
+   "text": "मास्टर जी"
+  },
+  {
+   "start": 1.2,
+   "end": 2.0,
+   "speaker": "Golu",
+   "text": "चावल जल गए,"
+  },
+  {
+   "start": 2.0,
+   "end": 3.0,
+   "speaker": "Golu",
+   "text": "पूरे घर में धुआं।"
+  },
+  {
+   "start": 3.3,
+   "end": 4.0,
+   "speaker": "Masterji",
+   "text": "नीचे मत खुरचो।"
+  },
+  {
+   "start": 4.3,
+   "end": 6.0,
+   "speaker": "Masterji",
+   "text": "ऊपर के चावल दूसरे बर्तन में डालो,"
+  },
+  {
+   "start": 6.0,
+   "end": 7.5,
+   "speaker": "Masterji",
+   "text": "जली महक नीचे ही रह जाएगी।"
+  },
+  {
+   "start": 8.2,
+   "end": 8.5,
+   "speaker": "Golu",
+   "text": "हम्म"
+  },
+  {
+   "start": 9.0,
+   "end": 10.0,
+   "speaker": "Masterji",
+   "text": "नमक ज्यादा हो गया,"
+  },
+  {
+   "start": 10.0,
+   "end": 10.8,
+   "speaker": "Masterji",
+   "text": "आलू डाल देता हूं।"
+  },
+  {
+   "start": 10.8,
+   "end": 11.0,
+   "speaker": "Golu",
+   "text": "आह!"
+  },
+  {
+   "start": 11.2,
+   "end": 12.3,
+   "speaker": "Golu",
+   "text": "आलू नमक नहीं चूसता,"
+  },
+  {
+   "start": 12.3,
+   "end": 13.2,
+   "speaker": "Golu",
+   "text": "बस पानी पीता है।"
+  },
+  {
+   "start": 14.0,
+   "end": 15.0,
+   "speaker": "Masterji",
+   "text": "बिना नमक की दाल मिलाओ।"
+  },
+  {
+   "start": 15.5,
+   "end": 16.3,
+   "speaker": "Golu",
+   "text": "तब और चीज हो?"
+  },
+  {
+   "start": 16.5,
+   "end": 16.8,
+   "speaker": "Masterji",
+   "text": "हम्म"
+  },
+  {
+   "start": 17.0,
+   "end": 18.0,
+   "speaker": "Masterji",
+   "text": "कल लाया था,"
+  },
+  {
+   "start": 18.0,
+   "end": 18.8,
+   "speaker": "Masterji",
+   "text": "आज मुरझा गया।"
+  },
+  {
+   "start": 19.0,
+   "end": 20.0,
+   "speaker": "Masterji",
+   "text": "फूलों की तरह डंडी पानी में,"
+  },
+  {
+   "start": 20.5,
+   "end": 21.5,
+   "speaker": "Masterji",
+   "text": "ऊपर से थैली।"
+  },
+  {
+   "start": 22.5,
+   "end": 23.3,
+   "speaker": "Golu",
+   "text": "हफ्ते भर ताजा।"
+  },
+  {
+   "start": 23.5,
+   "end": 24.5,
+   "speaker": "Masterji",
+   "text": "प्याज मैं काट रहा हूं।"
+  },
+  {
+   "start": 24.9,
+   "end": 26.0,
+   "speaker": "Masterji",
+   "text": "रो भी मैं ही रहा हूं।"
+  },
+  {
+   "start": 26.5,
+   "end": 28.0,
+   "speaker": "Golu",
+   "text": "प्याज 15 मिनट फ्रिज में रखो।"
+  },
+  {
+   "start": 28.9,
+   "end": 31.2,
+   "speaker": "Golu",
+   "text": "ठंडा प्याज आंसू वाली गैस कम छोड़ता है।"
+  }
+ ],
+ "model": "gemini-2.5-flash"
+}

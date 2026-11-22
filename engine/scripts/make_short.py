@@ -42,6 +42,19 @@ def validate_skit(sb):
     scenes = sb.get("scenes") or []
     if not scenes:
         errs.append("skit has no scenes (shots)")
+    # hook-first opening: half the viewers decide in the first 3 seconds
+    hook = (sb.get("hook") or "").replace("*", "").split()
+    if not hook:
+        errs.append('skit needs a "hook": 3-7 word on-screen line shown from the first frame '
+                    '(e.g. "Golu ne kamre ka *AC* bana diya?")')
+    elif len(hook) > 8:
+        warns.append(f'hook has {len(hook)} words; keep it to 3-7 so it reads in one glance')
+    if scenes:
+        if any(c.get("enter") for c in scenes[0].get("cast", [])):
+            errs.append("shot 0: no entrances in the first shot; open mid-action (cold open)")
+        b0 = (scenes[0].get("beats") or [{}])[0]
+        if not b0.get("say"):
+            errs.append("shot 0: the first beat must be a spoken line, not a silent hold")
     for i, s in enumerate(scenes):
         tag = f"shot {i}"
         if s.get("set", "classroom") not in SKIT_SETS:
@@ -282,7 +295,7 @@ def build_timeline(sb, clips):
     t, scenes = 0.0, []
     for i, s in enumerate(sb["scenes"]):
         st = t
-        t += lead
+        t += 0.03 if (skit and i == 0) else lead     # skits: the first word lands on frame 1
         beats = []
         for j, b in enumerate(s["beats"]):
             d = len(clips[(i, j)]) / SR if (i, j) in clips else float(b.get("hold", 1.2))
@@ -293,7 +306,7 @@ def build_timeline(sb, clips):
             t += d + gap + extra
         t += 0.04 if skit else 0.15
         scenes.append({"start": round(st, 3), "end": round(t, 3), "beats": beats})
-    total = t + float(sb.get("outro", 0.9))
+    total = t + float(sb.get("outro", 0.7 if skit else 0.9))
     scenes[-1]["end"] = round(total, 3)
     return {"duration": round(total, 3), "scenes": scenes}
 

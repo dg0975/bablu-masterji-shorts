@@ -246,6 +246,16 @@ Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
    `status` `PUBLISHED` with a `publicUrl`. If it shows an error, do not retry more than once;
    tell the user.
 
+## 4c. Post to Facebook Reels (Windsor.ai), when a Page is connected
+
+Only if the quality gates passed. Uses the same PUBLIC_URL as step 4.
+1. Windsor `get_connectors` (include_options false): if `facebook_organic` has no `accounts`,
+   skip this step and add one line to the report: "Facebook: Page not connected yet". Do not
+   ask the user to connect it more than once a week (Mondays).
+2. Otherwise `execute_action` connector `facebook_organic`, account = that Page's id, action
+   `create_reel`, params `{"video_url": PUBLIC_URL, "description": <the Instagram caption>}`.
+   Report the returned post id. If it fails, retry once after 2 minutes, then report the error.
+
 ## 5. Log and report
 
 1. Append to `topics/used.csv`: `date,slug,topic,status,instagram_media_id,youtube_url`

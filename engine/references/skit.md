@@ -15,6 +15,11 @@ warm light + vignette, listeners look at whoever talks, audio lip-sync (`voice_f
 (`"autocam": false` turns it off), voice polish in `voice_fx.polish` (pause squeeze, comedy tempo,
 kid pitch via rubberband, EQ/compressor, loudness match). Render takes ~3.5 min for a 30 s skit.
 
+Opening (required since 22 Nov 2026): top-level `"hook"` = 3-7 word Hinglish line with one
+`*highlighted*` word, drawn big from frame 1 until just after the first line (`"hook_until"` seconds
+to override), while the series badge waits; shot 0 has no `enter` and starts with a spoken line,
+which lands on frame 1. `"series"` = "<SERIES> · PART N" (see SKIT_RUN.md 2c). Skits 20-28 s,
+`outro` 0.7, rendered with `--max 30`.
 Props: scene `"props":[{"kind":"matka|bottle|glass|chai","x":..,"y":..,"scale":..}]` (world
 coords; floor is y 1400) and a held `"item"` per cast member or per beat (`"item":{"golu":"glass"}`).
 Joke rules: `SKIT_RUN.md` section 2a (three laughs, punch word last, callback ending,

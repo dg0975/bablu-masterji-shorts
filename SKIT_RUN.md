@@ -6,7 +6,8 @@ everything it needs is in this repo. **Since 21 Nov 2026 the skit is the channel
 6:30-7:00 PM IST. The 3 PM explainer (DAILY_RUN.md) is paused; DAILY_RUN.md still holds the posting,
 monetisation and report rules this file points to.
 
-Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
+Channel: @bablu.masterji. Format: 20-28 s comedy with a science punchline (owner decision 22 Nov 2026,
+see 2c). Read
 `engine/references/skit.md` (format, sets, cast, poses, fx, sfx) and the demo
 `storyboards/2026-11-18-skit-fridge-jugaad.json` before writing.
 
@@ -35,7 +36,7 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
 - Fact-check the science fact with web search; if unsure, pick another idea.
 
 ## 2. Write the skit
-- 25-40 s, 5-7 shots: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
+- 20-28 s, 4-6 shots: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
   (belan, newspaper, facepalm), Masterji's 2 short lines explaining the science, Golu's punchline,
   ending card (`card`) with the checked fact and a one-word comment question.
 - **Voices: Google Gemini for everyone in a skit, Masterji included (owner feedback 20 Nov: voices must fit the
@@ -69,7 +70,7 @@ Channel: @bablu.masterji. Format: 25-40 s comedy with a science punchline. Read
   cast with the Sarvam cast `"golu":{"voice":"kunal_hi_kids","pace":1.4}`,
   `"mummy":{"voice":"roopa_hi_conversational"}`, `"papa":{"voice":"ashok_hi_character","pace":1.5}`
   (keep the names), push again, re-run `get_voice.sh`, and mention the fallback in the report.
-  plus `"tts":"sarvam","outro":1.4,"music_style":"funky","music":0.16,"duck":0.65`.
+  plus `"tts":"sarvam","outro":0.7,"music_style":"funky","music":0.16,"duck":0.65`.
 - Lines are short spoken Hindi in Devanagari, about 6-12 words each. Funny but family-friendly: roast situations, never groups; Mummy's belan is a joke
   prop, never actual hitting. No real people, brands or other creators' characters or songs.
 - Vary sets, shot order and gags from the last 3 skits. Save `"post_title"` and `"format":"skit"`.
@@ -127,22 +128,51 @@ studied for patterns only, never copy anyone's characters, jokes, scripts or son
 - Sets: classroom, livingroom, kitchen, train (trees rush past the windows), tapri (street chai
   stall), terrace (water tank, washing line, kite), bedroom (`"night":true` for a night window).
 
+## 2c. Reach rules (owner decision 22 Nov 2026, from the channel's own numbers)
+
+Week-1 data: skits got about 10x the views of explainers, but on Instagram 35-60% of viewers swiped
+away in the first 3 s, the average watch was only 7-13 s of 30-40 s videos, and shares/saves were
+almost zero. These rules fix that; every skit must follow them:
+1. **Hook on frame 1.** Set `"hook"`: a 3-7 word Hinglish line shown big from the first frame
+   (the render refuses a skit without one), with one `*highlighted*` word, e.g. "Golu ne kamre ka
+   *AC* bana diya?", "Dadi vs *Topper*: kaun jeeta?". It must tease the conflict, not the answer.
+2. **Cold open.** Shot 0 starts mid-action with the funniest/most surprising line: no entrances
+   (`enter` is refused in shot 0), no greeting, no setup line; the first spoken line is at most 6
+   words and lands on frame 1. Entrances are fine from shot 1 on.
+3. **20-28 s total** (render with `--max 30`). Cut anything that does not set up or land a joke;
+   Masterji gets one or two short lines. Short videos get watched to the end and replay.
+4. **Loop ending.** The last line should flow back into the first frame (e.g. ends on a question
+   the opening line answers, or Golu starting the same jugaad again), and `outro` stays 0.7 so the
+   loop comes quickly. Keep the end card short (`text` up to about 18 words).
+5. **Built to be sent.** Pick situations people tag friends and family in ("har ghar mein ek Dadi
+   hoti hai", the topper cousin, the AC fight, the chai uncle). End the caption with one natural
+   share line naming a character type: "Apne Bunty dost ko bhejo 😂", "Ghar ke Golu ko tag karo".
+   Not "like/share/subscribe" bait.
+6. **Series with part numbers.** Every skit belongs to one series, named after who drives the
+   joke, and shows it as `"series"` (top-left badge): `GOLU KE JUGAAD`, `DADI KA GYAAN`,
+   `PINKY KA ROAST`, `BUNTY KO DEKHO`, `SHARMA AUNTY NEWS`, `MUMMY KA RULE`, `PAPA KA BUDGET`.
+   Part number = rows in `topics/skits_used.csv` with that series + 1, e.g.
+   `"series":"GOLU KE JUGAAD · PART 3"`. Put "<Series>, Part N" in the post title/caption too.
+7. **Facebook too.** Post the same Reel to Facebook as DAILY_RUN.md step 4c says (it skips itself
+   while no Facebook Page is connected in Windsor).
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`
-3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 15 --max 40`
+3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 15 --max 30`
    View the preview sheet: faces not cut off, effects above heads, subtitles readable, no
-   `PAGE ERROR`. If the total is over 40 s, shorten lines (push + get_voice again).
+   `PAGE ERROR`. If the total is over 30 s, cut a line or a shot (push + get_voice again); aim for 20-28 s.
 4. Full render the same way without `--check` (detached, as SKILL.md says).
 
 ## 4. Post and report
 - Publish with `bash scripts/publish_pages.sh work/short.mp4 work/cover.jpg <date>-skit-<slug>`.
-- Instagram via Windsor (`create_video_post`) and YouTube Short via Metricool exactly as
-  DAILY_RUN.md steps 4 and 4b (keyword-first title, caption ending `🎙️ AI voice · Facts: <source>`,
+- Instagram via Windsor (`create_video_post`), YouTube Short via Metricool and Facebook Reel via
+  Windsor exactly as DAILY_RUN.md steps 4, 4b and 4c (keyword-first title, caption ending `🎙️ AI voice · Facts: <source>`,
   first-comment quiz/question, `madeForKids` false, `isAiGeneratedContent` false).
-- Caption style for skits: the short relatable title (step 2b) first, then the science line, the
-  comment question, 4-5 hashtags (#funny #relatable #scienceinhindi #golu + 1 topic).
-- Append to `topics/skits_used.csv`: `date,slug,idea,status,instagram_media_id`; commit and push.
+- Caption style for skits: the short relatable title (step 2b) with the series part
+  ("Golu ke Jugaad, Part 4"), then the science line, the share line from 2c, the comment
+  question, 4-5 hashtags (#funny #relatable #scienceinhindi + 1 character tag + 1 topic).
+- Append to `topics/skits_used.csv`: `date,slug,idea,status,instagram_media_id,series`; commit and push.
 - Send the owner the MP4 and links (SendUserMessage + SendUserFile), short, phone-friendly, with:
   the skit idea and its 3 jokes, which voices were used (Gemini or the Sarvam fallback), and the
   **channel performance, milestones and Monday human-touch lines exactly as DAILY_RUN.md step 5**

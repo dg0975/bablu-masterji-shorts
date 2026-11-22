@@ -643,6 +643,19 @@ def write_page(sb, tl, out):
     if (fdir / "Kalam-Bold.ttf").exists():
         faces += f"@font-face{{font-family:'Kalam';font-weight:700;src:url('file://{fdir}/Kalam-Bold.ttf')}}\n"
     data = "const SB=" + json.dumps(sb, ensure_ascii=False).replace("</", "<\\/") + ";\nconst TL=" + json.dumps(tl) + ";"
+    if sb.get("kind") == "skit":                  # image puppets (Firefly-designed cast), when the storyboard opts in
+        pup = {}
+        if sb.get("puppets"):
+            ids = {c.get("id") for sc in sb["scenes"] for c in sc.get("cast", [])}
+            for cid in sorted(ids):
+                d = ASSETS / "chars" / str(cid)
+                if (d / "puppet.json").exists():
+                    meta = json.loads((d / "puppet.json").read_text())
+                    img = {}
+                    for part in ("head", "body", "armL", "armR", "browL", "browR"):
+                        img[part] = "data:image/png;base64," + base64.b64encode((d / f"{part}.png").read_bytes()).decode()
+                    pup[cid] = {"meta": meta, "img": img}
+        data += "\nconst PUPPETS=" + json.dumps(pup) + ";"
     libs = ""
     if sb.get("kind") != "skit" and any((sc.get("visual") or {}).get("type") == "3d" for sc in sb["scenes"]):
         for js in (ASSETS / "vendor" / "three.min.js", ASSETS / "g3d.js"):

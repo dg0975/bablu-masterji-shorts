@@ -1,0 +1,104 @@
+{
+ "kind": "skit",
+ "series": "DADAJI KE ZAMAANE MEIN · PART 1",
+ "title": "Dadaji ka chashma dhundhla",
+ "hook": "Dadaji ke chashme mein *baadal*? 😱",
+ "handle": "@bablu.masterji",
+ "post_title": "Chai se chashma dhundhla kyun? 😂 Dadaji ke Zamaane Mein, Part 1",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "dadaji": {"name": "Dadaji", "engine": "gemini", "gvoice": "Enceladus", "style": "a sweet, slightly forgetful Indian grandfather in his 70s, funny and full of old stories"},
+  "chutki": {"name": "Chutki", "engine": "gemini", "gvoice": "Achernar", "style": "a cute, dramatic 6-year-old Indian girl, high-pitched and excited"},
+  "raju": {"name": "Raju Bhaiya", "engine": "gemini", "gvoice": "Puck", "style": "a lazy, cool college-going cousin, laid back and casual"},
+  "masterji": {"name": "Masterji", "engine": "gemini", "gvoice": "Charon", "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}
+ },
+ "scenes": [
+  {
+   "set": "tapri",
+   "scale": 0.78,
+   "cast": [
+    {"id": "chutki", "x": 220, "pose": "shock"},
+    {"id": "dadaji", "x": 540, "pose": "shock", "item": "chai"},
+    {"id": "raju", "x": 860, "pose": "sly"}
+   ],
+   "beats": [
+    {"who": "dadaji", "say": "अरे, शाम को ही रात हो गई?",
+     "act": {"dadaji": "shock"}, "sfx": "scratch",
+     "style": "a confused grandpa peering around, startled and puzzled"},
+    {"who": "chutki", "say": "<gasp> दादाजी के चश्मे में बादल घुस गया!",
+     "act": {"chutki": "point"}, "fx": {"kind": "question", "on": "dadaji"},
+     "style": "a little girl pointing, dramatic and amazed"},
+    {"who": "dadaji", "say": "चुटकी बेटा, तू इतनी लंबी कब हो गई?",
+     "act": {"dadaji": "happy", "chutki": "shock"}, "turn": {"dadaji": 180},
+     "style": "a sweet grandpa lovingly praising someone, proud and affectionate"},
+    {"who": "raju", "say": "दादाजी, वो चाय वाले का खंभा है।",
+     "act": {"raju": "facepalm", "chutki": "laugh"}, "sfx": "drum",
+     "style": "a cousin trying hard not to laugh, deadpan"}
+   ]
+  },
+  {
+   "set": "tapri",
+   "scale": 0.9,
+   "cast": [
+    {"id": "raju", "x": 300, "pose": "sly"},
+    {"id": "dadaji", "x": 790, "pose": "think", "item": "chai"}
+   ],
+   "beats": [
+    {"who": "raju", "say": "ब्रो, रील में देखा था, चश्मे पे बर्फ़ रगड़ो।",
+     "act": {"raju": "point"}, "turn": {"dadaji": 0}, "fx": {"kind": "bulb", "on": "raju"}, "sfx": "ding",
+     "style": "a lazy cousin confidently sharing a life hack, smug"},
+    {"who": "dadaji", "say": "हमारे ज़माने में चश्मा नहीं, अंदाज़ा होता था!",
+     "act": {"dadaji": "laugh", "raju": "shock"}, "sfx": "drum",
+     "style": "a grandpa proudly bragging about the old days, chuckling"},
+    {"who": "dadaji", "say": "<gasp> अब तो पूरा कोहरा छा गया!",
+     "act": {"dadaji": "shock", "raju": "sad"}, "shake": true, "fx": {"kind": "sweat", "on": "dadaji"}, "sfx": "crash",
+     "style": "a grandpa panicking comically after a sip of chai"},
+    {"who": "raju", "say": "ब्रो, शायद बर्फ़ कम थी।",
+     "act": {"raju": "think", "dadaji": "facepalm"}, "sfx": "scratch",
+     "style": "a cousin unsure but still stubbornly confident"}
+   ]
+  },
+  {
+   "set": "tapri",
+   "scale": 0.9,
+   "cast": [
+    {"id": "masterji", "x": 300, "pose": "point"},
+    {"id": "raju", "x": 790, "pose": "think"}
+   ],
+   "beats": [
+    {"who": "masterji", "say": "भाप ठंडे शीशे पर नन्ही बूँदें बनती है, बिल्कुल बादल की तरह।",
+     "act": {"masterji": "point"},
+     "explain": {"kind": "steps", "title": "Chashma dhundhla kyun?", "steps": ["Chai ki garam bhaap", "Thanda sheesha mila", "Nanhi boondein = dhundh"]},
+     "style": "a teacher smiling and explaining with excitement"},
+    {"who": "masterji", "say": "बर्फ़ से शीशा और ठंडा, तो धुंध डबल!",
+     "act": {"masterji": "talk", "raju": "shock"}, "fx": {"kind": "stars", "on": "raju"},
+     "style": "a teacher landing a fun fact, amused"},
+    {"who": "raju", "say": "ब्रो, वो रील डिलीट कर देता हूँ।",
+     "act": {"raju": "sad", "masterji": "laugh"}, "sfx": "drum",
+     "style": "a cool cousin embarrassed and sheepish, mumbling"}
+   ]
+  },
+  {
+   "set": "tapri",
+   "scale": 0.9,
+   "cast": [
+    {"id": "chutki", "x": 300, "pose": "happy"},
+    {"id": "dadaji", "x": 790, "pose": "idle", "item": "chai"}
+   ],
+   "card": {"kicker": "Science ka sach", "text": "गरम भाप ठंडे चश्मे पर नन्ही बूँदें बन जाती है। शीशा जितना ठंडा, धुंध उतनी ज़्यादा।", "foot": "Quiz: nahane ke baad sheesha dhundhla kyun? 👇"},
+   "beats": [
+    {"who": "chutki", "say": "मतलब दादाजी की चाय ने बादल बना दिया!",
+     "act": {"chutki": "happy", "dadaji": "laugh"}, "spin": ["chutki"], "sfx": "boing",
+     "style": "a little girl thrilled, laughing and bouncing"},
+    {"who": "dadaji", "say": "<laugh> अरे, फिर से रात हो गई!",
+     "act": {"dadaji": "shock", "chutki": "facepalm"}, "sfx": "scratch",
+     "style": "a grandpa taking another sip and getting startled again, funny"}
+   ]
+  }
+ ]
+}

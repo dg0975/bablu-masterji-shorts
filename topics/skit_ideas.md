@@ -26,6 +26,7 @@
 - dost-ki-selfie-dhoop: friends take a selfie facing the sun, all faces dark; the camera exposes for the bright sky (friends)
 
 ## Ideas for the extra cast
+- jhoola-race: Gupta Uncle races Golu on the park swings in "imported" shoes; a swing's time depends on rope length, not weight (used 2026-11-23: Gupta, Golu, Pinky in the park)
 - dadi-matka: Dadi says the matka keeps water colder than the steel bottle; evaporation through clay (Dadi is right, Bunty is wrong) (ready: storyboards/2026-11-21-demo-skit-dadi-matka.json, see SKIT_RUN step 1)
 - aunty-chaand-grahan: Sharma Aunty says the moon "disappears" in an eclipse; Earth's shadow, it is still there
 - pinky-phone-dark-mode: Pinky's phone battery dies, Golu's "dark mode saves battery" jugaad; true mainly on OLED screens (verify)

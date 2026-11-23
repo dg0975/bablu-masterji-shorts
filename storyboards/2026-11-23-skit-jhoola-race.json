@@ -1,0 +1,105 @@
+{
+ "kind": "skit",
+ "series": "GUPTA JI KA SHOW-OFF · PART 1",
+ "title": "Gupta Uncle ki jhoola race",
+ "hook": "Gupta Uncle vs Golu: *jhoola* race! 😏",
+ "handle": "@bablu.masterji",
+ "post_title": "Jhoola race mein kaun jeeta? 😂 Gupta Ji ka Show-off, Part 1",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "golu": {"name": "Golu", "engine": "gemini", "gvoice": "Zephyr", "style": "a cheeky 10-year-old Indian boy, excited and mischievous"},
+  "gupta": {"name": "Gupta Uncle", "engine": "gemini", "gvoice": "Fenrir", "style": "a loud, show-off Indian neighbour uncle who brags about everything he owns"},
+  "pinky": {"name": "Pinky", "engine": "gemini", "gvoice": "Leda", "style": "a sarcastic teenage Indian elder sister, bored and unimpressed"},
+  "masterji": {"name": "Masterji", "engine": "gemini", "gvoice": "Charon", "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}
+ },
+ "scenes": [
+  {
+   "set": "park",
+   "scale": 0.78,
+   "cast": [
+    {"id": "golu", "x": 220, "pose": "shock"},
+    {"id": "gupta", "x": 540, "pose": "point"},
+    {"id": "pinky", "x": 860, "pose": "idle"}
+   ],
+   "beats": [
+    {"who": "gupta", "say": "इटली के जूते, अब रेस पक्की!",
+     "act": {"gupta": "point", "golu": "shock"}, "fx": {"kind": "stars", "on": "gupta"}, "sfx": "ding",
+     "style": "a show-off uncle proudly pointing at his shoes, bragging loudly"},
+    {"who": "golu", "say": "अंकल, झूला रेस है, बारात नहीं!",
+     "act": {"golu": "laugh", "pinky": "laugh", "gupta": "angry"}, "sfx": "drum",
+     "style": "a cheeky boy teasing, giggling"},
+    {"who": "gupta", "say": "बड़े लोग, बड़ा झूला! तू छोटे वाले पे बैठ।",
+     "act": {"gupta": "sly", "golu": "think"},
+     "style": "a smug uncle showing off, puffing up his chest"},
+    {"who": "pinky", "say": "ठीक है, रील चालू। दस झूले, शुरू!",
+     "act": {"pinky": "talk"}, "sfx": "whoosh",
+     "style": "a bored teenage girl filming on her phone, flat and unimpressed"}
+   ]
+  },
+  {
+   "set": "park",
+   "scale": 0.78,
+   "cast": [
+    {"id": "golu", "x": 220, "pose": "happy"},
+    {"id": "gupta", "x": 540, "pose": "shock"},
+    {"id": "pinky", "x": 860, "pose": "idle"}
+   ],
+   "beats": [
+    {"who": "golu", "say": "<laugh> दस पूरे! मैं जीत गया!",
+     "act": {"golu": "dance", "gupta": "shock"}, "spin": ["golu"], "sfx": "boing",
+     "style": "a boy thrilled, laughing and celebrating"},
+    {"who": "gupta", "say": "<gasp> वज़न कम था! अब सोने की चेन भी पहनूँगा!",
+     "act": {"gupta": "angry", "golu": "shock"}, "shake": true, "fx": {"kind": "anger", "on": "gupta"}, "sfx": "scratch",
+     "style": "a show-off uncle shocked, then stubbornly determined"},
+    {"who": "golu", "say": "फिर से जीता!",
+     "act": {"golu": "happy", "gupta": "sad"}, "hop": ["golu"], "fx": {"kind": "sweat", "on": "gupta"}, "sfx": "boing",
+     "style": "a cheeky boy gloating, giggling"},
+    {"who": "pinky", "say": "अंकल, चेन भारी है, किस्मत हल्की।",
+     "act": {"pinky": "sly", "golu": "laugh", "gupta": "sad"}, "turn": {"gupta": 180}, "sfx": "drum",
+     "style": "a teenage girl roasting deadpan, not even looking up from her phone"}
+   ]
+  },
+  {
+   "set": "park",
+   "scale": 0.9,
+   "cast": [
+    {"id": "masterji", "x": 300, "pose": "point", "enter": "left"},
+    {"id": "gupta", "x": 790, "pose": "sad"}
+   ],
+   "beats": [
+    {"who": "masterji", "say": "गुप्ता जी, झूले की रफ़्तार वज़न से नहीं, रस्सी की लंबाई से तय होती है।",
+     "act": {"masterji": "point", "gupta": "think"},
+     "explain": {"kind": "bars", "title": "Ek jhoola, kitne second?", "bars": [["Bada jhoola", 3.2], ["Bada + chain", 3.2], ["Chhota jhoola", 2.5]], "unit": "s"},
+     "style": "a teacher grinning and explaining with excitement"},
+    {"who": "masterji", "say": "छोटी रस्सी, जल्दी चक्कर। गोलू का झूला छोटा था!",
+     "act": {"masterji": "talk", "gupta": "shock"}, "fx": {"kind": "bulb", "on": "masterji"}, "sfx": "ding",
+     "style": "a teacher landing a fun fact, amused"},
+    {"who": "gupta", "say": "तो मेरे इटली के जूते बेकार?",
+     "act": {"gupta": "sad", "masterji": "laugh"}, "sfx": "scratch",
+     "style": "a show-off uncle heartbroken, sulking"}
+   ]
+  },
+  {
+   "set": "park",
+   "scale": 0.9,
+   "cast": [
+    {"id": "golu", "x": 300, "pose": "happy"},
+    {"id": "gupta", "x": 790, "pose": "think"}
+   ],
+   "card": {"kicker": "Science ka sach", "text": "झूले का एक चक्कर रस्सी की लंबाई पर निर्भर है, वज़न पर नहीं। छोटी रस्सी, जल्दी चक्कर।", "foot": "Aapke mohalle ka Gupta Uncle kaun? 👇"},
+   "beats": [
+    {"who": "golu", "say": "अंकल, जूते नहीं, रस्सी छोटी चाहिए!",
+     "act": {"golu": "point", "gupta": "think"},
+     "style": "a cheeky boy giving smart advice, smug"},
+    {"who": "gupta", "say": "ठीक है, कल छोटी रस्सी आएगी, जापान से!",
+     "act": {"gupta": "happy", "golu": "facepalm"}, "sfx": "drum",
+     "style": "a show-off uncle instantly bragging again, proud and loud"}
+   ]
+  }
+ ]
+}

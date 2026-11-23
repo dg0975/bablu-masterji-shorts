@@ -74,7 +74,7 @@
    "beats": [
     {"who": "masterji", "say": "गुप्ता जी, झूले की रफ़्तार वज़न से नहीं, रस्सी की लंबाई से तय होती है।",
      "act": {"masterji": "point", "gupta": "think"},
-     "explain": {"kind": "bars", "title": "Ek jhoola, kitne second?", "bars": [["Bada jhoola", 3.2], ["Bada + chain", 3.2], ["Chhota jhoola", 2.5]], "unit": "s"},
+     "explain": {"kind": "bars", "title": "Ek chakkar, kitne second?", "bars": [["Gupta ji", 3.2], ["+ Chain", 3.2], ["Golu", 2.5]], "unit": "s"},
      "style": "a teacher grinning and explaining with excitement"},
     {"who": "masterji", "say": "छोटी रस्सी, जल्दी चक्कर। गोलू का झूला छोटा था!",
      "act": {"masterji": "talk", "gupta": "shock"}, "fx": {"kind": "bulb", "on": "masterji"}, "sfx": "ding",

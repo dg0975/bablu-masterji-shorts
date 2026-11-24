@@ -34,7 +34,7 @@ SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", 
 SKIT_EXPLAIN = {"molecules", "evaporation", "heat", "pressure", "sound", "light", "gravity", "earth", "circuit", "magnet", "watercycle", "steps", "bars"}
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
-SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon", "balloon", "balloonsmall"}
+SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon", "balloon", "balloonsmall", "report"}
 SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch"}
 
 

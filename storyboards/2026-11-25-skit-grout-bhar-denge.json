@@ -1,0 +1,253 @@
+{
+ "kind": "skit",
+ "series": "GOLU KE JUGAAD · PART 2",
+ "title": "Isme grout bhar denge",
+ "hook": "Isme bhi *grout bhar denge*? 😂",
+ "handle": "@bablu.masterji",
+ "post_title": "Isme grout bhar denge? 😂 Grout pakka kaise hota hai | Golu ke Jugaad",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "golu": {
+   "name": "Golu",
+   "engine": "gemini",
+   "gvoice": "Zephyr",
+   "style": "a cheeky 10-year-old Indian boy, excited and mischievous"
+  },
+  "mummy": {
+   "name": "Mummy",
+   "engine": "gemini",
+   "gvoice": "Kore",
+   "style": "an Indian mother scolding her son, loud, dramatic and annoyed"
+  },
+  "papa": {
+   "name": "Papa",
+   "engine": "gemini",
+   "gvoice": "Algenib",
+   "style": "a tired Indian father, dry and sarcastic"
+  },
+  "dadaji": {
+   "name": "Dadaji",
+   "engine": "gemini",
+   "gvoice": "Enceladus",
+   "style": "a sweet, slightly forgetful Indian grandfather in his 70s, funny and full of old stories"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
+ },
+ "scenes": [
+  {
+   "set": "livingroom",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "papa",
+     "x": 270,
+     "pose": "shock"
+    },
+    {
+     "id": "golu",
+     "x": 790,
+     "pose": "sly"
+    }
+   ],
+   "beats": [
+    {
+     "who": "papa",
+     "say": "गोलू! बाथरूम की टाइल में दरार आ गई!",
+     "act": {
+      "papa": "shock"
+     },
+     "fx": {
+      "kind": "lines"
+     },
+     "sfx": "crash",
+     "style": "a father panicking, loud and dramatic"
+    },
+    {
+     "who": "golu",
+     "say": "टेंशन मत लो पापा, इसमें ग्राउट भर देंगे!",
+     "act": {
+      "golu": "sly",
+      "papa": "think"
+     },
+     "sfx": "boing",
+     "style": "a cheeky boy copying a calm, confident mason, totally unbothered"
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.82,
+   "cast": [
+    {
+     "id": "mummy",
+     "x": 220,
+     "pose": "angry",
+     "item": "report"
+    },
+    {
+     "id": "golu",
+     "x": 540,
+     "pose": "idle"
+    },
+    {
+     "id": "dadaji",
+     "x": 860
+    }
+   ],
+   "beats": [
+    {
+     "who": "mummy",
+     "say": "रिपोर्ट कार्ड में तीन लाल निशान!",
+     "act": {
+      "mummy": "angry"
+     },
+     "fx": {
+      "kind": "anger",
+      "on": "mummy"
+     },
+     "style": "a mother furious, waving a report card"
+    },
+    {
+     "who": "golu",
+     "say": "उसमें भी ग्राउट भर देंगे, मम्मी!",
+     "act": {
+      "golu": "sly",
+      "mummy": "shock"
+     },
+     "sfx": "drum",
+     "style": "a cheeky boy, smug and calm"
+    },
+    {
+     "who": "dadaji",
+     "say": "बेटा, मेरे दाँतों में भी गैप है।",
+     "act": {
+      "dadaji": "talk"
+     },
+     "style": "a grandpa complaining sweetly, a bit slow"
+    },
+    {
+     "who": "golu",
+     "say": "दादाजी, ग्राउट भर देंगे!",
+     "act": {
+      "golu": "happy"
+     },
+     "spin": [
+      "golu"
+     ],
+     "style": "a cheeky boy, super confident, excited"
+    },
+    {
+     "who": "dadaji",
+     "say": "फिर रोटी क्या सीमेंट से खाऊँगा?",
+     "act": {
+      "dadaji": "shock",
+      "mummy": "laugh"
+     },
+     "sfx": "drum",
+     "style": "a shocked grandpa, funny and offended"
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "board": "",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 300
+    },
+    {
+     "id": "golu",
+     "x": 800,
+     "pose": "think"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "गोलू, ग्राउट भरके उसे पानी भी देना पड़ता है।",
+     "act": {
+      "masterji": "point"
+     },
+     "explain": {
+      "kind": "steps",
+      "title": "Grout pakka kaise hota hai?",
+      "steps": [
+       "Cement + paani",
+       "Chemical reaction",
+       "Crystal ka jaal",
+       "Pakka jod!"
+      ]
+     },
+     "style": "a teacher smiling, explaining with excitement"
+    },
+    {
+     "who": "golu",
+     "say": "ग्राउट को भी प्यास लगती है?",
+     "act": {
+      "golu": "shock"
+     },
+     "style": "a surprised boy, wide-eyed and funny"
+    },
+    {
+     "who": "masterji",
+     "say": "हाँ! सीमेंट सूखकर नहीं, पानी से रिएक्शन करके पक्का होता है।",
+     "act": {
+      "masterji": "talk"
+     },
+     "style": "a teacher explaining clearly, lively"
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "golu",
+     "x": 300,
+     "pose": "sly",
+     "item": "report"
+    },
+    {
+     "id": "mummy",
+     "x": 790,
+     "pose": "angry"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "सीमेंट पानी से रासायनिक क्रिया करके सख़्त बनता है। इसलिए ग्राउट और प्लास्टर पर कुछ दिन पानी छिड़कते हैं (curing)।",
+    "foot": "Aapke ghar mein kya toota hai? Grout bhar denge 😂👇"
+   },
+   "beats": [
+    {
+     "who": "golu",
+     "say": "तो रिपोर्ट कार्ड पे पानी डालूँ, नंबर पक्के?",
+     "act": {
+      "golu": "sly",
+      "mummy": "angry"
+     },
+     "shake": true,
+     "fx": {
+      "kind": "anger",
+      "on": "mummy"
+     },
+     "sfx": "whoosh",
+     "style": "a sneaky boy with a genius idea, whispering"
+    }
+   ]
+  }
+ ]
+}

@@ -1,0 +1,117 @@
+{
+ "kind": "skit",
+ "series": "CHUTKI KE SAWAAL · PART 1",
+ "title": "Chutki ka pichka gubbara",
+ "hook": "Fridge mein *gubbara* kyun pichka? 😱",
+ "handle": "@bablu.masterji",
+ "post_title": "Gubbara fridge mein pichka? 😂 Chutki ke Sawaal, Part 1",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "chutki": {"name": "Chutki", "engine": "gemini", "gvoice": "Achernar", "style": "a cute, dramatic 6-year-old Indian girl, high-pitched and excited"},
+  "golu": {"name": "Golu", "engine": "gemini", "gvoice": "Zephyr", "style": "a cheeky 10-year-old Indian boy, excited and mischievous"},
+  "papa": {"name": "Papa", "engine": "gemini", "gvoice": "Algenib", "style": "a tired Indian father, dry and sarcastic"},
+  "masterji": {"name": "Masterji", "engine": "gemini", "gvoice": "Charon", "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"}
+ },
+ "scenes": [
+  {
+   "set": "kitchen",
+   "scale": 0.78,
+   "cast": [
+    {"id": "chutki", "x": 220, "pose": "sad", "item": "balloonsmall"},
+    {"id": "golu", "x": 540, "pose": "sly"},
+    {"id": "papa", "x": 860, "pose": "hold"}
+   ],
+   "beats": [
+    {"who": "chutki", "say": "मेरा गुब्बारा पिचक गया!",
+     "act": {"chutki": "sad", "golu": "sly", "papa": "hold"}, "fx": {"kind": "sweat", "on": "chutki"}, "sfx": "slide",
+     "style": "a little girl wailing dramatically, about to cry"},
+    {"who": "golu", "say": "रात भर फ्रिज में डाइटिंग की है!",
+     "act": {"golu": "laugh", "chutki": "angry", "papa": "hold"}, "sfx": "drum",
+     "style": "a cheeky boy proudly confessing, giggling"},
+    {"who": "papa", "say": "गुब्बारा फ्रिज में? क्यों भाई?",
+     "act": {"papa": "shock", "golu": "happy"},
+     "style": "a tired father lowering his newspaper, baffled and dry"},
+    {"who": "golu", "say": "मम्मी कहती हैं, फ्रिज में सब ताज़ा रहता है!",
+     "act": {"golu": "point", "papa": "facepalm"}, "fx": {"kind": "bulb", "on": "golu"},
+     "style": "a boy explaining his genius logic, very confident"}
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.78,
+   "cast": [
+    {"id": "chutki", "x": 220, "pose": "sad", "item": "balloonsmall"},
+    {"id": "golu", "x": 540, "pose": "happy"},
+    {"id": "papa", "x": 860, "pose": "hold"}
+   ],
+   "beats": [
+    {"who": "papa", "say": "तो बिजली का बिल भी फ्रिज में रखो, शायद छोटा हो जाए।",
+     "act": {"papa": "sly", "golu": "think"}, "sfx": "drum",
+     "style": "a father making a dry sarcastic money joke, deadpan"},
+    {"who": "chutki", "say": "<gasp> गुब्बारे को ठंड लग गई! इसे मेरा स्वेटर पहनाओ!",
+     "act": {"chutki": "shock", "golu": "laugh", "papa": "laugh"}, "hop": ["chutki"], "sfx": "boing",
+     "style": "a little girl panicking dramatically, very worried"},
+    {"who": "chutki", "say": "पर ये छोटा हुआ क्यों?",
+     "act": {"chutki": "think", "golu": "think", "papa": "think"}, "fx": {"kind": "question", "on": "golu"},
+     "style": "a little girl asking innocently, curious and serious"},
+    {"hold": 0.65, "act": {"golu": "shock", "papa": "think", "chutki": "think"}, "turn": {"golu": 180}, "sfx": "scratch"}
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.9,
+   "cast": [
+    {"id": "masterji", "x": 300, "pose": "point", "enter": "left"},
+    {"id": "chutki", "x": 790, "pose": "think", "item": "balloonsmall"}
+   ],
+   "beats": [
+    {"who": "masterji", "say": "चुटकी, ठंड में हवा के कण सुस्त होकर पास-पास आ जाते हैं।",
+     "act": {"masterji": "point", "chutki": "think"},
+     "explain": {"kind": "molecules", "title": "Gubbara kyun pichka?", "labels": ["Fridge: sust kan", "Dhoop: tez kan"]},
+     "style": "a teacher explaining with excitement, smiling"},
+    {"who": "masterji", "say": "धूप में रखो, कण फिर दौड़ेंगे, गुब्बारा फिर फूलेगा!",
+     "act": {"masterji": "happy", "chutki": "happy"}, "fx": {"kind": "bulb", "on": "masterji"}, "sfx": "ding",
+     "style": "a teacher landing a fun fact, amused and cheerful"}
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.78,
+   "cast": [
+    {"id": "chutki", "x": 220, "pose": "happy", "item": "balloon"},
+    {"id": "golu", "x": 540, "pose": "happy"},
+    {"id": "papa", "x": 860, "pose": "hold"}
+   ],
+   "beats": [
+    {"who": "chutki", "say": "<laugh> मेरा गुब्बारा फिर से फूल गया!",
+     "act": {"chutki": "dance", "golu": "happy"}, "spin": ["chutki"], "fx": {"kind": "hearts", "on": "chutki"}, "sfx": "boing",
+     "style": "a little girl thrilled, laughing and dancing"},
+    {"who": "golu", "say": "पापा, बिल को भी धूप में रख दें?",
+     "act": {"golu": "sly", "papa": "shock"},
+     "style": "a cheeky boy teasing his father, mischievous"},
+    {"who": "papa", "say": "<sigh> बिल तो पहले से फूला हुआ है।",
+     "act": {"papa": "sad", "golu": "laugh", "chutki": "laugh"}, "sfx": "drum",
+     "style": "a tired father sighing about money, dry and defeated"}
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.9,
+   "cast": [
+    {"id": "golu", "x": 300, "pose": "sly", "item": "balloon"},
+    {"id": "chutki", "x": 790, "pose": "shock"}
+   ],
+   "card": {"kicker": "Science ka sach", "text": "ठंड में हवा के कण धीमे होकर पास आते हैं, हवा सिकुड़ती है। गर्मी में फिर फैलती है।", "foot": "Quiz: garmi mein cycle tyre, phoolega ya pichkega? 👇"},
+   "beats": [
+    {"who": "golu", "say": "चल गुब्बारे, कल फिर डाइटिंग!",
+     "act": {"golu": "sly", "chutki": "angry"}, "fx": {"kind": "anger", "on": "chutki"}, "sfx": "whoosh",
+     "style": "a sneaky boy whispering mischievously, giggling"}
+   ]
+  }
+ ]
+}

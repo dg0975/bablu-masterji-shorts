@@ -20,7 +20,7 @@ Opening (required since 22 Nov 2026): top-level `"hook"` = 3-7 word Hinglish lin
 to override), while the series badge waits; shot 0 has no `enter` and starts with a spoken line,
 which lands on frame 1. `"series"` = "<SERIES> · PART N" (see SKIT_RUN.md 2c). Skits 30-35 s,
 `outro` 0.7, rendered with `--min 28 --max 37`.
-Props: scene `"props":[{"kind":"matka|bottle|glass|chai","x":..,"y":..,"scale":..}]` (world
+Props: scene `"props":[{"kind":"matka|bottle|glass|chai|spoon|straw|balloon|balloonsmall","x":..,"y":..,"scale":..}]` (world
 coords; floor is y 1400) and a held `"item"` per cast member or per beat (`"item":{"golu":"glass"}`).
 Joke rules: `SKIT_RUN.md` section 2a (three laughs, punch word last, callback ending,
 character-driven, specific desi detail, reaction after every punch).

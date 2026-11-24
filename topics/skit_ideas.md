@@ -3,7 +3,7 @@
 - fridge-jugaad: Golu opens the fridge to cool the kitchen; open fridge heats the room (demo, post first)
 - pankha-thanda: Golu turns the fan on in an empty room "to cool it"; a fan cools people (sweat evaporation), not the air
 - chashma-bhaap: Papa's glasses fog up over hot chai, Golu blames "bhoot"; condensation on cold glass (used 2026-11-22: Dadaji, Chutki, Raju at the tapri)
-- balloon-fridge: Golu's party balloon shrinks in the fridge, he thinks it is "darr gaya"; gas contracts when cold
+- balloon-fridge: Golu's party balloon shrinks in the fridge, he thinks it is "darr gaya"; gas contracts when cold (used 2026-11-24: Chutki, Golu, Papa in the kitchen)
 - chaand-peecha: Golu says the moon follows the car; parallax, far objects seem to move with you
 - steel-chammach: Golu leaves a steel spoon in hot dal, Mummy's wooden spoon stays cool; conduction
 - cycle-tyre: Golu over-pumps his cycle tyre on a hot afternoon; air expands with heat, pressure rises

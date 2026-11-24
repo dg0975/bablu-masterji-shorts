@@ -83,7 +83,7 @@ see 2c). Read
   Gupta Uncle, Raju Bhaiya) in every skit, and one of the four new ones at least every other day,
   rotating them; Golu, Mummy and Papa are not needed every time. Props for the gag: scene
   `"props":[{"kind":"matka","x":150,"y":1300,"scale":1.1}]` or a held `"item"` on a cast member
-  (`bottle`, `glass`, `chai`, `matka`; change per beat with `"item":{"golu":"glass"}`).
+  (`bottle`, `glass`, `chai`, `matka`, `balloon`, `balloonsmall` = shrunk; change per beat with `"item":{"golu":"glass"}`).
 - No "..." inside `say` (Gemini turns it into a long pause); use a comma.
 
 ## 2a. Joke quality (write the jokes first, the science second)

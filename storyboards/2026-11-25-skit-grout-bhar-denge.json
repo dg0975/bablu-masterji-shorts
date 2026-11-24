@@ -81,6 +81,16 @@
      },
      "sfx": "boing",
      "style": "a cheeky boy copying a calm, confident mason, totally unbothered"
+    },
+    {
+     "who": "papa",
+     "say": "पहले तेरे दिमाग़ में भर दूँ, ग्राउट?",
+     "act": {
+      "papa": "angry",
+      "golu": "shock"
+     },
+     "sfx": "drum",
+     "style": "a tired father, dry and sarcastic, deadpan"
     }
    ]
   },

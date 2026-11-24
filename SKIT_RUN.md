@@ -183,7 +183,7 @@ almost zero. These rules fix that; every skit must follow them:
 7. **Facebook too.** Post the same Reel to Facebook as DAILY_RUN.md step 4c says (it skips itself
    while no Facebook Page is connected in Windsor).
 
-9. **Ride the trend (owner request 25 Nov 2026), about 2 skits a week.** Search the web for this
+8. **Ride the trend (owner request 25 Nov 2026), about 2 skits a week.** Search the web for this
    week's viral Hindi/Indian meme catchphrase or reel line (e.g. "isme grout bhar denge", the
    mistri who fixes everything with grout). Put the catchphrase in a cast member's mouth as a
    running gag (rule of three: it gets more absurd each time), say it in the hook text, and end on
@@ -192,7 +192,7 @@ almost zero. These rules fix that; every skit must follow them:
    look or name, and skip memes about real people, politics, religion, tragedies or anything mean.
    Put the meme phrase in the post title and as one hashtag (e.g. #groutbharDenge).
 
-8. **Movement, not statues.** Characters now turn in 3D on their own: anyone not speaking turns
+9. **Movement, not statues.** Characters now turn in 3D on their own: anyone not speaking turns
    to face whoever is talking, so do not add facing directions by hand. For one comic moment per
    skit, add `"spin":["golu"]` on a beat (a full 360° turn, e.g. a happy dance, dizzy shock or
    showing off) or `"turn":{"dadi":180}` to turn someone fully away (sulking, hiding, ignoring;

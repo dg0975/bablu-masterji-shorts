@@ -17,6 +17,15 @@ see 2c). Read
    monetisable), 2b (humour), 2d (titles and engagement), 4, 4b and 5 (posting and reporting);
    those rules apply to skits too, except where this file says otherwise.
 
+## 0. Pre-approved video for today (check first)
+
+If `ready/<today>-*.json` exists and `topics/skits_used.csv` has no row for today, the owner has
+already approved that exact video: do NOT write or render a new skit. Publish its `video` and
+`cover` with `scripts/publish_pages.sh`, post it with the captions, title, tags, first comment and
+`thumb_offset_ms` from that JSON (Instagram, YouTube, Facebook exactly as in DAILY_RUN.md 4, 4b
+and 4c), log it in `topics/skits_used.csv` with `log_row` (status posted, the Instagram media id,
+the series), push, and send the usual report. Then delete the `ready/<today>-*` files in a commit.
+
 ## 1. Pick the skit
 - Read `topics/skits_used.csv`. **If `fridge-jugaad` is not in it, this run posts the approved
   demo `storyboards/2026-11-18-skit-fridge-jugaad-gemini.json` unchanged** (copy it to

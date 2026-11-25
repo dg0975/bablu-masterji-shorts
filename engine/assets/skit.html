@@ -483,7 +483,7 @@ function drawPuppet(id,Pa,Pb,p,t,talk,lv,act){
 }
 
 /* ================= props: scene objects (world coords) and things a character holds ================= */
-function propSvg(kind,t,sc){const f=v=>v.toFixed(1);sc=sc||1;
+function propSvg(kind,t,sc){if(typeof kind==='string'&&kind.startsWith('icon:')) return iconSvg(kind.slice(5),0,-46,92);const f=v=>v.toFixed(1);sc=sc||1;
  if(kind==='matka'){const drip=[0,1,2].map(k=>{const q=((t*.5+k/3)%1);return `<ellipse cx="${f(-38+k*36)}" cy="${f(-10+q*70)}" rx="4" ry="6" fill="#8fd3ff" opacity="${(.8*(1-q)).toFixed(2)}"/>`}).join('');
   return `<g transform="scale(${sc})"><ellipse cx="0" cy="92" rx="70" ry="12" fill="#000" opacity=".2"/><path d="M-70 92 L-50 40 L50 40 L70 92 Z" fill="#6b4a2e" stroke="${OL}" stroke-width="4"/>
   <path d="M-34 -96 Q-62 -60 -66 -10 Q-66 50 0 58 Q66 50 66 -10 Q62 -60 34 -96 Z" fill="#b8643a" stroke="${OL}" stroke-width="5"/>
@@ -525,7 +525,7 @@ const ICONS={
  tile:`<rect x="14" y="14" width="72" height="72" rx="4" fill="#9fd0f0" ${IK}/><path d="M50 14 V86 M14 50 H86" ${IK}/><path d="M22 22 l10 0" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`,
  tile_up:`<path d="M6 80 H94" ${IK}/><path d="M14 80 L48 40 L54 46 L22 80Z M86 80 L52 40 L46 46 L78 80Z" fill="#9fd0f0" ${IK}/><path d="M44 26 l-6 -10 M50 22 v-12 M56 26 l6 -10" ${IK}/>`,
  gap:`<rect x="8" y="30" width="34" height="40" rx="3" fill="#9fd0f0" ${IK}/><rect x="58" y="30" width="34" height="40" rx="3" fill="#9fd0f0" ${IK}/><path d="M46 84 H54 M46 84 l6 -5 M54 84 l-6 -5" ${IK}/><path d="M50 26 V74" stroke="#e8213a" stroke-width="4" stroke-dasharray="5 5"/>`,
- crack:`<rect x="12" y="12" width="76" height="76" rx="6" fill="#efe3cf" ${IK}/><path d="M52 12 L42 34 L56 46 L40 62 L54 74 L46 88" fill="none" ${IK}/>`,
+ crack:`<path d="M56 6 L40 30 L58 44 L36 64 L54 76 L44 96" fill="none" stroke="${INK}" stroke-width="11" stroke-linecap="round" stroke-linejoin="round"/><path d="M56 6 L40 30 L58 44 L36 64 L54 76 L44 96" fill="none" stroke="#5a4a3a" stroke-width="5" stroke-linecap="round" stroke-linejoin="round"/><path d="M40 30 L26 34 M58 44 L72 40 M54 76 L68 82" stroke="${INK}" stroke-width="5" stroke-linecap="round"/>`,
  heart:`<path d="M50 84 C20 64 8 46 14 30 C20 14 42 12 50 30 C58 12 80 14 86 30 C92 46 80 64 50 84Z" fill="#e8213a" ${IK}/><path d="M26 30 q4 -8 12 -8" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>`,
  heart_broken:`<path d="M46 84 C18 64 6 46 12 30 C18 14 38 12 46 28 L38 44 L50 56 L42 70 Z" fill="#e8213a" ${IK}/><path d="M56 84 C84 64 94 46 88 30 C82 14 62 12 54 28 L46 44 L58 56 L50 70 Z" fill="#e8213a" ${IK}/>`,
  report:`<rect x="20" y="8" width="60" height="84" rx="5" fill="#fffdf5" ${IK}/><rect x="20" y="8" width="60" height="16" rx="5" fill="#2f6bd8"/>${[0,1,2].map(k=>`<path d="M30 ${40+k*16} h26" stroke="#8a8f9a" stroke-width="4"/><text x="68" y="${45+k*16}" font-family="Poppins" font-weight="800" font-size="15" fill="#e8213a" text-anchor="middle">F</text>`).join('')}`,
@@ -568,6 +568,14 @@ const ICONS={
  car:`<path d="M10 64 V52 L24 34 H70 L86 52 H92 V64 Z" fill="#e8213a" ${IK}/><circle cx="30" cy="66" r="10" fill="#2a2a2a" ${IK}/><circle cx="72" cy="66" r="10" fill="#2a2a2a" ${IK}/><path d="M28 50 L34 40 H52 V50 Z M58 40 H66 L76 50 H58Z" fill="#cfeaff"/>`,
 };
 const ICON_NAMES=Object.keys(ICONS);
+const ICON_HAND=new Set(['report','money','phone','trowel','chai','glass','bottle','egg','onion','book','balloon','salt','ice','dumbbell','magnet','battery','bulb','plant']);
+const ICON_FLOOR=new Set(['tile','tile_up','gap','brick','bucket','cement','matka','cooker','rice','fridge','ac','car','fan']);
+const iconWhere=(o,who)=>o.where||(ICON_HAND.has(o.icon)&&who&&who!=='masterji'?'hand':ICON_FLOOR.has(o.icon)?'floor':'float');
+function worldObj(name,x,y,size,q,t,where){const s=eBack(clamp(q/.35)), bob=where==='float'?Math.sin(t*3)*8:0, rot=where==='float'?Math.sin(t*2)*6:0;
+ const sh=where==='floor'?`<ellipse cx="${x.toFixed(1)}" cy="${(y+size*.46).toFixed(1)}" rx="${(size*.5*s).toFixed(1)}" ry="${(size*.09*s).toFixed(1)}" fill="#000" opacity=".18"/>`:'';
+ const yy=where==='floor'?y-(1-eBounce(clamp(q/.5)))*90:y;
+ const spark=q<.45?[0,1,2,3,4,5].map(k=>{const a=k*1.047+.3, r=size*.55+q*90;return `<line x1="${(x+Math.cos(a)*r).toFixed(1)}" y1="${(yy+bob+Math.sin(a)*r).toFixed(1)}" x2="${(x+Math.cos(a)*(r+22)).toFixed(1)}" y2="${(yy+bob+Math.sin(a)*(r+22)).toFixed(1)}" stroke="${INK}" stroke-width="5" stroke-linecap="round" opacity="${(1-q/.45).toFixed(2)}"/>`}).join(''):'';
+ return sh+spark+`<g transform="translate(${x.toFixed(1)} ${(yy+bob).toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${s.toFixed(3)}) translate(${(-x).toFixed(1)} ${(-yy-bob).toFixed(1)})">${iconSvg(name,x,yy+bob,size)}</g>`}
 function iconSvg(name,x,y,size){const g=ICONS[name]||ICONS.question;const k=size/100;return `<g transform="translate(${(x-size/2).toFixed(1)} ${(y-size/2).toFixed(1)}) scale(${k.toFixed(3)})">${g}</g>`}
 // a sticker card that pops up beside a character's head
 function stickerSvg(name,x,y,q,t,label){const s=eBack(clamp(q/.3)), bob=Math.sin(t*3.2)*6, rot=Math.sin(t*2.1)*4-3, W=170;
@@ -748,6 +756,7 @@ function renderAt(t){
  let chars='', defs=GDEFS, fxs0='', STK=[];
  const spk=B.who&&t<TB.audioEnd?B.who:null, spkX=spk?charPos(s,spk)[0]:null;
  const env3=k=>{let a=0;for(let q=-6;q<=6;q++)a+=envAt(t+q/30);return a/13};
+ const HANDS={}; for(const sh of [].concat(B.show||[])){const o=typeof sh==='string'?{icon:sh}:sh, who=o.on||B.who; if(o.icon&&who&&iconWhere(o,who)==='hand'&&bt>=(+o.at||0)) HANDS[who]='icon:'+o.icon}
  for(const c of s.cast){
   const id=c.id, Pb=poseOf(si,j,id), Pa=j>0?poseOf(si,j-1,id):Pb, p=Pa===Pb?1:eBack(bt/.32);
   const talk=(B.who===id&&t<TB.audioEnd)?1:0, lv=talk?envAt(t):0, lvs=talk?env3():0;
@@ -774,7 +783,7 @@ function renderAt(t){
   if((B.spin||[]).includes(id)) th+=360*eIO(Math.min(1,bt/.75));
   if(c.flip) th=-th;
   if(id!=='masterji') defs+=charDefs(id);
-  const body=(id==='masterji'&&!(typeof PUPPETS!=='undefined'&&PUPPETS.masterji))?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):(typeof PUPPETS!=='undefined'&&PUPPETS[id]?drawPuppet:drawPerson)(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,th,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
+  const body=(id==='masterji'&&!(typeof PUPPETS!=='undefined'&&PUPPETS.masterji))?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):(typeof PUPPETS!=='undefined'&&PUPPETS[id]?drawPuppet:drawPerson)(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,th,item:HANDS[id]||((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
   let ssx=1, ssy=1, rot=0, dx=0;
   if((B.hop||[]).includes(id)){const hp=bt/.45; if(hp<1){const q=Math.sin(hp*Math.PI); ssy=1+.1*q; ssx=1-.07*q} else if(hp<1.3){const q=Math.sin((hp-1)/.3*Math.PI); ssy=1-.12*q; ssx=1+.1*q}}
   const fallDir=x<540?1:-1, fellBefore=j>0&&(s.beats[j-1].fall||[]).includes(id);
@@ -791,11 +800,15 @@ function renderAt(t){
   const [x,y]=f.on?charPos(s,f.on):(f.at||[540,700]);
   const hy=f.on?headY(s,f.on):y;          // just above the character's head
   fxs+=fx(f.kind,x,f.kind==='pop'&&!f.on?y:hy,Math.min(1,bt/Math.max(.2,(TB.end-TB.start))),t,f.text)}
- for(const sh of [].concat(B.show||[])){const o=typeof sh==='string'?{icon:sh}:sh, who=o.on||B.who; if(!o.icon) continue;
-   const [cx]=who?charPos(s,who):[540], side=o.side?(o.side==='left'?-1:1):(cx<540?1:-1), dly=+o.at||0;
-   const wx=who?cx+side*200:(o.x||540), wy=who?headY(s,who)+20:(o.y||700);
-   if(bt>=dly) STK.push({o,wx,wy,side,q:bt-dly})}
- $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+fxs0+fxs;
+ let objs='';
+ for(const sh of [].concat(B.show||[])){const o=typeof sh==='string'?{icon:sh}:sh, who=o.on||B.who; if(!o.icon||o.where==='hand') continue;
+   const wh=iconWhere(o,who); if(wh==='hand') continue;
+   const [cx]=who?charPos(s,who):[540], side=o.side?(o.side==='left'?-1:1):(cx<540?1:-1), dly=+o.at||0, q=bt-dly; if(q<0) continue;
+   if(wh==='card'){STK.push({o,wx:cx+side*200,wy:who?headY(s,who)+20:700,side,q});continue}
+   if(wh==='floor'){let fx2=o.x;if(fx2===undefined){const others=s.cast.filter(c=>c.id!==who);fx2=others.length?(cx+others.reduce((a,c)=>Math.abs(c.x-cx)<Math.abs(a.x-cx)?c:a).x)/2:cx+side*260}
+     objs+=worldObj(o.icon,fx2,FLOOR-50,o.size||175,q,t,'floor')}
+   else objs+=worldObj(o.icon,o.x!==undefined?o.x:cx+side*165,o.y!==undefined?o.y:(who?headY(s,who)+(s.card?240:-30):700),o.size||125,q,t,'float')}
+ $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
  const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;

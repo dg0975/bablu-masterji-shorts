@@ -60,22 +60,20 @@
      "sfx": "crash",
      "style": "a show-off uncle panicking loudly, dramatic",
      "show": {
-      "icon": "tile_up",
-      "label": "Imported tile"
+      "icon": "tile_up"
      }
     },
     {
      "who": "golu",
      "say": "टेंशन मत लो अंकल, इसमें ग्राउट भर देंगे!",
      "act": {
-      "golu": "sly"
+      "golu": "hold"
      },
      "punch": "golu",
      "sfx": "boom",
      "style": "a cheeky boy copying a calm, unbothered mason",
      "show": {
-      "icon": "trowel",
-      "label": "Grout!"
+      "icon": "trowel"
      }
     },
     {
@@ -119,14 +117,13 @@
      "who": "golu",
      "say": "और अंकल, पिछली बार का बिल भी बाकी है।",
      "act": {
-      "golu": "sly",
+      "golu": "hold",
       "gupta": "shock"
      },
      "sfx": "pop",
      "style": "a cheeky boy casually demanding money, smug",
      "show": {
-      "icon": "money",
-      "label": "₹500 bill"
+      "icon": "money"
      }
     },
     {
@@ -137,15 +134,14 @@
      },
      "style": "an uncle whining dramatically, wounded pride",
      "show": {
-      "icon": "heart_broken",
-      "label": "Izzat"
+      "icon": "heart_broken"
      }
     },
     {
      "who": "golu",
      "say": "उसमें डबल ग्राउट!",
      "act": {
-      "golu": "happy"
+      "golu": "hold"
      },
      "punch": "golu",
      "sfx": "boom",
@@ -153,12 +149,9 @@
       "golu"
      ],
      "style": "a cheeky boy, super confident, punchline",
-     "show": [
-      {
-       "icon": "trowel",
-       "label": "Double"
-      }
-     ]
+     "show": {
+      "icon": "trowel"
+     }
     },
     {
      "who": "gupta",
@@ -220,8 +213,7 @@
      },
      "style": "a teacher explaining clearly, lively",
      "show": {
-      "icon": "gap",
-      "label": "Jagah chhodo"
+      "icon": "gap"
      }
     },
     {
@@ -236,8 +228,7 @@
      "sfx": "ding",
      "style": "a boy amazed, funny realization",
      "show": {
-      "icon": "wind",
-      "label": "Saans"
+      "icon": "wind"
      }
     },
     {
@@ -284,23 +275,21 @@
      },
      "style": "an uncle sobbing comically, heartbroken",
      "show": {
-      "icon": "heart_broken",
-      "label": "Dil"
+      "icon": "heart_broken"
      }
     },
     {
      "who": "golu",
      "say": "टेंशन मत लो, इसमें भी ग्राउट भर देंगे!",
      "act": {
-      "golu": "sly",
+      "golu": "hold",
       "gupta": "shock"
      },
      "punch": "golu",
      "sfx": "boom",
      "style": "a cheeky boy, calm, perfect comic timing",
      "show": {
-      "icon": "trowel",
-      "label": "Grout!"
+      "icon": "trowel"
      }
     }
    ]

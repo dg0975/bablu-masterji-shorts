@@ -96,8 +96,9 @@ up on the next beat (camera goes wide), `"tremble":["<id>"]` shakes in anger or 
 squash and stretch, `"cut": true` skips the camera glide into that beat. New sfx: `boom`, `thud`.
 
 ## Object stickers
-Beat field `"show"`: an icon name, `{"icon","label","on","side","at"}`, or a list of them. The sticker pops
-up beside the speaker (or `on`), in screen space so it never leaves the frame, and sits below the card
-in card shots. Explain `steps` take `"icon:Text"` or `[icon, text]` to draw the icon above the step.
+Beat field `"show"`: an icon name, `{"icon","label","on","side","at"}`, or a list of them. Objects are drawn in the scene:
+`where` = `hand` (held as a prop), `floor` (pops onto the floor between characters with a shadow) or
+`float` (beside the head); the default comes from the icon (ICON_HAND / ICON_FLOOR in skit.html).
+`where:"card"` still gives the old white sticker card. Explain `steps` take `"icon:Text"` or `[icon, text]` to draw the icon above the step.
 Icon names live in `ICONS` in assets/skit.html; make_short validates them.
 

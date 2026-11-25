@@ -217,7 +217,12 @@ almost zero. These rules fix that; every skit must follow them:
 
 11. **Show the objects (owner request 26 Nov 2026).** When a line names a thing (tile, report card,
    money, heart, phone, chai, fridge, sun...), add `"show":{"icon":"<name>","label":"1-2 words"}` on
-   that beat: a sticker of it pops up beside the speaker. Aim for a sticker on most beats. Give the
+   that beat. Objects live in the scene, not on cards: things people hold (report, money, phone,
+   trowel, chai, glass, bottle, egg, book, balloon...) go in the speaker's hand (give them the
+   `hold` pose), big things (tile_up, tile, gap, bucket, matka, cooker, fridge...) appear on the
+   floor between the characters, and feelings/ideas (heart_broken, crack, wind, sun, fire, ice,
+   question...) float beside the head. Override with `"where":"hand"|"floor"|"float"`, `"on":"<id>"`.
+   Aim for an object on most beats; labels are not needed. Give the
    explain board's steps pictures too: `"steps":["sun:Dhoop","tile:Tiles phaili","tile_up:Tile upar!"]`.
    Icons: ac balloon battery book bottle brick bucket bulb car cement chai clock cloud cooker crack
    cross drop dumbbell earth egg exclaim fan fire fridge gap glass heart heart_broken ice magnet

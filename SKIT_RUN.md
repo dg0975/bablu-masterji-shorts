@@ -208,6 +208,13 @@ almost zero. These rules fix that; every skit must follow them:
    90 = side profile, 180 = back view, 0 = front again). Use at most one spin and one turn per skit.
    `"autoturn": false` at the top level switches auto-facing off.
 
+10. **Comedy moves (owner request 26 Nov 2026: smoother and funnier).** The camera now glides
+   between speakers on its own. On beats, use: `"punch":"golu"` (crash zoom on that face with a
+   small shake; pair with `"sfx":"boom"`) on the 1-2 biggest punchlines; `"fall":["gupta"]`
+   (faints/falls over with a dust puff; pair with `"sfx":"thud"` and `"fx":{"kind":"stars","on":id}`),
+   once per skit at most; `"tremble":["id"]` for anger or fear; `"hop":["id"]` now squashes and
+   stretches. Do not punch every beat: 2 punches + 1 fall or spin per skit keeps them funny.
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`

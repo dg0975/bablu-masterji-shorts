@@ -89,3 +89,9 @@ turn from that beat (+ turns toward screen-right; 90 profile, 180 back, 0 front)
 storyboard `"autoturn": false` disables it. Puppet (3D cutout) characters are opt-in with
 `"puppets": true` and do not turn.
 
+## Comedy moves
+Beat fields: `"punch":"<id>"` crash zoom on a face (snaps in 0.16 s, small shake; `"punch_at"` seconds
+into the beat), `"fall":["<id>"]` falls over toward the middle of the frame with a dust puff and gets
+up on the next beat (camera goes wide), `"tremble":["<id>"]` shakes in anger or fear, `"hop"` has
+squash and stretch, `"cut": true` skips the camera glide into that beat. New sfx: `boom`, `thud`.
+

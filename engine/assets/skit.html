@@ -717,7 +717,7 @@ function renderAt(t){
   const body=(id==='masterji'&&!(typeof PUPPETS!=='undefined'&&PUPPETS.masterji))?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):(typeof PUPPETS!=='undefined'&&PUPPETS[id]?drawPuppet:drawPerson)(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,th,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
   let ssx=1, ssy=1, rot=0, dx=0;
   if((B.hop||[]).includes(id)){const hp=bt/.45; if(hp<1){const q=Math.sin(hp*Math.PI); ssy=1+.1*q; ssx=1-.07*q} else if(hp<1.3){const q=Math.sin((hp-1)/.3*Math.PI); ssy=1-.12*q; ssx=1+.1*q}}
-  const fallDir=x<540?-1:1, fellBefore=j>0&&(s.beats[j-1].fall||[]).includes(id);
+  const fallDir=x<540?1:-1, fellBefore=j>0&&(s.beats[j-1].fall||[]).includes(id);
   if((B.fall||[]).includes(id)){rot=fallDir*84*eBounce(clamp(bt/.55)); if(bt>.4&&bt<1.2) fxs0+=dust(x+fallDir*330*sc,y,clamp((bt-.4)/.8))}
   else if(fellBefore){rot=fallDir*84*(1-eBack(clamp(bt/.35)))}
   if((B.tremble||[]).includes(id)){dx=Math.sin(t*75)*7; rot+=Math.sin(t*63)*1.6}
@@ -743,6 +743,7 @@ function renderAt(t){
    else if(who) auto={zoom:1.18,on:who,push:.07};
    else if(BB.act){const k=Object.keys(BB.act).find(q=>s.cast.find(c=>c.id===q));auto=n>2?{zoom:1.06,push:.04}:(k?{zoom:1.3,on:k,push:.05}:null)}}
   if(exOn(jj)&&SB.autocam!==false&&!s.cam&&!BB.cam) auto={zoom:1.0,push:.02};
+  if((BB.fall||[]).length&&SB.autocam!==false&&!s.cam&&!BB.cam) auto={zoom:1.0,push:.03};          // wide so the whole fall is on screen
   const cam=Object.assign({zoom:1,on:null,push:0},s.cam||{}, BB.cam||auto||{});
   let [fx_,fy_]=cam.on?(typeof cam.on==='string'?[charPos(s,cam.on)[0],headY(s,cam.on)+170]:cam.on):[540,960];
   let z=cam.zoom*(1+cam.push*(auto&&!s.cam&&!BB.cam?eOut(clamp(btj/Math.max(.8,TBj.end-TBj.start))):clamp(lt/Math.max(1,T.end-T.start))));
@@ -751,7 +752,7 @@ function renderAt(t){
    ox=lerp(ox,540-px*zt,q); oy=lerp(oy,820-py*zt,q); z=lerp(z,zt,q)}
   ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy)); return {z,ox,oy}};
  let CM=camFor(j,bt);
- if(j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
+ if(j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut&&!B.punch){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
  let z=CM.z, ox=CM.ox, oy=CM.oy;
  if(z>1.01){ox+=Math.sin(t*.9)*5+Math.sin(t*2.3)*2;oy+=Math.cos(t*.7)*4; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));}
  if(B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}

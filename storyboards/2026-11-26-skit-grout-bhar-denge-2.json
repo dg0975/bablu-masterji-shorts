@@ -104,6 +104,16 @@
    ],
    "beats": [
     {
+     "who": "golu",
+     "say": "और अंकल, पिछली बार का बिल भी बाकी है।",
+     "act": {
+      "golu": "sly",
+      "gupta": "shock"
+     },
+     "sfx": "pop",
+     "style": "a cheeky boy casually demanding money, smug"
+    },
+    {
      "who": "gupta",
      "say": "और मेरी इज़्ज़त में जो दरार आई?",
      "act": {
@@ -195,6 +205,15 @@
      ],
      "sfx": "ding",
      "style": "a boy amazed, funny realization"
+    },
+    {
+     "who": "masterji",
+     "say": "बिल्कुल! हर गैप ग्राउट के लिए नहीं होता।",
+     "act": {
+      "masterji": "happy",
+      "golu": "laugh"
+     },
+     "style": "a teacher laughing warmly, wrapping up"
     }
    ]
   },

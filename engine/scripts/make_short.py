@@ -34,6 +34,7 @@ SKIT_SETS = {"classroom", "livingroom", "kitchen", "train", "tapri", "terrace", 
 SKIT_EXPLAIN = {"molecules", "evaporation", "heat", "pressure", "sound", "light", "gravity", "earth", "circuit", "magnet", "watercycle", "steps", "bars"}
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
+SKIT_ICONS = set(__import__("re").findall(r"^ (\w+):`", (Path(__file__).resolve().parent.parent / "assets" / "skit.html").read_text(), __import__("re").M))
 SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon", "balloon", "balloonsmall", "report"}
 SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch", "boom", "thud"}
 
@@ -96,6 +97,10 @@ def validate_skit(sb):
                 if i == 0 and j == 0:
                     errs.append("shot 0 beat 0: no explain board on the first beat (the hook is there)")
             ids = {c.get("id") for c in s.get("cast", [])}
+            for sh in ([b["show"]] if isinstance(b.get("show"), (str, dict)) else (b.get("show") or [])):
+                name = sh if isinstance(sh, str) else sh.get("icon")
+                if name not in SKIT_ICONS:
+                    errs.append(f"{tag} beat {j}: unknown show icon {name!r} (use {sorted(SKIT_ICONS)})")
             if b.get("punch") and b["punch"] not in ids:
                 errs.append(f"{tag} beat {j}: punch {b['punch']!r} is not in this shot")
             for key in ("fall", "tremble", "hop", "spin"):

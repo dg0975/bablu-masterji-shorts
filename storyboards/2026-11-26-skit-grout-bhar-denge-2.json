@@ -58,7 +58,11 @@
       "kind": "lines"
      },
      "sfx": "crash",
-     "style": "a show-off uncle panicking loudly, dramatic"
+     "style": "a show-off uncle panicking loudly, dramatic",
+     "show": {
+      "icon": "tile_up",
+      "label": "Imported tile"
+     }
     },
     {
      "who": "golu",
@@ -68,7 +72,11 @@
      },
      "punch": "golu",
      "sfx": "boom",
-     "style": "a cheeky boy copying a calm, unbothered mason"
+     "style": "a cheeky boy copying a calm, unbothered mason",
+     "show": {
+      "icon": "trowel",
+      "label": "Grout!"
+     }
     },
     {
      "who": "gupta",
@@ -83,7 +91,11 @@
       "kind": "anger",
       "on": "gupta"
      },
-     "style": "an uncle shaking with anger, shouting"
+     "style": "an uncle shaking with anger, shouting",
+     "show": {
+      "icon": "crack",
+      "on": "gupta"
+     }
     }
    ]
   },
@@ -111,7 +123,11 @@
       "gupta": "shock"
      },
      "sfx": "pop",
-     "style": "a cheeky boy casually demanding money, smug"
+     "style": "a cheeky boy casually demanding money, smug",
+     "show": {
+      "icon": "money",
+      "label": "₹500 bill"
+     }
     },
     {
      "who": "gupta",
@@ -119,7 +135,11 @@
      "act": {
       "gupta": "sad"
      },
-     "style": "an uncle whining dramatically, wounded pride"
+     "style": "an uncle whining dramatically, wounded pride",
+     "show": {
+      "icon": "heart_broken",
+      "label": "Izzat"
+     }
     },
     {
      "who": "golu",
@@ -132,7 +152,13 @@
      "hop": [
       "golu"
      ],
-     "style": "a cheeky boy, super confident, punchline"
+     "style": "a cheeky boy, super confident, punchline",
+     "show": [
+      {
+       "icon": "trowel",
+       "label": "Double"
+      }
+     ]
     },
     {
      "who": "gupta",
@@ -178,10 +204,10 @@
       "kind": "steps",
       "title": "Tile upar kyun uthi?",
       "steps": [
-       "Dhoop, garmi",
-       "Tiles phaili",
-       "Jagah nahi bachi",
-       "Tile upar!"
+       "sun:Dhoop, garmi",
+       "tile:Tiles phaili",
+       "gap:Jagah nahi bachi",
+       "tile_up:Tile upar!"
       ]
      },
      "style": "a teacher explaining with excitement, smiling"
@@ -192,7 +218,11 @@
      "act": {
       "masterji": "talk"
      },
-     "style": "a teacher explaining clearly, lively"
+     "style": "a teacher explaining clearly, lively",
+     "show": {
+      "icon": "gap",
+      "label": "Jagah chhodo"
+     }
     },
     {
      "who": "golu",
@@ -204,7 +234,11 @@
       "golu"
      ],
      "sfx": "ding",
-     "style": "a boy amazed, funny realization"
+     "style": "a boy amazed, funny realization",
+     "show": {
+      "icon": "wind",
+      "label": "Saans"
+     }
     },
     {
      "who": "masterji",
@@ -248,7 +282,11 @@
       "kind": "sweat",
       "on": "gupta"
      },
-     "style": "an uncle sobbing comically, heartbroken"
+     "style": "an uncle sobbing comically, heartbroken",
+     "show": {
+      "icon": "heart_broken",
+      "label": "Dil"
+     }
     },
     {
      "who": "golu",
@@ -259,7 +297,11 @@
      },
      "punch": "golu",
      "sfx": "boom",
-     "style": "a cheeky boy, calm, perfect comic timing"
+     "style": "a cheeky boy, calm, perfect comic timing",
+     "show": {
+      "icon": "trowel",
+      "label": "Grout!"
+     }
     }
    ]
   }

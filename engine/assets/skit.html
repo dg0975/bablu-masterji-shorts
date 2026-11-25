@@ -21,11 +21,12 @@ html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden;fo
 #card .f{margin-top:26px;color:#7a5a2e;font-weight:700;font-size:36px}
 #handle{position:absolute;right:40px;top:160px;color:#fff;font-weight:700;font-size:30px;text-shadow:0 3px 0 #1e1620;z-index:5}
 #light{position:absolute;inset:0;z-index:4;pointer-events:none;background:radial-gradient(ellipse 80% 62% at 50% 44%,rgba(0,0,0,0) 55%,rgba(20,8,0,.34) 100%),linear-gradient(160deg,rgba(255,226,180,.16),rgba(255,226,180,0) 45%)}
+#stk{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible;z-index:8;pointer-events:none}
 #ex{position:absolute;left:98px;top:236px;width:900px;height:440px;overflow:visible;z-index:5;pointer-events:none}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:8;pointer-events:none}
 </style></head>
 <body><div id="frame"><div id="world"><svg id="w" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
-<svg id="ex" width="900" height="440" viewBox="0 0 900 440"></svg><div id="hook"></div><div id="title"><div class="series"></div><div class="ep"></div></div><div id="handle"></div>
+<svg id="ex" width="900" height="440" viewBox="0 0 900 440"></svg><svg id="stk" width="1080" height="1920" viewBox="0 0 1080 1920"></svg><div id="hook"></div><div id="title"><div class="series"></div><div class="ep"></div></div><div id="handle"></div>
 <div id="sub"><div class="who"></div><div class="line"></div></div>
 <div id="card"><div class="k"></div><div class="t"></div><div class="f"></div></div><div id="light"></div><div id="flash"></div></div>
 <script>
@@ -513,6 +514,65 @@ function fx(kind,x,y,p,t,text){const a=clamp(p*4)*clamp((1-p)*4+.0001), s=.6+.4*
  if(kind==='lines'){let s='';for(let k=0;k<28;k++){const an=k/28*6.283+t*.4, r1=360+((k*53)%5)*40;s+=`<line x1="${(540+Math.cos(an)*r1).toFixed(0)}" y1="${(900+Math.sin(an)*r1).toFixed(0)}" x2="${(540+Math.cos(an)*1400).toFixed(0)}" y2="${(900+Math.sin(an)*1400).toFixed(0)}" stroke="#fff" stroke-width="${8+(k%3)*6}" opacity=".55"/>`}return `<g opacity="${clamp(p*6)}">${s}</g>`}
  return '';}
 
+/* ---- object icons (100x100 box): shown as pop-up stickers beside a speaker ("show") and on explain steps ---- */
+const IK=`stroke="${INK}" stroke-width="5" stroke-linejoin="round" stroke-linecap="round"`;
+const ICONS={
+ sun:`${[...Array(8)].map((_,k)=>{const a=k*Math.PI/4;return `<line x1="${50+Math.cos(a)*30}" y1="${50+Math.sin(a)*30}" x2="${50+Math.cos(a)*44}" y2="${50+Math.sin(a)*44}" ${IK}/>`}).join('')}<circle cx="50" cy="50" r="22" fill="#ffc640" ${IK}/>`,
+ fire:`<path d="M50 6 C66 28 84 44 76 70 C70 90 30 90 24 70 C18 52 34 40 38 22 C46 36 50 38 50 6Z" fill="#ff7a1a" ${IK}/><path d="M50 46 C58 58 66 64 62 76 C58 86 42 86 38 76 C36 66 46 60 50 46Z" fill="#ffd54a"/>`,
+ ice:`<path d="M20 36 L50 22 L80 36 L80 70 L50 84 L20 70 Z" fill="#cfeeff" ${IK}/><path d="M20 36 L50 50 L80 36 M50 50 V84" fill="none" ${IK}/><path d="M30 44 l8 4" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`,
+ drop:`<path d="M50 8 C64 32 78 48 78 64 A28 28 0 0 1 22 64 C22 48 36 32 50 8Z" fill="#3aa0e8" ${IK}/><path d="M36 62 q0 12 10 16" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+ cement:`<path d="M22 18 H78 L84 86 H16 Z" fill="#d8c8a6" ${IK}/><rect x="28" y="40" width="44" height="22" rx="4" fill="#8a8f9a"/><text x="50" y="56" font-family="Poppins" font-weight="700" font-size="12" fill="#fff" text-anchor="middle">CEMENT</text>`,
+ tile:`<rect x="14" y="14" width="72" height="72" rx="4" fill="#9fd0f0" ${IK}/><path d="M50 14 V86 M14 50 H86" ${IK}/><path d="M22 22 l10 0" stroke="#fff" stroke-width="5" stroke-linecap="round"/>`,
+ tile_up:`<path d="M6 80 H94" ${IK}/><path d="M14 80 L48 40 L54 46 L22 80Z M86 80 L52 40 L46 46 L78 80Z" fill="#9fd0f0" ${IK}/><path d="M44 26 l-6 -10 M50 22 v-12 M56 26 l6 -10" ${IK}/>`,
+ gap:`<rect x="8" y="30" width="34" height="40" rx="3" fill="#9fd0f0" ${IK}/><rect x="58" y="30" width="34" height="40" rx="3" fill="#9fd0f0" ${IK}/><path d="M46 84 H54 M46 84 l6 -5 M54 84 l-6 -5" ${IK}/><path d="M50 26 V74" stroke="#e8213a" stroke-width="4" stroke-dasharray="5 5"/>`,
+ crack:`<rect x="12" y="12" width="76" height="76" rx="6" fill="#efe3cf" ${IK}/><path d="M52 12 L42 34 L56 46 L40 62 L54 74 L46 88" fill="none" ${IK}/>`,
+ heart:`<path d="M50 84 C20 64 8 46 14 30 C20 14 42 12 50 30 C58 12 80 14 86 30 C92 46 80 64 50 84Z" fill="#e8213a" ${IK}/><path d="M26 30 q4 -8 12 -8" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+ heart_broken:`<path d="M46 84 C18 64 6 46 12 30 C18 14 38 12 46 28 L38 44 L50 56 L42 70 Z" fill="#e8213a" ${IK}/><path d="M56 84 C84 64 94 46 88 30 C82 14 62 12 54 28 L46 44 L58 56 L50 70 Z" fill="#e8213a" ${IK}/>`,
+ report:`<rect x="20" y="8" width="60" height="84" rx="5" fill="#fffdf5" ${IK}/><rect x="20" y="8" width="60" height="16" rx="5" fill="#2f6bd8"/>${[0,1,2].map(k=>`<path d="M30 ${40+k*16} h26" stroke="#8a8f9a" stroke-width="4"/><text x="68" y="${45+k*16}" font-family="Poppins" font-weight="800" font-size="15" fill="#e8213a" text-anchor="middle">F</text>`).join('')}`,
+ money:`<rect x="8" y="26" width="84" height="48" rx="6" fill="#7fd08a" ${IK}/><circle cx="50" cy="50" r="15" fill="#c8f0cc" ${IK}/><text x="50" y="57" font-family="Poppins" font-weight="800" font-size="20" fill="${INK}" text-anchor="middle">₹</text>`,
+ bulb:`<path d="M34 62 A26 26 0 1 1 66 62 Q60 68 60 76 H40 Q40 68 34 62Z" fill="#ffe680" ${IK}/><rect x="40" y="76" width="20" height="14" rx="3" fill="#9aa0a8" ${IK}/>`,
+ phone:`<rect x="28" y="8" width="44" height="84" rx="10" fill="#2a2a2a" ${IK}/><rect x="33" y="18" width="34" height="58" rx="3" fill="#6fc3ff"/><circle cx="50" cy="84" r="3.5" fill="#fff"/>`,
+ fridge:`<rect x="24" y="6" width="52" height="88" rx="8" fill="#eef3f8" ${IK}/><path d="M24 38 H76 M66 18 v12 M66 48 v18" ${IK}/>`,
+ fan:`<circle cx="50" cy="50" r="8" fill="#5a5f6b" ${IK}/>${[0,1,2].map(k=>`<ellipse cx="50" cy="24" rx="10" ry="22" fill="#cfd6df" ${IK} transform="rotate(${k*120} 50 50)"/>`).join('')}<circle cx="50" cy="50" r="8" fill="#5a5f6b" ${IK}/>`,
+ ac:`<rect x="6" y="28" width="88" height="34" rx="8" fill="#f3f6fa" ${IK}/><path d="M18 52 H82" ${IK}/><path d="M30 70 q-4 8 0 14 M50 70 q-4 8 0 14 M70 70 q-4 8 0 14" stroke="#6fc3ff" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+ chai:`<path d="M24 40 H72 L66 86 H30 Z" fill="#c8874a" ${IK}/><path d="M72 50 q16 0 12 16 q-2 8 -14 8" fill="none" ${IK}/><path d="M38 30 q-6 -10 0 -18 M52 30 q-6 -10 0 -18" stroke="#9aa0a8" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+ balloon:`<ellipse cx="50" cy="40" rx="26" ry="32" fill="#ff4d8d" ${IK}/><path d="M46 72 h8 l-4 6z" fill="#ff4d8d" ${IK}/><path d="M50 78 q-8 10 2 18" stroke="${INK}" stroke-width="3" fill="none"/><path d="M38 28 q4 -8 12 -10" stroke="#fff" stroke-width="5" fill="none" stroke-linecap="round"/>`,
+ clock:`<circle cx="50" cy="50" r="38" fill="#fffaf0" ${IK}/><path d="M50 50 V26 M50 50 L66 60" ${IK}/>`,
+ thermo:`<rect x="40" y="8" width="20" height="62" rx="10" fill="#fff" ${IK}/><rect x="45" y="30" width="10" height="44" fill="#e8213a"/><circle cx="50" cy="78" r="15" fill="#e8213a" ${IK}/>`,
+ cloud:`<path d="M24 72 A16 16 0 0 1 26 40 A22 22 0 0 1 68 34 A18 18 0 0 1 76 72 Z" fill="#fff" ${IK}/>`,
+ rain:`<path d="M24 56 A14 14 0 0 1 26 28 A20 20 0 0 1 66 24 A16 16 0 0 1 74 56 Z" fill="#cfd6df" ${IK}/><path d="M34 66 l-5 12 M52 66 l-5 12 M70 66 l-5 12" stroke="#3aa0e8" stroke-width="6" stroke-linecap="round"/>`,
+ snow:`${[0,1,2].map(k=>`<path d="M50 12 V88 M42 20 l8 8 8 -8 M42 80 l8 -8 8 8" ${IK} fill="none" transform="rotate(${k*60} 50 50)"/>`).join('')}`,
+ wind:`<path d="M10 36 H62 a10 10 0 1 0 -10 -10 M10 54 H78 a10 10 0 1 1 -10 10 M10 72 H48" fill="none" stroke="#6fa8dc" stroke-width="7" stroke-linecap="round"/>`,
+ moon:`<path d="M62 12 A38 38 0 1 0 88 62 A30 30 0 1 1 62 12Z" fill="#ffe680" ${IK}/>`,
+ earth:`<circle cx="50" cy="50" r="38" fill="#3a8dff" ${IK}/><path d="M30 30 q14 -6 18 6 q-4 12 -16 10 q-10 -6 -2 -16Z M56 56 q14 -4 18 8 q-6 12 -18 8 q-6 -8 0 -16Z" fill="#5cbf5a"/>`,
+ magnet:`<path d="M22 20 V54 A28 28 0 0 0 78 54 V20 H60 V54 A10 10 0 0 1 40 54 V20 Z" fill="#e8413a" ${IK}/><rect x="22" y="14" width="18" height="16" fill="#c9d0d8" ${IK}/><rect x="60" y="14" width="18" height="16" fill="#c9d0d8" ${IK}/>`,
+ battery:`<rect x="12" y="30" width="70" height="40" rx="6" fill="#2a2a2a" ${IK}/><rect x="82" y="42" width="8" height="16" rx="2" fill="#9aa0a8" ${IK}/><rect x="18" y="36" width="40" height="28" rx="3" fill="#2bd67b"/>`,
+ plant:`<path d="M28 62 H72 L66 90 H34 Z" fill="#c8673a" ${IK}/><path d="M50 62 V30" ${IK}/><path d="M50 40 C30 40 22 26 26 16 C40 16 50 26 50 40Z M50 34 C66 34 76 22 72 12 C58 12 50 22 50 34Z" fill="#5cbf5a" ${IK}/>`,
+ egg:`<path d="M50 10 C72 10 82 46 80 62 A30 30 0 0 1 20 62 C18 46 28 10 50 10Z" fill="#fff6e6" ${IK}/>`,
+ glass:`<path d="M26 14 H74 L66 88 H34 Z" fill="#dff3ff" ${IK}/><path d="M29 40 H71 L66 88 H34 Z" fill="#8fd3ff"/><path d="M26 14 H74 L66 88 H34 Z" fill="none" ${IK}/>`,
+ bottle:`<rect x="40" y="6" width="20" height="14" rx="3" fill="#2f6bd8" ${IK}/><path d="M38 20 H62 V30 Q74 36 74 48 V86 Q74 92 68 92 H32 Q26 92 26 86 V48 Q26 36 38 30 Z" fill="#cfe8ff" ${IK}/>`,
+ matka:`<path d="M36 14 H64 L62 24 Q88 36 86 60 Q82 90 50 90 Q18 90 14 60 Q12 36 38 24 Z" fill="#b8643a" ${IK}/><path d="M20 52 Q50 62 80 52" stroke="#e6b08a" stroke-width="5" fill="none"/>`,
+ salt:`<path d="M30 30 H70 L66 90 H34 Z" fill="#fff" ${IK}/><path d="M30 30 Q50 6 70 30" fill="#c9d0d8" ${IK}/><circle cx="44" cy="22" r="2.5" fill="${INK}"/><circle cx="56" cy="22" r="2.5" fill="${INK}"/>`,
+ onion:`<path d="M50 10 C54 22 80 34 80 60 A30 30 0 0 1 20 60 C20 34 46 22 50 10Z" fill="#b65a9c" ${IK}/><path d="M50 34 V84 M36 44 Q30 64 40 82 M64 44 Q70 64 60 82" stroke="#e7a8d4" stroke-width="4" fill="none"/>`,
+ brick:`<rect x="8" y="30" width="84" height="40" rx="4" fill="#c8573a" ${IK}/><path d="M8 50 H92 M36 30 V50 M64 50 V70" ${IK}/>`,
+ trowel:`<path d="M14 70 L58 26 L80 48 L36 92 Z" fill="#c9d0d8" ${IK}/><path d="M64 38 L80 22" ${IK}/><rect x="74" y="8" width="16" height="26" rx="6" fill="#c8874a" ${IK} transform="rotate(45 82 21)"/>`,
+ bucket:`<path d="M20 34 H80 L72 90 H28 Z" fill="#2f6bd8" ${IK}/><path d="M20 34 Q50 4 80 34" fill="none" ${IK}/><ellipse cx="50" cy="34" rx="30" ry="6" fill="#c9d0d8" ${IK}/>`,
+ rice:`<path d="M14 46 H86 Q84 86 50 88 Q16 86 14 46Z" fill="#c9d0d8" ${IK}/><path d="M18 46 Q50 18 82 46Z" fill="#fffaf0" ${IK}/>`,
+ cooker:`<path d="M18 40 H82 V84 Q82 90 76 90 H24 Q18 90 18 84 Z" fill="#c9d0d8" ${IK}/><path d="M14 40 H86" ${IK}/><rect x="44" y="20" width="12" height="18" rx="3" fill="#2a2a2a"/><path d="M82 44 H96" ${IK}/>`,
+ tick:`<circle cx="50" cy="50" r="40" fill="#2bd67b" ${IK}/><path d="M30 52 L44 66 L72 36" fill="none" stroke="#fff" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>`,
+ cross:`<circle cx="50" cy="50" r="40" fill="#e8213a" ${IK}/><path d="M34 34 L66 66 M66 34 L34 66" stroke="#fff" stroke-width="10" stroke-linecap="round"/>`,
+ question:`<text x="50" y="80" font-family="Poppins" font-weight="800" font-size="80" fill="#2f6bd8" stroke="${INK}" stroke-width="4" paint-order="stroke" text-anchor="middle">?</text>`,
+ exclaim:`<text x="50" y="82" font-family="Poppins" font-weight="800" font-size="84" fill="#e8213a" stroke="${INK}" stroke-width="4" paint-order="stroke" text-anchor="middle">!</text>`,
+ dumbbell:`<rect x="30" y="44" width="40" height="12" fill="#5a5f6b" ${IK}/><rect x="12" y="28" width="18" height="44" rx="4" fill="#2a2a2a" ${IK}/><rect x="70" y="28" width="18" height="44" rx="4" fill="#2a2a2a" ${IK}/>`,
+ book:`<path d="M12 22 Q30 16 50 26 Q70 16 88 22 V82 Q70 76 50 86 Q30 76 12 82 Z" fill="#fff" ${IK}/><path d="M50 26 V86" ${IK}/>`,
+ car:`<path d="M10 64 V52 L24 34 H70 L86 52 H92 V64 Z" fill="#e8213a" ${IK}/><circle cx="30" cy="66" r="10" fill="#2a2a2a" ${IK}/><circle cx="72" cy="66" r="10" fill="#2a2a2a" ${IK}/><path d="M28 50 L34 40 H52 V50 Z M58 40 H66 L76 50 H58Z" fill="#cfeaff"/>`,
+};
+const ICON_NAMES=Object.keys(ICONS);
+function iconSvg(name,x,y,size){const g=ICONS[name]||ICONS.question;const k=size/100;return `<g transform="translate(${(x-size/2).toFixed(1)} ${(y-size/2).toFixed(1)}) scale(${k.toFixed(3)})">${g}</g>`}
+// a sticker card that pops up beside a character's head
+function stickerSvg(name,x,y,q,t,label){const s=eBack(clamp(q/.3)), bob=Math.sin(t*3.2)*6, rot=Math.sin(t*2.1)*4-3, W=170;
+ return `<g transform="translate(${x.toFixed(1)} ${(y+bob).toFixed(1)}) rotate(${rot.toFixed(2)}) scale(${(s*1.25).toFixed(3)})" opacity="${clamp(q/.12).toFixed(2)}"><rect x="${-W/2+8}" y="${-W/2+10}" width="${W}" height="${W}" rx="30" fill="${INK}" opacity=".9"/><rect x="${-W/2}" y="${-W/2}" width="${W}" height="${W}" rx="30" fill="#fffaf0" stroke="${INK}" stroke-width="6"/>${iconSvg(name,0,label?-10:0,label?118:132)}${label?`<text x="0" y="${W/2-16}" font-family="Poppins,'Noto Sans Devanagari'" font-weight="700" font-size="24" fill="${INK}" text-anchor="middle">${String(label).replace(/[<>&]/g,'').slice(0,14)}</text>`:''}</g>`}
+
 /* ================= explainers: moving science diagrams on a board at the top of the screen ================= */
 function exText(x,y,s,o){o=o||{};return `<text x="${r1(x)}" y="${r1(y)}" text-anchor="${o.a||'middle'}" font-family="Poppins,'Noto Sans Devanagari',sans-serif" font-weight="700" font-size="${o.size||30}" fill="${o.col||INK}" stroke="${o.halo||'#fffaf0'}" stroke-width="${o.sw===undefined?8:o.sw}" paint-order="stroke" stroke-linejoin="round" opacity="${o.op===undefined?1:r1(o.op)}">${String(s).replace(/[<>&]/g,'')}</text>`}
 function exArrow(x1,y1,x2,y2,col,w,op){const a=Math.atan2(y2-y1,x2-x1),h=w*2.4;
@@ -640,10 +700,10 @@ const EXPLAIN={
   s+=`<path d="M650 330 Q560 340 520 316" stroke="#3a8dff" stroke-width="12" fill="none" stroke-linecap="round"/>`;
   return s+exText(270,190,L[0],{size:32,op:exIn(e,0)})+exText(800,40,L[1],{size:30,op:exIn(e,1)})+exText(780,262,L[2],{size:28,op:exIn(e,2)})},
  // generic: up to 4 steps appearing one by one with moving arrows between them
- steps(E,e,t){const S=(E.steps||E.labels||[]).slice(0,4), n=Math.max(1,S.length), gap=46, w=(824-(n-1)*gap)/n;let s='';
+ steps(E,e,t){const S0=(E.steps||E.labels||[]).slice(0,4), IC=S0.map(v=>Array.isArray(v)?v[0]:(/^[a-z_]+:/.test(v)&&ICONS[v.split(':')[0]]?v.split(':')[0]:null)), S=S0.map(v=>Array.isArray(v)?v[1]:(/^[a-z_]+:/.test(v)&&ICONS[v.split(':')[0]]?v.slice(v.indexOf(':')+1).trim():v)), n=Math.max(1,S.length), gap=46, w=(824-(n-1)*gap)/n;let s='';
   S.forEach((txt,k)=>{const x=30+k*(w+gap), o=exIn(e,k,1.0), sc=.6+.4*eOut(o), fs=n>=4?25:30, ln=wrap(txt,Math.max(5,Math.floor(w/(fs*.6))));
    s+=`<g opacity="${r1(o)}" transform="translate(${r1(x+w/2)} 215) scale(${r1(sc)}) translate(${r1(-x-w/2)} -215)"><rect x="${r1(x)}" y="110" width="${r1(w)}" height="210" rx="24" fill="${['#ffe7a8','#d8f3e2','#dfeaff','#ffd8e6'][k]}" stroke="${INK}" stroke-width="5"/>
-    <circle cx="${r1(x+26)}" cy="112" r="22" fill="${INK}"/>${exText(x+26,121,k+1,{size:26,col:'#fff',sw:0})}${ln.map((l,i)=>exText(x+w/2,222+(i-(ln.length-1)/2)*(fs+8),l,{size:fs,sw:0})).join('')}</g>`;
+    <circle cx="${r1(x+26)}" cy="112" r="22" fill="${INK}"/>${exText(x+26,121,k+1,{size:26,col:'#fff',sw:0})}${IC[k]?iconSvg(IC[k],x+w/2,170,Math.min(84,w*.55)):''}${ln.map((l,i)=>exText(x+w/2,(IC[k]?262:222)+(i-(ln.length-1)/2)*(fs+6),l,{size:IC[k]?fs-3:fs,sw:0})).join('')}</g>`;
    if(k<n-1&&exIn(e,k+1,1.0)>0){const ax=x+w+4;for(let j=0;j<2;j++){const u=(t*1.4+j/2)%1;s+=`<path d="M${r1(ax+u*30)} 200 l12 15 l-12 15" stroke="#e8413a" stroke-width="7" fill="none" stroke-linecap="round" stroke-linejoin="round" opacity="${r1(Math.sin(u*Math.PI))}"/>`}}});
   return s},
  // generic: growing bars, e.g. "bars":[["Cheeni",10],["Namak",4]], "unit":"g"
@@ -685,7 +745,7 @@ function renderAt(t){
    $('#title').style.opacity=(SB.hook&&t<hu)||EX?0:1; }
  $('#ex').innerHTML=EX&&EX.kind?explainSvg(EX,t-exT0,t):'';
  const set=(SETS[s.set]||SETS.classroom)(t,s);
- let chars='', defs=GDEFS, fxs0='';
+ let chars='', defs=GDEFS, fxs0='', STK=[];
  const spk=B.who&&t<TB.audioEnd?B.who:null, spkX=spk?charPos(s,spk)[0]:null;
  const env3=k=>{let a=0;for(let q=-6;q<=6;q++)a+=envAt(t+q/30);return a/13};
  for(const c of s.cast){
@@ -731,6 +791,10 @@ function renderAt(t){
   const [x,y]=f.on?charPos(s,f.on):(f.at||[540,700]);
   const hy=f.on?headY(s,f.on):y;          // just above the character's head
   fxs+=fx(f.kind,x,f.kind==='pop'&&!f.on?y:hy,Math.min(1,bt/Math.max(.2,(TB.end-TB.start))),t,f.text)}
+ for(const sh of [].concat(B.show||[])){const o=typeof sh==='string'?{icon:sh}:sh, who=o.on||B.who; if(!o.icon) continue;
+   const [cx]=who?charPos(s,who):[540], side=o.side?(o.side==='left'?-1:1):(cx<540?1:-1), dly=+o.at||0;
+   const wx=who?cx+side*200:(o.x||540), wy=who?headY(s,who)+20:(o.y||700);
+   if(bt>=dly) STK.push({o,wx,wy,side,q:bt-dly})}
  $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
@@ -757,6 +821,10 @@ function renderAt(t){
  if(z>1.01){ox+=Math.sin(t*.9)*5+Math.sin(t*2.3)*2;oy+=Math.cos(t*.7)*4; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));}
  if(B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}
  if(B.shake&&bt<.45){const k=(.45-bt)/.45*18;ox+=Math.sin(t*90)*k;oy+=Math.cos(t*77)*k}
+ { let h='';                                            // stickers in screen space: always fully on screen, above the card
+   for(const k of STK){let X=k.wx*z+ox+k.side*40*(z-1), Y=k.wy*z+oy; X=Math.max(135,Math.min(945,X));
+    Y=s.card?Math.max(1200,Math.min(1250,Y)):Math.max(SB.hook&&t<3.4?640:340,Math.min(1240,Y)); h+=stickerSvg(k.o.icon,X,Y,k.q,t,k.o.label)}
+   $('#stk').innerHTML=h }
  $('#world').style.transform=`translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px) scale(${z.toFixed(4)})`;
  $('#flash').style.opacity=(lt<.12&&si>0&&s.flash!==false)?((.12-lt)/.12*.5).toFixed(2):0;
  // subtitles

@@ -215,6 +215,15 @@ almost zero. These rules fix that; every skit must follow them:
    once per skit at most; `"tremble":["id"]` for anger or fear; `"hop":["id"]` now squashes and
    stretches. Do not punch every beat: 2 punches + 1 fall or spin per skit keeps them funny.
 
+11. **Show the objects (owner request 26 Nov 2026).** When a line names a thing (tile, report card,
+   money, heart, phone, chai, fridge, sun...), add `"show":{"icon":"<name>","label":"1-2 words"}` on
+   that beat: a sticker of it pops up beside the speaker. Aim for a sticker on most beats. Give the
+   explain board's steps pictures too: `"steps":["sun:Dhoop","tile:Tiles phaili","tile_up:Tile upar!"]`.
+   Icons: ac balloon battery book bottle brick bucket bulb car cement chai clock cloud cooker crack
+   cross drop dumbbell earth egg exclaim fan fire fridge gap glass heart heart_broken ice magnet
+   matka money moon onion phone plant question rain report rice salt snow sun thermo tick tile
+   tile_up trowel wind (the render check rejects unknown names).
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`

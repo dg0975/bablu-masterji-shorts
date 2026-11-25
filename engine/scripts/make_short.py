@@ -35,7 +35,7 @@ SKIT_EXPLAIN = {"molecules", "evaporation", "heat", "pressure", "sound", "light"
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
 SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon", "balloon", "balloonsmall", "report"}
-SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch"}
+SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch", "boom", "thud"}
 
 
 def validate_skit(sb):
@@ -95,6 +95,13 @@ def validate_skit(sb):
                     errs.append(f"{tag} beat {j}: explain bars needs \"bars\": [[label, number], ...]")
                 if i == 0 and j == 0:
                     errs.append("shot 0 beat 0: no explain board on the first beat (the hook is there)")
+            ids = {c.get("id") for c in s.get("cast", [])}
+            if b.get("punch") and b["punch"] not in ids:
+                errs.append(f"{tag} beat {j}: punch {b['punch']!r} is not in this shot")
+            for key in ("fall", "tremble", "hop", "spin"):
+                for who in b.get(key) or []:
+                    if who not in ids:
+                        errs.append(f"{tag} beat {j}: {key} {who!r} is not in this shot")
             if not b.get("say") and not b.get("hold"):
                 warns.append(f"{tag} beat {j}: no line and no 'hold'; using 1.2 s")
     return errs, warns
@@ -545,6 +552,14 @@ def sfx(name):
     if name == "scratch":
         x = t(.35); f = 300 + 900 * np.abs(np.sin(2 * np.pi * 6 * x))
         return (np.sin(2 * np.pi * np.cumsum(f) / SR) * .5 + R.standard_normal(len(x)) * .25) * np.exp(-x * 4)
+    if name == "boom":   # deep meme-style bass hit for crash zooms
+        x = t(1.6); f = 62 * (1 + 1.4 * np.exp(-x * 9))
+        y = np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-x * 2.2)
+        y += .35 * np.sin(2 * np.pi * np.cumsum(2 * f) / SR) * np.exp(-x * 5)
+        return np.tanh(y * 2.4) * .8
+    if name == "thud":   # body hitting the floor
+        x = t(.5); y = np.sin(2 * np.pi * np.cumsum(90 * (1 + 2 * np.exp(-x * 25))) / SR) * np.exp(-x * 11)
+        return (y + R.standard_normal(len(x)) * np.exp(-x * 30) * .3) * .9
     return np.zeros(1)
 
 

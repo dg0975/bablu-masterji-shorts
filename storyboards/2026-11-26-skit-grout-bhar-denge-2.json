@@ -1,0 +1,248 @@
+{
+ "kind": "skit",
+ "series": "GROUT BHAR DENGE · PART 2",
+ "title": "Gupta Uncle ki imported tile",
+ "hook": "Grout bhar denge *PART 2* 😂🧱",
+ "handle": "@bablu.masterji",
+ "post_title": "Isme grout bhar denge PART 2 😂 Tile upar kyun uthi?",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "golu": {
+   "name": "Golu",
+   "engine": "gemini",
+   "gvoice": "Zephyr",
+   "style": "a cheeky 10-year-old Indian boy, excited and mischievous"
+  },
+  "gupta": {
+   "name": "Gupta Uncle",
+   "engine": "gemini",
+   "gvoice": "Fenrir",
+   "style": "a loud, show-off Indian neighbour uncle who brags about everything he owns"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
+ },
+ "scenes": [
+  {
+   "set": "livingroom",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "gupta",
+     "x": 270,
+     "pose": "shock"
+    },
+    {
+     "id": "golu",
+     "x": 790,
+     "pose": "sly"
+    }
+   ],
+   "beats": [
+    {
+     "who": "gupta",
+     "say": "गोलू! मेरी इम्पोर्टेड टाइल ऊपर उठ गई!",
+     "act": {
+      "gupta": "shock"
+     },
+     "fx": {
+      "kind": "lines"
+     },
+     "sfx": "crash",
+     "style": "a show-off uncle panicking loudly, dramatic"
+    },
+    {
+     "who": "golu",
+     "say": "टेंशन मत लो अंकल, इसमें ग्राउट भर देंगे!",
+     "act": {
+      "golu": "sly"
+     },
+     "punch": "golu",
+     "sfx": "boom",
+     "style": "a cheeky boy copying a calm, unbothered mason"
+    },
+    {
+     "who": "gupta",
+     "say": "पिछली बार भी यही बोला था!",
+     "act": {
+      "gupta": "angry"
+     },
+     "tremble": [
+      "gupta"
+     ],
+     "fx": {
+      "kind": "anger",
+      "on": "gupta"
+     },
+     "style": "an uncle shaking with anger, shouting"
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "golu",
+     "x": 280,
+     "pose": "idle"
+    },
+    {
+     "id": "gupta",
+     "x": 790,
+     "pose": "sad"
+    }
+   ],
+   "beats": [
+    {
+     "who": "gupta",
+     "say": "और मेरी इज़्ज़त में जो दरार आई?",
+     "act": {
+      "gupta": "sad"
+     },
+     "style": "an uncle whining dramatically, wounded pride"
+    },
+    {
+     "who": "golu",
+     "say": "उसमें डबल ग्राउट!",
+     "act": {
+      "golu": "happy"
+     },
+     "punch": "golu",
+     "sfx": "boom",
+     "hop": [
+      "golu"
+     ],
+     "style": "a cheeky boy, super confident, punchline"
+    },
+    {
+     "who": "gupta",
+     "say": "हे भगवान!",
+     "act": {
+      "gupta": "shock"
+     },
+     "fall": [
+      "gupta"
+     ],
+     "sfx": "thud",
+     "fx": {
+      "kind": "stars",
+      "on": "gupta"
+     },
+     "style": "an uncle fainting dramatically, a long wail"
+    }
+   ]
+  },
+  {
+   "set": "classroom",
+   "board": "",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 300
+    },
+    {
+     "id": "golu",
+     "x": 800,
+     "pose": "think"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "टाइल इसलिए उठी, क्योंकि धूप में टाइलें फैलती हैं।",
+     "act": {
+      "masterji": "point"
+     },
+     "explain": {
+      "kind": "steps",
+      "title": "Tile upar kyun uthi?",
+      "steps": [
+       "Dhoop, garmi",
+       "Tiles phaili",
+       "Jagah nahi bachi",
+       "Tile upar!"
+      ]
+     },
+     "style": "a teacher explaining with excitement, smiling"
+    },
+    {
+     "who": "masterji",
+     "say": "इसलिए किनारों पर थोड़ी जगह खाली छोड़ते हैं, सब ग्राउट से बंद नहीं करते।",
+     "act": {
+      "masterji": "talk"
+     },
+     "style": "a teacher explaining clearly, lively"
+    },
+    {
+     "who": "golu",
+     "say": "मतलब टाइल को भी साँस लेने की जगह चाहिए!",
+     "act": {
+      "golu": "shock"
+     },
+     "hop": [
+      "golu"
+     ],
+     "sfx": "ding",
+     "style": "a boy amazed, funny realization"
+    }
+   ]
+  },
+  {
+   "set": "livingroom",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "gupta",
+     "x": 270,
+     "pose": "sad"
+    },
+    {
+     "id": "golu",
+     "x": 790,
+     "pose": "sly"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "धूप में टाइलें फैलती हैं। जगह न मिले तो एक-दूसरे को धकेलकर ऊपर उठ जाती हैं, इसलिए किनारों पर थोड़ी जगह छोड़ी जाती है।",
+    "foot": "Aapke ghar mein kya 'grout' maangta hai? 😂👇"
+   },
+   "beats": [
+    {
+     "who": "gupta",
+     "say": "गोलू, मेरा दिल भी टूट गया…",
+     "act": {
+      "gupta": "sad"
+     },
+     "fx": {
+      "kind": "sweat",
+      "on": "gupta"
+     },
+     "style": "an uncle sobbing comically, heartbroken"
+    },
+    {
+     "who": "golu",
+     "say": "टेंशन मत लो, इसमें भी ग्राउट भर देंगे!",
+     "act": {
+      "golu": "sly",
+      "gupta": "shock"
+     },
+     "punch": "golu",
+     "sfx": "boom",
+     "style": "a cheeky boy, calm, perfect comic timing"
+    }
+   ]
+  }
+ ]
+}

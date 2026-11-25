@@ -672,6 +672,9 @@ const FLOOR=1400;
 function charScale(s,c){return (c.scale||1)*(s.scale||1)*(c.id==='masterji'?1.72:1.85*(SPEC[c.id]?SPEC[c.id].scale:1))}
 function charPos(s,id){const c=s.cast.find(c=>c.id===id);return c?[c.x,c.y||FLOOR]:[540,FLOOR]}
 function headY(s,id){const c=s.cast.find(c=>c.id===id);if(!c)return 700;if(typeof PUPPETS!=='undefined'&&PUPPETS[id])return (c.y||FLOOR)-((PUP_H[id]||440)+30)*charScale(s,c);return (c.y||FLOOR)-430*charScale(s,c)*.92}
+const eBack=x=>{x=clamp(x);const c1=1.25,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
+const eBounce=x=>{const n=7.5625,d=2.75;if(x<1/d)return n*x*x;if(x<2/d)return n*(x-=1.5/d)*x+.75;if(x<2.5/d)return n*(x-=2.25/d)*x+.9375;return n*(x-=2.625/d)*x+.984375};
+function dust(x,y,q){let o='';for(let k=0;k<7;k++){const a=k/6*Math.PI, r=30+q*120;o+=`<circle cx="${(x+Math.cos(a)*r*1.6).toFixed(1)}" cy="${(y-14-Math.sin(a)*r*.5).toFixed(1)}" r="${(22+q*34).toFixed(1)}" fill="#e9dfcf" stroke="#b9a98f" stroke-width="3" opacity="${(.9*(1-q)).toFixed(2)}"/>`}return o}
 function renderAt(t){
  const si=sceneAt(t), s=SC[si], T=TL.scenes[si], j=beatAt(si,t), B=s.beats[j], TB=T.beats[j], lt=t-T.start, bt=t-TB.start;
  let EX=null, exT0=0; for(let k=0;k<=j;k++){const bb=s.beats[k]; if(bb.explain!==undefined){EX=bb.explain||null; exT0=T.beats[k].start}}   // a board stays up until a beat sets "explain": false
@@ -682,11 +685,11 @@ function renderAt(t){
    $('#title').style.opacity=(SB.hook&&t<hu)||EX?0:1; }
  $('#ex').innerHTML=EX&&EX.kind?explainSvg(EX,t-exT0,t):'';
  const set=(SETS[s.set]||SETS.classroom)(t,s);
- let chars='', defs=GDEFS;
+ let chars='', defs=GDEFS, fxs0='';
  const spk=B.who&&t<TB.audioEnd?B.who:null, spkX=spk?charPos(s,spk)[0]:null;
  const env3=k=>{let a=0;for(let q=-6;q<=6;q++)a+=envAt(t+q/30);return a/13};
  for(const c of s.cast){
-  const id=c.id, Pb=poseOf(si,j,id), Pa=j>0?poseOf(si,j-1,id):Pb, p=Pa===Pb?1:eIO(bt/.3);
+  const id=c.id, Pb=poseOf(si,j,id), Pa=j>0?poseOf(si,j-1,id):Pb, p=Pa===Pb?1:eBack(bt/.32);
   const talk=(B.who===id&&t<TB.audioEnd)?1:0, lv=talk?envAt(t):0, lvs=talk?env3():0;
   let x=c.x, y=c.y||FLOOR, sc=charScale(s,c), flip=c.flip?-1:1;
   if(c.enter&&lt<.6){const q=eOut(lt/.6);if(c.enter==='left')x=lerp(-300,x,q);if(c.enter==='right')x=lerp(1380,x,q);if(c.enter==='drop')y=lerp(y-900,y,q);if(c.enter==='pop')sc*=q}
@@ -712,7 +715,14 @@ function renderAt(t){
   if(c.flip) th=-th;
   if(id!=='masterji') defs+=charDefs(id);
   const body=(id==='masterji'&&!(typeof PUPPETS!=='undefined'&&PUPPETS.masterji))?drawMasterji(Pa==='talk'?'idle':Pa,Pb==='talk'?'point':Pb,p,t,talk,hop,0,lv,lvs,vm):(typeof PUPPETS!=='undefined'&&PUPPETS[id]?drawPuppet:drawPerson)(id,Pa,Pb,p,t,talk,lv,{hop,gx,gy,lvs,vm,th,item:((B.item||{})[id]!==undefined?(B.item||{})[id]:c.item)});
-  chars+=`<g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g>`;
+  let ssx=1, ssy=1, rot=0, dx=0;
+  if((B.hop||[]).includes(id)){const hp=bt/.45; if(hp<1){const q=Math.sin(hp*Math.PI); ssy=1+.1*q; ssx=1-.07*q} else if(hp<1.3){const q=Math.sin((hp-1)/.3*Math.PI); ssy=1-.12*q; ssx=1+.1*q}}
+  const fallDir=x<540?-1:1, fellBefore=j>0&&(s.beats[j-1].fall||[]).includes(id);
+  if((B.fall||[]).includes(id)){rot=fallDir*84*eBounce(clamp(bt/.55)); if(bt>.4&&bt<1.2) fxs0+=dust(x+fallDir*330*sc,y,clamp((bt-.4)/.8))}
+  else if(fellBefore){rot=fallDir*84*(1-eBack(clamp(bt/.35)))}
+  if((B.tremble||[]).includes(id)){dx=Math.sin(t*75)*7; rot+=Math.sin(t*63)*1.6}
+  const wrap=(ssx!==1||ssy!==1||rot||dx)?`translate(${(x+dx).toFixed(1)} ${y}) rotate(${rot.toFixed(2)}) scale(${ssx.toFixed(3)} ${ssy.toFixed(3)}) translate(${(-x).toFixed(1)} ${-y})`:'';
+  chars+=`<g transform="${wrap}"><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g></g>`;
  }
  // effects for this beat
  let fxs='', back='';
@@ -721,22 +731,30 @@ function renderAt(t){
   const [x,y]=f.on?charPos(s,f.on):(f.at||[540,700]);
   const hy=f.on?headY(s,f.on):y;          // just above the character's head
   fxs+=fx(f.kind,x,f.kind==='pop'&&!f.on?y:hy,Math.min(1,bt/Math.max(.2,(TB.end-TB.start))),t,f.text)}
- $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+fxs;
- // camera: zoom on a character or point, gentle push, shake on demand
- let auto=null;                                   // auto camera: cut to the speaker, wide for reactions
- if(SB.autocam!==false&&!s.cam&&!B.cam&&s.card&&B.who&&typeof PUPPETS!=='undefined'&&PUPPETS[B.who]) auto={zoom:1.22,on:B.who,push:.04};
- else if(SB.autocam!==false&&!s.cam&&!B.cam&&!s.card){
-  const n=s.cast.length, who=B.who&&s.cast.find(c=>c.id===B.who)?B.who:null;
-  if(who&&n>1) auto={zoom:1.42+((si+j)%2)*.12,on:who,push:.06};
-  else if(who&&s.board) auto={zoom:1.0,push:.05};          // keep the blackboard text readable
-  else if(who) auto={zoom:1.18,on:who,push:.07};
-  else if(B.act){const k=Object.keys(B.act).find(q=>s.cast.find(c=>c.id===q));auto=n>2?{zoom:1.06,push:.04}:(k?{zoom:1.3,on:k,push:.05}:null)}}
- if(EX&&SB.autocam!==false&&!s.cam&&!B.cam) auto={zoom:1.0,push:.02};          // wide while the board explains
- const cam=Object.assign({zoom:1,on:null,push:0},s.cam||{}, B.cam||auto||{});
- let [fx_,fy_]=cam.on?(typeof cam.on==='string'?[charPos(s,cam.on)[0],headY(s,cam.on)+170]:cam.on):[540,960];
- const z=cam.zoom*(1+cam.push*(auto&&!s.cam&&!B.cam?eOut(clamp(bt/Math.max(.8,TB.end-TB.start))):clamp(lt/Math.max(1,T.end-T.start))));
- let ox=540-fx_*z, oy=(cam.on?760:960)-fy_*z; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));
+ $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+fxs0+fxs;
+  // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
+ const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
+ const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;
+  if(SB.autocam!==false&&!s.cam&&!BB.cam&&s.card&&BB.who&&typeof PUPPETS!=='undefined'&&PUPPETS[BB.who]) auto={zoom:1.22,on:BB.who,push:.04};
+  else if(SB.autocam!==false&&!s.cam&&!BB.cam&&!s.card){
+   const n=s.cast.length, who=BB.who&&s.cast.find(c=>c.id===BB.who)?BB.who:null;
+   if(who&&n>1) auto={zoom:1.42+((si+jj)%2)*.12,on:who,push:.06};
+   else if(who&&s.board) auto={zoom:1.0,push:.05};
+   else if(who) auto={zoom:1.18,on:who,push:.07};
+   else if(BB.act){const k=Object.keys(BB.act).find(q=>s.cast.find(c=>c.id===q));auto=n>2?{zoom:1.06,push:.04}:(k?{zoom:1.3,on:k,push:.05}:null)}}
+  if(exOn(jj)&&SB.autocam!==false&&!s.cam&&!BB.cam) auto={zoom:1.0,push:.02};
+  const cam=Object.assign({zoom:1,on:null,push:0},s.cam||{}, BB.cam||auto||{});
+  let [fx_,fy_]=cam.on?(typeof cam.on==='string'?[charPos(s,cam.on)[0],headY(s,cam.on)+170]:cam.on):[540,960];
+  let z=cam.zoom*(1+cam.push*(auto&&!s.cam&&!BB.cam?eOut(clamp(btj/Math.max(.8,TBj.end-TBj.start))):clamp(lt/Math.max(1,T.end-T.start))));
+  let ox=540-fx_*z, oy=(cam.on?760:960)-fy_*z;
+  if(BB.punch&&s.cast.find(c=>c.id===BB.punch)){const q=eOut(clamp((btj-(+BB.punch_at||0))/.16)), zt=2.1, px=charPos(s,BB.punch)[0], py=headY(s,BB.punch)+120;
+   ox=lerp(ox,540-px*zt,q); oy=lerp(oy,820-py*zt,q); z=lerp(z,zt,q)}
+  ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy)); return {z,ox,oy}};
+ let CM=camFor(j,bt);
+ if(j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
+ let z=CM.z, ox=CM.ox, oy=CM.oy;
  if(z>1.01){ox+=Math.sin(t*.9)*5+Math.sin(t*2.3)*2;oy+=Math.cos(t*.7)*4; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));}
+ if(B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}
  if(B.shake&&bt<.45){const k=(.45-bt)/.45*18;ox+=Math.sin(t*90)*k;oy+=Math.cos(t*77)*k}
  $('#world').style.transform=`translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px) scale(${z.toFixed(4)})`;
  $('#flash').style.opacity=(lt<.12&&si>0&&s.flash!==false)?((.12-lt)/.12*.5).toFixed(2):0;

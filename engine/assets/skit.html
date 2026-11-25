@@ -570,7 +570,7 @@ const ICONS={
 const ICON_NAMES=Object.keys(ICONS);
 const ICON_HAND=new Set(['report','money','phone','trowel','chai','glass','bottle','egg','onion','book','balloon','salt','ice','dumbbell','magnet','battery','bulb','plant']);
 const ICON_FLOOR=new Set(['tile','tile_up','gap','brick','bucket','cement','matka','cooker','rice','fridge','ac','car','fan']);
-const iconWhere=(o,who)=>o.where||(ICON_HAND.has(o.icon)&&who&&who!=='masterji'?'hand':ICON_FLOOR.has(o.icon)?'floor':'float');
+const iconWhere=(o,who)=>o.where||'card';            // owner prefers the sticker cards (26 Nov); hand/floor/float on request
 function worldObj(name,x,y,size,q,t,where){const s=eBack(clamp(q/.35)), bob=where==='float'?Math.sin(t*3)*8:0, rot=where==='float'?Math.sin(t*2)*6:0;
  const sh=where==='floor'?`<ellipse cx="${x.toFixed(1)}" cy="${(y+size*.46).toFixed(1)}" rx="${(size*.5*s).toFixed(1)}" ry="${(size*.09*s).toFixed(1)}" fill="#000" opacity=".18"/>`:'';
  const yy=where==='floor'?y-(1-eBounce(clamp(q/.5)))*90:y;

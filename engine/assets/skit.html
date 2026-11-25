@@ -749,7 +749,7 @@ function renderAt(t){
   let z=cam.zoom*(1+cam.push*(auto&&!s.cam&&!BB.cam?eOut(clamp(btj/Math.max(.8,TBj.end-TBj.start))):clamp(lt/Math.max(1,T.end-T.start))));
   let ox=540-fx_*z, oy=(cam.on?760:960)-fy_*z;
   if(BB.punch&&s.cast.find(c=>c.id===BB.punch)){const q=eOut(clamp((btj-(+BB.punch_at||0))/.16)), zt=2.1, px=charPos(s,BB.punch)[0], py=headY(s,BB.punch)+120;
-   ox=lerp(ox,540-px*zt,q); oy=lerp(oy,820-py*zt,q); z=lerp(z,zt,q)}
+   ox=lerp(ox,540-px*zt,q); oy=lerp(oy,(s.card?1330:820)-py*zt,q); z=lerp(z,zt,q)}
   ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy)); return {z,ox,oy}};
  let CM=camFor(j,bt);
  if(j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut&&!B.punch){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}

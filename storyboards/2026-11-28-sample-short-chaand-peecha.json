@@ -69,7 +69,11 @@
       "dadaji": "idle"
      },
      "cam": {
-      "zoom": 1.0
+      "zoom": 1.1,
+      "on": [
+       589,
+       777
+      ]
      },
      "hop": [
       "chutki"
@@ -78,11 +82,7 @@
       "kind": "lines"
      },
      "sfx": "whoosh",
-     "style": "a little girl shouting in shocked excitement, pointing up at the window",
-     "show": {
-      "icon": "moon",
-      "label": "Chaand"
-     }
+     "style": "a little girl shouting in shocked excitement, pointing up at the window"
     },
     {
      "who": "raju",
@@ -293,5 +293,5 @@
    ]
   }
  ],
- "hook_top": 120
+ "hook_top": 215
 }

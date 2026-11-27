@@ -182,7 +182,8 @@ almost zero. These rules fix that; every skit must follow them:
      first frame (`"fx":{"kind":"lines"}`, a `hop` or `shake`, a prop or sticker popping) and an
      `sfx` on beat 0 (`boing`, `crash`, `whoosh`, `scratch`).
    - Use an explicit `cam` on beat 0 that frames the speaker AND the funny thing together; check
-     that the hook text does not cover it (the hook sits about y 300-560 on screen).
+     that the hook text does not cover it (the hook sits about y 300-560 on screen; `"hook_top":215`
+     lifts it so a window or sky stays visible). No sticker on beat 0 if it would hide a face.
    - Hook text 3-5 words (one `*highlighted*` word), a question or a shock: "Chaand *peecha* kar
      raha hai?!", not a full sentence.
    - The first spoken line is 2-5 words, shouted or gasped, and lands on frame 1; a reaction (a

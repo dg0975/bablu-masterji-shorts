@@ -102,3 +102,31 @@ Beat field `"show"`: an icon name, `{"icon","label","on","side","at"}`, or a lis
 `float` (beside the head); these are used only when asked. Explain `steps` take `"icon:Text"` or `[icon, text]` to draw the icon above the step.
 Icon names live in `ICONS` in assets/skit.html; make_short validates them.
 
+
+## Smooth motion (automatic, 28 Nov 2026)
+Owner feedback: characters must move smoothly, never like puppets. The rig does this by itself:
+- Arms blend by joint angle (bones keep their length) and swing outward, never through the body;
+  the forearm trails the upper arm and settles with a tiny overshoot (follow-through). Arms are
+  drawn as soft curves through the elbow.
+- Poses, turns and camera glides use smootherstep easing (about 0.5 s); eyes, brows and mouths
+  blend between expressions instead of snapping.
+- Each pose has body language (shock: lift and lean back; sad: slump; angry: lean in; laugh: shake),
+  the upper body bends at the hips while the feet stay planted, idle weight shift and breathing,
+  the head lags the body slightly, calm talk gestures, and walk-ins bounce instead of sliding.
+Nothing to set in the storyboard. Still keep `hold` 0.5-0.75 and do not chain more than one big
+pose change per beat.
+
+## Living, informative backgrounds (automatic, 28 Nov 2026)
+Every set gets an extra layer (`SETX` in assets/skit.html):
+- **Info display** in the set (classroom chalkboard when `board` is empty, living-room TV, kitchen
+  fridge note, train poster, tapri menu board, terrace poster, bedroom poster, park notice board,
+  market LED ticker). It shows **SAWAAL** + the explain board's `title` until Masterji's explain beat,
+  then flips to **JAWAB** + the last explain step (its icon and text). Override with top-level
+  `"bg_info": {"q":"Chaand saath kyun chale?","a":"Chaand bahut door hai","icon":"moon"}` or just
+  `"bgfact": "<short answer, under 30 characters>"`. Keep both short Hinglish.
+- **Light**: soft sunlight beams with sparkling dust from the window or sun (off at night), a light
+  wash that drifts slowly, darker floor edges.
+- **Depth**: the set moves a little less than the cast when the camera glides (parallax) and drifts
+  gently, so the frame is never still. Outdoor sets (tapri, park, market) have people strolling far
+  behind the cast.
+Switch off with `"bg_extras": false` or `"parallax": false` (not normally needed).

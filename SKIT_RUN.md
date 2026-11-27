@@ -255,6 +255,13 @@ almost zero. These rules fix that; every skit must follow them:
    of its spoken line (`renderAt(t)` in `work/_page.html`, or `ffmpeg -nostdin -ss <t>` on the
    MP4; without `-nostdin`, ffmpeg in a `while read` loop eats the list and grabs the wrong frames).
 
+13. **Background info display (owner request 28 Nov 2026: attractive, informative, not static).**
+   Every set now shows the skit's question on a TV/board/poster in the background and flips it to the
+   answer when Masterji explains (automatic, from the explain board). Make the explain board's
+   `title` a short question (3-5 words) and its last step a short answer with an icon, or set
+   `"bgfact": "<short answer, under 30 characters>"`. Light beams, parallax and background people are
+   automatic. Character motion is smoothed automatically too (see engine/references/skit.md).
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`

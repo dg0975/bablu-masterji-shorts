@@ -1,6 +1,6 @@
 ---
 name: "hindi-shorts-maker"
-description: "Turn a topic into a ~60-second vertical Hindi explainer video (Reel/Short) for @bablu.masterji, with voiceover, animated infographics and the Bablu Masterji mascot. Use when the user gives a daily short / reel topic."
+description: "Turn a topic into a ~60-second vertical Hindi explainer video (Reel/Short) or a 20-25 s comedy skit for @bablu.masterji, with voiceover, animated visuals, the Bablu Masterji mascot and cast, smooth character animation and living, informative backgrounds. Use when the user gives a daily short / reel topic or asks for a skit."
 ---
 
 # Hindi Shorts Maker
@@ -150,11 +150,16 @@ hashtags. General audience (not made for kids).
 ## Skits (comedy + science punchline)
 
 `"kind":"skit"` storyboards make 20-25 s "Masterji ki Class" comedy shorts with drawn sets
-(classroom, living room, kitchen), the cast Masterji, Golu, Mummy and Papa, camera close-ups,
+(classroom, living room, kitchen, train, tapri, terrace, bedroom, park, market), the cast Masterji, Golu, Mummy, Papa,
+Dadi, Pinky, Bunty, Sharma Aunty, Dadaji, Chutki, Gupta Uncle and Raju Bhaiya, camera close-ups,
 comic effects, sound effects and a Gemini voice with acting directions for every character
 (Masterji too). The engine polishes voices automatically (comedy pace, kid pitch, loudness match),
 lip-syncs mouths to the audio, draws shaded characters with real blinks and gaze, and runs an auto
-camera that cuts to whoever speaks. Format and options:
+camera that glides to whoever speaks. Characters move smoothly (joint-angle arm blending with
+follow-through, eased poses, blended expressions, hip bend and weight shift), and every set gets a
+living background layer: parallax depth, light beams with dust, a soft light wash, people strolling
+outdoors, and an in-scene info display (TV, chalkboard, poster, note or LED ticker) that shows the
+skit's question and flips to the answer when Masterji explains. Format and options:
 `references/skit.md`. Scheduled every evening via the repo's `SKIT_RUN.md` (the only daily post since 21 Nov 2026).
 
 ## 3. Check before the long render

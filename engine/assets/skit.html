@@ -108,6 +108,68 @@ function tree(x,y,s,t,k){const sw=Math.sin(t*1.2+k)*2.5;return `<g transform="ro
  <circle cx="${x}" cy="${y-200*s}" r="${90*s}" fill="#3e8a3c" stroke="${INK}" stroke-width="4"/><circle cx="${x-70*s}" cy="${y-150*s}" r="${60*s}" fill="#4f9a4a" stroke="${INK}" stroke-width="4"/><circle cx="${x+70*s}" cy="${y-160*s}" r="${64*s}" fill="#4f9a4a" stroke="${INK}" stroke-width="4"/><circle cx="${x-24*s}" cy="${y-236*s}" r="${30*s}" fill="#68b25f" opacity=".7"/></g>`}
 function clouds(t){return [0,1].map(k=>{const x=((k*560+t*30)%1400)-200;return `<g transform="translate(${x.toFixed(0)} ${260+k*120})"><ellipse cx="0" cy="0" rx="90" ry="34" fill="#fff"/><ellipse cx="60" cy="-14" rx="60" ry="30" fill="#fff"/></g>`}).join('')}
 function kite(x,y,t){return `<g transform="translate(${(x+Math.sin(t*.8)*40).toFixed(0)} ${(y+Math.sin(t*1.3)*20).toFixed(0)}) rotate(${(Math.sin(t*1.6)*12).toFixed(1)})"><path d="M0 -50 L40 0 L0 50 L-40 0 Z" fill="#e8213a" stroke="${INK}" stroke-width="4"/><path d="M0 -50 L0 50 M-40 0 L40 0" stroke="${INK}" stroke-width="2"/><path d="M0 50 q-20 80 30 160" stroke="${INK}" stroke-width="2" fill="none"/></g>`}
+
+/* ================= backgrounds: light, depth and an in-scene info display ================= */
+// topic info shown on a surface in every set: the question before Masterji explains, the answer after
+let BGINFO=null;
+function bgInfo(){if(BGINFO)return BGINFO;let q='',a='',icon='',tEx=1e9;
+ SB.scenes.forEach((sc,i)=>sc.beats.forEach((b,j)=>{const E=b.explain;if(E&&E.kind&&tEx===1e9){q=E.title||'';tEx=TL.scenes[i].beats[j].start;
+   const st=(E.steps||[]).map(x=>Array.isArray(x)?x:String(x).split(':')); const last=st[st.length-1]; if(last){a=(last[1]||last[0]||'');if(last.length>1)icon=last[0]}
+   if(!icon&&st[0]&&st[0].length>1)icon=st[0][0];}
+  [].concat(b.show||[]).forEach(sh=>{const o=typeof sh==='string'?{icon:sh}:sh;if(!icon&&o.icon)icon=o.icon})}));
+ const I=SB.bg_info||{}; BGINFO={q:I.q||q||SB.title||'',a:I.a||SB.bgfact||a,icon:I.icon||icon||'bulb',tEx:I.at!=null?+I.at:tEx,head:I.head};return BGINFO}
+// one display surface: kind = tv | chalk | poster | note | led
+function infoPanel(kind,x,y,w,h,t){const I=bgInfo(); if(!I.q&&!I.a)return '';
+ const ans=t>=I.tEx+.6&&I.a, flip=clamp(Math.abs(t-(I.tEx+.6))/.35), sy=ans||t<I.tEx?Math.max(.05,flip):1;
+ const head=ans?'JAWAB':(I.head||'SAWAAL'), txt=ans?I.a:I.q, f=v=>v.toFixed(1), cx=x+w/2;
+ let lines=wrap(txt,kind==='led'?60:Math.max(8,Math.round(w/24))); const longest=Math.max(...lines.map(l=>l.length),6);
+ const fs=Math.max(14,Math.min(38,w*.92/(longest*.62),h*.36/(lines.length*1.12)));
+ const pulse=1+.06*Math.sin(t*3.2), ic=ans?I.icon:'question', isz=Math.min(h*.3,w*.34), iy=y+h*.33, ty=y+h*.6+fs*.8;
+ const th=kind==='chalk'?'#f3efe4':kind==='tv'?'#ffffff':INK, tc=kind==='chalk'?'#ffd54a':kind==='tv'?'#ffd54a':'#e8213a', fam=kind==='chalk'?'Kalam,Poppins':'Poppins';
+ const body=`<g transform="translate(${cx} ${y+h/2}) scale(1 ${f(sy)}) translate(${-cx} ${-(y+h/2)})">
+   <text x="${cx}" y="${f(y+h*.14)}" text-anchor="middle" font-family="${fam}" font-weight="700" font-size="${f(Math.min(30,h*.11))}" fill="${tc}" letter-spacing="2">${head}</text>
+   <g transform="translate(${f(cx)} ${f(iy)}) scale(${f(pulse)}) translate(${f(-cx)} ${f(-iy)})">${iconSvg(ic,cx,iy,isz)}</g>
+   ${lines.map((l,k)=>`<text x="${cx}" y="${f(ty+k*fs*1.12)}" text-anchor="middle" font-family="${fam}" font-weight="700" font-size="${f(fs)}" fill="${th}">${l.replace(/[<>&]/g,'')}</text>`).join('')}</g>`;
+ if(kind==='tv'){const sc=(t*60)%h;return `<rect x="${x-14}" y="${y-14}" width="${w+28}" height="${h+28}" rx="14" fill="#1c1c22" stroke="${INK}" stroke-width="6"/>
+   <rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#20306a"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="url(#tvGlow)" opacity="${f(.75+.1*Math.sin(t*7))}"/>${body}
+   <rect x="${x}" y="${f(y+sc)}" width="${w}" height="6" fill="#fff" opacity=".07"/><circle cx="${x+w-12}" cy="${y+h+4}" r="4" fill="#ff4d4d" opacity="${f(.5+.5*Math.sin(t*4))}"/><path d="M${x+w*.3} ${y+h+14} l-20 40 M${x+w*.7} ${y+h+14} l20 40" stroke="${INK}" stroke-width="6"/>`}
+ if(kind==='chalk') return `<rect x="${x-12}" y="${y-12}" width="${w+24}" height="${h+24}" rx="10" fill="#7a5233" stroke="${INK}" stroke-width="5"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#2e5c47"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff" opacity=".05"/>${body}`;
+ if(kind==='note') return `<g transform="rotate(${f(-3+Math.sin(t*1.3)*1.2)} ${cx} ${y})"><rect x="${x+6}" y="${y+8}" width="${w}" height="${h}" fill="#000" opacity=".15"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fff59a" stroke="${INK}" stroke-width="4"/><circle cx="${cx}" cy="${y+8}" r="11" fill="#e8213a" stroke="${INK}" stroke-width="3"/>${body}</g>`;
+ if(kind==='led'){const msg=`${head}: ${txt}  •  `.repeat(3), off=(t*120)%(msg.length*18);
+   return `<rect x="${x-10}" y="${y-10}" width="${w+20}" height="${h+20}" rx="10" fill="#222" stroke="${INK}" stroke-width="5"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#0d0d12"/><clipPath id="ledc"><rect x="${x}" y="${y}" width="${w}" height="${h}"/></clipPath>
+    <g clip-path="url(#ledc)"><text x="${f(x+w-off)}" y="${y+h*.7}" font-family="Poppins" font-weight="700" font-size="${Math.round(h*.6)}" fill="#ffd54a" letter-spacing="3">${msg.replace(/[<>&]/g,'')}</text></g>`}
+ return `<g transform="rotate(${f(2+Math.sin(t*1.1)*.6)} ${cx} ${y})"><rect x="${x+8}" y="${y+10}" width="${w}" height="${h}" fill="#000" opacity=".16"/><rect x="${x}" y="${y}" width="${w}" height="${h}" fill="#fffaf0" stroke="${INK}" stroke-width="5"/>
+   <rect x="${x+w*.38}" y="${y-12}" width="${w*.24}" height="24" fill="#cfe6ff" opacity=".8"/>${body}</g>`}
+// soft sunlight beams from a window with dust sparkling in them
+function beams(x,y,w,ang,t,col,len){const f=v=>v.toFixed(1);let s='';const a=ang*Math.PI/180, L=len||900, dx=Math.sin(a)*L, dy=Math.cos(a)*L;
+ for(let k=0;k<3;k++){const o=.10+.05*Math.sin(t*.8+k*1.7), x0=x-w/2+k*w/3, x1=x0+w/3*.8, sp=60+k*25;
+  s+=`<path d="M${f(x0)} ${y} L${f(x1)} ${y} L${f(x1+dx+sp)} ${f(y+dy)} L${f(x0+dx-sp)} ${f(y+dy)} Z" fill="url(#beamG)" opacity="${f(o)}" style="mix-blend-mode:screen"/>`}
+ for(let k=0;k<14;k++){const q=((t*.05+k*.071)%1), px=x-w/2+((k*37)%w)+dx*q+Math.sin(t*.7+k)*20, py=y+dy*q+Math.cos(t*.5+k)*14;
+  s+=`<circle cx="${f(px)}" cy="${f(py)}" r="${k%4?2.2:3.4}" fill="${col||'#fff6d8'}" opacity="${f(.55*Math.sin(q*Math.PI))}"/>`}
+ return s}
+
+// people strolling far in the background (outdoor sets): small, soft, never in front of the cast
+function walker(t,period,y,sc,dir,c1,c2,ph){const u=((t+ph)%period)/period, x=dir>0?lerp(-80,1160,u):lerp(1160,-80,u), st=Math.sin((t+ph)*7), b=Math.abs(st)*3, f=v=>v.toFixed(1);
+ return `<g transform="translate(${f(x)} ${f(y-b)}) scale(${dir*sc} ${sc})" opacity=".85"><path d="M-6 60 L${f(-6+st*9)} 92 M6 60 L${f(6-st*9)} 92" stroke="#3a3440" stroke-width="9" stroke-linecap="round"/>
+  <rect x="-16" y="10" width="32" height="54" rx="14" fill="${c1}"/><path d="M-14 22 L${f(-20-st*8)} 52 M14 22 L${f(20+st*8)} 52" stroke="${c1}" stroke-width="8" stroke-linecap="round"/><circle cx="0" cy="-4" r="15" fill="#c98b62"/><path d="M-15 -8 Q0 -26 15 -8 Z" fill="${c2}"/></g>`}
+function wash(t,cx,cy,warm){const x=cx+Math.sin(t*.17)*40, f=v=>v.toFixed(1);
+ return `<radialGradient id="washG" cx="${f(x/1080)}" cy="${f(cy/1920)}" r=".75"><stop offset="0" stop-color="${warm||'#fff1cf'}" stop-opacity=".55"/><stop offset=".55" stop-color="#fff1cf" stop-opacity="0"/><stop offset="1" stop-color="#2a1a30" stop-opacity=".28"/></radialGradient>
+  <rect width="1080" height="1920" fill="url(#washG)" style="mix-blend-mode:soft-light"/><rect y="1500" width="1080" height="420" fill="url(#floorFade)"/>`}
+const BGDEFS=`<linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4" stop-opacity="1"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></linearGradient>
+ <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
+ <radialGradient id="tvGlow" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#4f7bff"/><stop offset="1" stop-color="#16204a"/></radialGradient>`;
+// extra layer drawn over each set: info display + light (+ the set's own extras)
+const SETX={
+ classroom:(t,o)=>(o.board?'':infoPanel('chalk',300,420,480,300,t))+beams(55,440,90,-40,t)+wash(t,200,500),
+ livingroom:(t,o)=>infoPanel('tv',150,400,280,190,t)+(o.night?'':beams(810,380,280,35,t))+wash(t,810,520,o.night?'#bcd0ff':null),
+ kitchen:(t,o)=>infoPanel('note',830,440,170,150,t)+beams(540,0,500,8,t,null,700)+wash(t,540,300),
+ train:(t,o)=>infoPanel('poster',438,360,224,270,t)+(o.night?'':beams(270,450,260,30,t,null,700)+beams(810,450,260,30,t,null,700))+wash(t,540,500,o.night?'#bcd0ff':null),
+ tapri:(t,o)=>walker(t,14,1010,.9,1,'#2f6bd8','#1d1614',0)+walker(t,17,1030,.8,-1,'#e8213a','#1d1614',6)+infoPanel('chalk',712,520,296,150,t)+beams(160,330,200,-25,t,null,1100)+wash(t,160,330,'#ffd9a0'),
+ terrace:(t,o)=>infoPanel('poster',735,790,170,170,t)+beams(900,300,240,-30,t,null,1100)+wash(t,900,300),
+ bedroom:(t,o)=>infoPanel('poster',150,410,190,200,t)+(o.night?'':beams(790,390,280,35,t))+wash(t,790,530,o.night?'#bcd0ff':null),
+ park:(t,o)=>`<g stroke="${INK}" stroke-width="5"><rect x="400" y="1010" width="14" height="110" fill="#8a5c38"/><rect x="600" y="1010" width="14" height="110" fill="#8a5c38"/></g>`+infoPanel('chalk',380,870,250,150,t)+beams(880,250,260,-20,t,null,1200)+walker(t,16,1000,.7,1,'#ff8a3d','#1d1614',2)+walker(t,21,990,.65,-1,'#2bd67b','#3a2a22',9)+wash(t,880,250),
+ market:(t,o)=>infoPanel('led',30,250,1020,56,t)+beams(540,210,300,0,t,null,1000)+walker(t,12,1130,.85,1,'#8e3a8a','#1d1614',1)+walker(t,15,1140,.8,-1,'#2f6bd8','#1d1614',7)+wash(t,540,210,'#ffd9a0'),
+};
 const SETS_NEW={
  park(t,o){const ang=Math.sin(t*2.2)*24, rad=ang*Math.PI/180, sx=690+Math.sin(rad)*330, sy=760+Math.cos(rad)*330;
   return `<rect width="1080" height="1300" fill="#9edcff"/><circle cx="880" cy="250" r="66" fill="#ffd54a"/>${clouds(t)}${kite(260,420,t)}${birdsFly(t,9,330,4)}
@@ -843,7 +905,7 @@ function renderAt(t){
    if(wh==='floor'){let fx2=o.x;if(fx2===undefined){const others=s.cast.filter(c=>c.id!==who);fx2=others.length?(cx+others.reduce((a,c)=>Math.abs(c.x-cx)<Math.abs(a.x-cx)?c:a).x)/2:cx+side*260}
      objs+=worldObj(o.icon,fx2,FLOOR-50,o.size||175,q,t,'floor')}
    else objs+=worldObj(o.icon,o.x!==undefined?o.x:cx+side*165,o.y!==undefined?o.y:(who?headY(s,who)+(s.card?240:-30):700),o.size||125,q,t,'float')}
- $('#w').innerHTML=D3?'':`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
+ $('#w').innerHTML=D3?'':`<defs>${defs}${BGDEFS}</defs><g id="bgL"><g filter="url(#bgsoft)">${set}${SB.bg_extras===false?'':(SETX[s.set]||(()=>''))(t,s)}</g></g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
  const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;
@@ -874,6 +936,11 @@ function renderAt(t){
     Y=s.card?Math.max(1200,Math.min(1250,Y)):Math.max(SB.hook&&t<3.4?640:340,Math.min(1240,Y)); h+=stickerSvg(k.o.icon,X,Y,k.q,t,k.o.label)}
    $('#stk').innerHTML=h }
  $('#world').style.transform=`translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px) scale(${z.toFixed(4)})`;
+ if(!D3&&SB.parallax!==false){const bl=document.getElementById('bgL');if(bl){            // the set moves a little less than the cast: depth, and a slow drift so it is never still
+   const k=.86, si2=k+(1-k)/z, vx0=-ox/z, vx1=(1080-ox)/z, cx=(vx0+vx1)/2, ov=1.06;
+   let tx=ox*(k-1)/z+Math.sin(t*.23)*7, X0=(0*si2+tx-cx)*ov+cx, X1=(1080*si2+tx-cx)*ov+cx;
+   if(X0>vx0) tx-=(X0-vx0)/ov; if(X1<vx1) tx+=(vx1-X1)/ov;
+   bl.setAttribute('transform',`translate(${cx.toFixed(1)} 960) scale(${ov} 1) translate(${(-cx).toFixed(1)} -960) translate(${tx.toFixed(1)} 0) scale(${si2.toFixed(4)} 1)`)}}
  $('#flash').style.opacity=(lt<.12&&si>0&&s.flash!==false&&!(D3&&SC[si-1].set===s.set&&!!SC[si-1].night===!!s.night))?((.12-lt)/.12*.5).toFixed(2):0;
  // subtitles
  const showSub=B.who&&(B.caption||B.say);

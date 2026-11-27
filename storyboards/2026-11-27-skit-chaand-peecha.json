@@ -44,9 +44,9 @@
    "scale": 0.78,
    "cast": [
     {
-     "id": "chutki",
+     "id": "dadaji",
      "x": 220,
-     "pose": "shock"
+     "pose": "idle"
     },
     {
      "id": "raju",
@@ -54,9 +54,9 @@
      "pose": "idle"
     },
     {
-     "id": "dadaji",
+     "id": "chutki",
      "x": 860,
-     "pose": "idle"
+     "pose": "hand"
     }
    ],
    "beats": [
@@ -64,7 +64,8 @@
      "who": "chutki",
      "say": "भैया! चाँद हमारा पीछा कर रहा है!",
      "act": {
-      "chutki": "point"
+      "chutki": "hand",
+      "raju": "idle"
      },
      "fx": {
       "kind": "lines"
@@ -74,6 +75,13 @@
      "show": {
       "icon": "moon",
       "label": "Chaand"
+     },
+     "cam": {
+      "zoom": 1.4,
+      "on": [
+       780,
+       880
+      ]
      }
     },
     {
@@ -95,23 +103,25 @@
      "who": "chutki",
      "say": "फ़ॉलो बैक, चाँद अंकल!",
      "act": {
-      "chutki": "wave"
+      "chutki": "happy",
+      "raju": "laugh"
      },
-     "spin": [
-      "chutki"
-     ],
      "fx": {
       "kind": "hearts",
       "on": "chutki"
      },
      "sfx": "boing",
-     "style": "a little girl waving happily at the moon, sweet and excited"
+     "style": "a little girl waving happily at the moon, sweet and excited",
+     "hop": [
+      "chutki"
+     ]
     },
     {
      "who": "dadaji",
      "say": "क्या? पीछा? टीटी आ गया? राजू, टिकट दिखा!",
      "act": {
-      "dadaji": "shock"
+      "dadaji": "shock",
+      "raju": "shock"
      },
      "fx": {
       "kind": "question",
@@ -128,18 +138,19 @@
      "who": "raju",
      "say": "टिकट? वो तो मेरी स्टोरी पे है!",
      "act": {
-      "raju": "shock",
+      "raju": "sly",
       "dadaji": "angry"
      },
      "punch": "raju",
      "sfx": "boom",
-     "tremble": [
-      "raju"
-     ],
      "style": "a cousin panicking, embarrassed and sheepish",
      "show": {
       "icon": "phone",
       "label": "Story pe!"
+     },
+     "fx": {
+      "kind": "sweat",
+      "on": "raju"
      }
     },
     {
@@ -174,7 +185,8 @@
      "who": "dadaji",
      "say": "हमारे ज़माने में चाँद बैलगाड़ी का भी पीछा करता था!",
      "act": {
-      "dadaji": "talk"
+      "dadaji": "happy",
+      "chutki": "think"
      },
      "style": "a grandfather boasting proudly about the old days, nostalgic",
      "show": {
@@ -222,7 +234,8 @@
      "who": "masterji",
      "say": "चाँद पीछा नहीं करता! पेड़ पास हैं, इसलिए तेज़ी से पीछे भागते दिखते हैं।",
      "act": {
-      "masterji": "point"
+      "masterji": "point",
+      "chutki": "think"
      },
      "explain": {
       "kind": "steps",
@@ -257,9 +270,9 @@
    "scale": 0.78,
    "cast": [
     {
-     "id": "chutki",
+     "id": "dadaji",
      "x": 220,
-     "pose": "happy"
+     "pose": "idle"
     },
     {
      "id": "raju",
@@ -267,9 +280,9 @@
      "pose": "sad"
     },
     {
-     "id": "dadaji",
+     "id": "chutki",
      "x": 860,
-     "pose": "idle"
+     "pose": "happy"
     }
    ],
    "card": {
@@ -283,10 +296,8 @@
      "say": "मतलब फ़ॉलो भी नहीं किया? चाँद ने भी इग्नोर कर दिया!",
      "act": {
       "raju": "sad",
-      "chutki": "laugh"
-     },
-     "turn": {
-      "raju": 180
+      "chutki": "laugh",
+      "dadaji": "laugh"
      },
      "sfx": "drum",
      "style": "a cousin heartbroken and sulking, dramatic",
@@ -299,17 +310,18 @@
      "who": "chutki",
      "say": "भैया, देखो! अब तारे भी पीछा कर रहे हैं!",
      "act": {
-      "chutki": "point",
-      "dadaji": "shock"
+      "chutki": "hand",
+      "dadaji": "facepalm",
+      "raju": "sad"
      },
-     "hop": [
-      "chutki"
-     ],
      "sfx": "whoosh",
      "style": "a little girl excited all over again, pointing out of the window",
      "show": {
       "icon": "moon",
       "label": "Taare bhi!"
+     },
+     "turn": {
+      "raju": 180
      }
     }
    ]

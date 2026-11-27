@@ -83,12 +83,13 @@
       "raju": "sly",
       "chutki": "think"
      },
-     "sfx": "drum",
+     "sfx": "boom",
      "style": "a lazy cool cousin, totally casual, very sure of himself",
      "show": {
       "icon": "phone",
       "label": "Follow back"
-     }
+     },
+     "punch": "raju"
     },
     {
      "who": "chutki",
@@ -186,29 +187,18 @@
      "say": "तो चाँद सबका पीछा करता है? वो थकता नहीं?",
      "act": {
       "chutki": "think",
-      "dadaji": "shock"
-     },
-     "fx": {
-      "kind": "question",
-      "on": "chutki"
-     },
-     "sfx": "ding",
-     "style": "a little girl asking innocently, genuinely puzzled",
-     "show": {
-      "icon": "question",
-      "label": "Thakta nahi?"
-     }
-    },
-    {
-     "hold": 0.6,
-     "act": {
       "dadaji": "think"
      },
      "fx": {
       "kind": "sweat",
       "on": "dadaji"
      },
-     "sfx": "scratch"
+     "sfx": "scratch",
+     "style": "a little girl asking innocently, genuinely puzzled",
+     "show": {
+      "icon": "question",
+      "label": "Thakta nahi?"
+     }
     }
    ]
   },
@@ -250,28 +240,13 @@
      "who": "masterji",
      "say": "चाँद लगभग चार लाख किलोमीटर दूर है, इसलिए खिड़की में वहीं टिका रहता है।",
      "act": {
-      "masterji": "talk"
+      "masterji": "talk",
+      "chutki": "happy"
      },
      "style": "a teacher explaining clearly, lively",
      "show": {
       "icon": "earth",
       "label": "4 lakh km"
-     }
-    },
-    {
-     "who": "chutki",
-     "say": "मतलब चाँद बस बहुत दूर है!",
-     "act": {
-      "chutki": "happy"
-     },
-     "hop": [
-      "chutki"
-     ],
-     "sfx": "ding",
-     "style": "a little girl amazed, a happy realization",
-     "show": {
-      "icon": "bulb",
-      "label": "Samjhi!"
      }
     }
    ]
@@ -313,8 +288,7 @@
      "turn": {
       "raju": 180
      },
-     "punch": "raju",
-     "sfx": "boom",
+     "sfx": "drum",
      "style": "a cousin heartbroken and sulking, dramatic",
      "show": {
       "icon": "heart_broken",

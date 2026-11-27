@@ -363,9 +363,13 @@ window.S3D = (function () {
     const shotSeg = {};
     for (const sg of segs) {
       const first = SB.scenes[sg.shots[0]]; const order = first.cast.slice().sort((a, b) => a.x - b.x).map(c => c.id); const enterAt = {};
-      for (const si of sg.shots.slice(1)) for (const c of SB.scenes[si].cast) if (!order.includes(c.id)) { if (c.x < 540) order.unshift(c.id); else order.push(c.id); enterAt[c.id] = si; }
       const n = order.length, pos = {};
       order.forEach((id, i) => { const X = (i - (n - 1) / 2) * SPACING; pos[id] = { x: X, z: -.28 * Math.pow(X / 1.6, 2) + (i % 2 ? -.12 : 0) }; });
+      for (const si of sg.shots.slice(1)) for (const c of SB.scenes[si].cast) if (!order.includes(c.id)) {
+        const mates = SB.scenes[si].cast.filter(q => q.id !== c.id && pos[q.id]); const m = mates.sort((a2, b2) => Math.abs(a2.x - c.x) - Math.abs(b2.x - c.x))[0];
+        const side = m ? Math.sign(c.x - m.x) || -1 : (c.x < 540 ? -1 : 1);
+        pos[c.id] = m ? { x: pos[m.id].x + side * SPACING * .8, z: pos[m.id].z + .75 } : { x: side * (n / 2 + .5) * SPACING, z: 0 };
+        order.push(c.id); enterAt[c.id] = si; }
       sg.order = order; sg.pos = pos; sg.enterAt = enterAt; sg.shots.forEach(si => shotSeg[si] = sg);
     }
     return { segs, shotSeg };
@@ -374,8 +378,12 @@ window.S3D = (function () {
   function charState(id, si, t) { // world position, presence and walking phase
     const sg = LAYOUT.shotSeg[si]; if (!sg.order.includes(id)) return null;
     const p = sg.pos[id], e = sg.enterAt[id];
-    if (e !== undefined) { if (si < e) return null; const t0 = TL.scenes[e].start, q = (t - t0) / WALK;
-      if (q < 1) { const side = p.x < 0 ? -1 : 1, sx = side * 3.6; return { x: lerp(sx, p.x, eIO(q)), z: p.z, walking: true, dir: -side, wq: q }; } }
+    if (e !== undefined) { if (si < e) return null; const side = p.x < 0 ? -1 : 1, sx = side * 4.2;
+      const ex = sg.shots.find(k => k > e && !SB.scenes[k].cast.some(c => c.id === id));   // newcomers leave when a later shot no longer has them
+      if (ex !== undefined && si >= ex) { const q = (t - TL.scenes[ex].start) / WALK; if (q >= 1) return null;
+        return { x: lerp(p.x, sx, eIO(q)), z: p.z, walking: true, dir: side, wq: Math.min(q * 1.25, .84) }; }
+      const t0 = TL.scenes[e].start, q = (t - t0) / WALK;
+      if (q < 1) return { x: lerp(sx, p.x, eIO(q)), z: p.z, walking: true, dir: -side, wq: q }; }
     return { x: p.x, z: p.z, walking: false };
   }
 
@@ -385,13 +393,16 @@ window.S3D = (function () {
     for (const id of ids) { const c = CH[id], st = charState(id, si, t); if (!c || !st) continue; x0 = Math.min(x0, st.x - .55); x1 = Math.max(x1, st.x + .55); y1 = Math.max(y1, c.height + .08); y0 = Math.min(y0, cut === 'close' ? c.legL + c.torso * .3 : cut ? c.legL * cut : -.02); z += st.z; n++; }
     return n ? { x0, x1, y0, y1, z: z / n } : null; }
   // camera that fits the box into the screen band [top,bottom] (px), seen from yaw (deg)
-  function fitCam(bb, top, bottom, yaw, pitch = -4) {
+  function fitCam(bb, top, bottom, yaw) {
     const tn = Math.tan(FOV * D / 2), frH = (bottom - top) / H, frW = (W - 160) / W, asp = W / H;
     const h = bb.y1 - bb.y0, w = bb.x1 - bb.x0;
     const d = Math.max(h / (2 * tn * frH), w / (2 * tn * asp * frW)) + .3;
-    const visH = 2 * d * tn, cy = (bb.y0 + bb.y1) / 2, off = ((top + bottom) / 2 - H / 2) / H * visH; // move up so the box sits lower
-    const cx = (bb.x0 + bb.x1) / 2, a = yaw * D;
-    const tgt = new T.Vector3(cx, cy + off, bb.z), pos = new T.Vector3(cx + Math.sin(a) * d, cy + off - Math.sin(pitch * D) * d, bb.z + Math.cos(a) * d);
+    const cx = (bb.x0 + bb.x1) / 2, cy = (bb.y0 + bb.y1) / 2, a = yaw * D;
+    const camY = clamp(bb.y0 + h * .78, .7, 2.75);          // about eye level, always under the ceiling
+    const f = ((top + bottom) / 2 - H / 2) / (H / 2);         // where the box centre should sit (+ = lower)
+    const alpha = Math.atan(f * tn), beta = Math.atan2(cy - camY, d), pitch = beta + alpha;
+    const pos = new T.Vector3(cx + Math.sin(a) * d, camY, bb.z + Math.cos(a) * d);
+    const tgt = new T.Vector3(cx, camY + Math.tan(pitch) * d, bb.z);
     return { pos, tgt };
   }
   function bandFor(si, j) { const s = SB.scenes[si];
@@ -406,7 +417,7 @@ window.S3D = (function () {
     const present = sg.order.filter(id => charState(id, si, TL.scenes[si].start + 2) !== null);
     const inShot = s.cast.map(c => c.id).filter(id => present.includes(id));
     let subj;
-    const wide = (B.cam && +B.cam.zoom <= 1.05 && !B.cam.on) || exOn(si, j) || s.card || (!B.who && inShot.length > 1) || (B.fall || []).length || (si === 0 && j === 0 && SB.hook);
+    const wide = (B.cam && +B.cam.zoom <= 1.05 && !B.cam.on) || (!B.who && inShot.length > 1) || (B.fall || []).length || (si === 0 && j === 0 && SB.hook);
     if (B.cam && typeof B.cam.on === 'string') subj = [B.cam.on];
     else if (wide) subj = inShot.slice();
     else if (B.who && inShot.includes(B.who)) { // speaker + who they talk to (previous/next speaker)
@@ -414,29 +425,30 @@ window.S3D = (function () {
       subj = other && ((si + j) % 3 === 2) ? [B.who, other] : [B.who];
     } else subj = inShot.slice();
     let [top, bottom] = bandFor(si, j); const yaw = ((si * 7 + j * 5) % 3 - 1) * 9;
-    const cut = wide ? 0 : subj.length === 1 ? 'close' : .55;
-    if (cut === 'close') { top = 430; bottom = 1440; }
+    let cut = wide ? 0 : subj.length === 1 ? 'close' : .55;
+    if (!wide && exOn(si, j)) cut = .55;                     // board up: the speaker from the knees up, under the board
+    if (cut === 'close') { top = s.card ? 990 : 430; bottom = s.card ? 1470 : 1440; }
     for (let it = 0; it < 6; it++) {
       const bb = bboxOf(subj, si, t, cut); if (!bb) break;
       const cam = fitCam(bb, top, bottom, yaw);
       const add = present.filter(id => !subj.includes(id) && partlyIn(id, si, t, cam));
       if (!add.length) return { cam, subj, top, bottom, yaw };
-      subj = subj.concat(add); if (cut === 'close') return framingWith(subj, si, t, yaw, present);
+      subj = subj.concat(add); if (cut === 'close') return framingWith(subj, si, t, yaw, present, s.card ? [990, 1470] : [560, 1460]);
     }
     const bb = bboxOf(present, si, t) || { x0: -1, x1: 1, y0: 0, y1: 2, z: 0 };
     return { cam: fitCam(bb, top, bottom, yaw), subj: present, top, bottom, yaw };
   }
-  function framingWith(subj, si, t, yaw, present) { const [top, bottom] = [560, 1460];
+  function framingWith(subj, si, t, yaw, present, band) { const [top, bottom] = band;
     for (let it = 0; it < 6; it++) { const bb = bboxOf(subj, si, t, .55); const cam = fitCam(bb, top, bottom, yaw);
       const add = present.filter(id => !subj.includes(id) && partlyIn(id, si, t, cam)); if (!add.length) return { cam, subj, top, bottom, yaw }; subj = subj.concat(add); }
-    const bb = bboxOf(present, si, t, 0); return { cam: fitCam(bb, 560, 1460, yaw), subj: present, top, bottom, yaw }; }
+    const bb = bboxOf(present, si, t, 0); return { cam: fitCam(bb, top, bottom, yaw), subj: present, top, bottom, yaw }; }
   const _cam = new T.PerspectiveCamera(FOV, W / H, .05, 400);
   function partlyIn(id, si, t, cam) {
     const st = charState(id, si, t), c = CH[id]; if (!st || !c) return false;
     _cam.position.copy(cam.pos); _cam.lookAt(cam.tgt); _cam.updateMatrixWorld(); _cam.updateProjectionMatrix();
-    let inside = 0, tot = 0;
-    for (const dx of [-.4, 0, .4]) for (const y of [.1, c.height * .5, c.height - .05]) { const v = new T.Vector3(st.x + dx, y, st.z).project(_cam); tot++; if (Math.abs(v.x) < 1 && Math.abs(v.y) < 1 && v.z < 1) inside++; }
-    return inside > 0;
+    let inside = 0, outside = 0;
+    for (const dx of [-.42, 0, .42]) for (const y of [c.height * .55, c.height - .1]) { const v = new T.Vector3(st.x + dx, y, st.z).project(_cam); if (v.z >= 1 || Math.abs(v.y) > 1) continue; if (Math.abs(v.x) < .97) inside++; else outside++; }
+    return inside > 0 && outside > 0;
   }
   const FR_CACHE = {};
   function framingCached(si, j) { const k = si + ':' + j; if (!FR_CACHE[k]) { const TB = TL.scenes[si].beats[j]; FR_CACHE[k] = framing(si, j, TB.start + .9); } return FR_CACHE[k]; }

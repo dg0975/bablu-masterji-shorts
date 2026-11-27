@@ -155,6 +155,10 @@ function walker(t,period,y,sc,dir,c1,c2,ph){const u=((t+ph)%period)/period, x=di
 function wash(t,cx,cy,warm){const x=cx+Math.sin(t*.17)*40, f=v=>v.toFixed(1);
  return `<radialGradient id="washG" cx="${f(x/1080)}" cy="${f(cy/1920)}" r=".75"><stop offset="0" stop-color="${warm||'#fff1cf'}" stop-opacity=".55"/><stop offset=".55" stop-color="#fff1cf" stop-opacity="0"/><stop offset="1" stop-color="#2a1a30" stop-opacity=".28"/></radialGradient>
   <rect width="1080" height="1920" fill="url(#washG)" style="mix-blend-mode:soft-light"/><rect y="1500" width="1080" height="420" fill="url(#floorFade)"/>`}
+
+// night train: light from passing station lamps sweeps across the coach
+function lampSweep(t){const u=(t%3.6)/1.1;if(u>1)return '';const x=lerp(1500,-500,u), f=v=>v.toFixed(1);
+ return `<path d="M${f(x)} 380 L${f(x+260)} 380 L${f(x+60)} 1300 L${f(x-200)} 1300 Z" fill="#fff4cc" opacity="${f(.16*Math.sin(u*Math.PI))}" style="mix-blend-mode:screen"/>`}
 const BGDEFS=`<linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4" stop-opacity="1"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></linearGradient>
  <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
  <radialGradient id="tvGlow" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#4f7bff"/><stop offset="1" stop-color="#16204a"/></radialGradient>`;
@@ -163,7 +167,7 @@ const SETX={
  classroom:(t,o)=>(o.board?'':infoPanel('chalk',300,420,480,300,t))+beams(55,440,90,-40,t)+wash(t,200,500),
  livingroom:(t,o)=>infoPanel('tv',150,400,280,190,t)+(o.night?'':beams(810,380,280,35,t))+wash(t,810,520,o.night?'#bcd0ff':null),
  kitchen:(t,o)=>infoPanel('note',830,440,170,150,t)+beams(540,0,500,8,t,null,700)+wash(t,540,300),
- train:(t,o)=>infoPanel('poster',438,360,224,270,t)+(o.night?'':beams(270,450,260,30,t,null,700)+beams(810,450,260,30,t,null,700))+wash(t,540,500,o.night?'#bcd0ff':null),
+ train:(t,o)=>infoPanel('poster',440,420,220,250,t)+(o.night?lampSweep(t):'')+(o.night?'':beams(270,450,260,30,t,null,700)+beams(810,450,260,30,t,null,700))+wash(t,540,500,o.night?'#bcd0ff':null),
  tapri:(t,o)=>walker(t,14,1010,.9,1,'#2f6bd8','#1d1614',0)+walker(t,17,1030,.8,-1,'#e8213a','#1d1614',6)+infoPanel('chalk',712,520,296,150,t)+beams(160,330,200,-25,t,null,1100)+wash(t,160,330,'#ffd9a0'),
  terrace:(t,o)=>infoPanel('poster',735,790,170,170,t)+beams(900,300,240,-30,t,null,1100)+wash(t,900,300),
  bedroom:(t,o)=>infoPanel('poster',150,410,190,200,t)+(o.night?'':beams(790,390,280,35,t))+wash(t,790,530,o.night?'#bcd0ff':null),

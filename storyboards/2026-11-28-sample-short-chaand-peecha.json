@@ -100,6 +100,23 @@
      }
     },
     {
+     "who": "chutki",
+     "say": "फ़ॉलो बैक, चाँद अंकल!",
+     "act": {
+      "chutki": "happy",
+      "raju": "laugh"
+     },
+     "hop": [
+      "chutki"
+     ],
+     "fx": {
+      "kind": "hearts",
+      "on": "chutki"
+     },
+     "sfx": "boing",
+     "style": "a little girl waving happily at the moon, sweet and excited"
+    },
+    {
      "who": "dadaji",
      "say": "पीछा? टीटी आ गया? टिकट दिखा!",
      "act": {
@@ -162,6 +179,24 @@
     }
    ],
    "beats": [
+    {
+     "who": "chutki",
+     "say": "पर चाँद थकता नहीं?",
+     "act": {
+      "chutki": "think",
+      "masterji": "happy"
+     },
+     "fx": {
+      "kind": "question",
+      "on": "chutki"
+     },
+     "sfx": "ding",
+     "style": "a little girl asking innocently, genuinely puzzled",
+     "show": {
+      "icon": "question",
+      "label": "Thakta nahi?"
+     }
+    },
     {
      "who": "masterji",
      "say": "पास के पेड़ तेज़ी से पीछे भागते दिखते हैं।",

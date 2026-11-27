@@ -149,7 +149,7 @@ hashtags. General audience (not made for kids).
 
 ## Skits (comedy + science punchline)
 
-`"kind":"skit"` storyboards make 30-35 s "Masterji ki Class" comedy shorts with drawn sets
+`"kind":"skit"` storyboards make 20-25 s "Masterji ki Class" comedy shorts with drawn sets
 (classroom, living room, kitchen), the cast Masterji, Golu, Mummy and Papa, camera close-ups,
 comic effects, sound effects and a Gemini voice with acting directions for every character
 (Masterji too). The engine polishes voices automatically (comedy pace, kid pitch, loudness match),

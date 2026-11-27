@@ -730,7 +730,7 @@ function explainSvg(E,e,t){const f=EXPLAIN[E.kind];if(!f)return '';const s=.72+.
 /* ================= timeline / state ================= */
 const SC=SB.scenes, CAST=SB.cast||{};
 const NAME={masterji:'Masterji',golu:'Golu',mummy:'Mummy',papa:'Papa',dadi:'Dadi',pinky:'Pinky',bunty:'Bunty',aunty:'Sharma Aunty',dadaji:'Dadaji',chutki:'Chutki',gupta:'Gupta Uncle',raju:'Raju Bhaiya'}, TAG={masterji:'#ffd54a',golu:'#8fd3ff',mummy:'#ff9ac2',papa:'#c6f08a',dadi:'#f3efe4',pinky:'#ffb3d1',bunty:'#d6c8ff',aunty:'#9ff0c4',dadaji:'#e6e2da',chutki:'#ffd54a',gupta:'#ffc27a',raju:'#9fe0d0'};
-document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); window.__ready=true; });
+document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; if(SB.hook_top!=null) $('#hook').style.top=(+SB.hook_top)+'px'; $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); window.__ready=true; });
 function sceneAt(t){let i=0;TL.scenes.forEach((s,k)=>{if(t>=s.start)i=k});return i}
 function beatAt(si,t){const bs=TL.scenes[si].beats;let j=0;bs.forEach((b,k)=>{if(t>=b.start)j=k});return j}
 function envAt(t){if(!TL.env)return .5;const i=Math.floor(t*TL.envFps);return TL.env[Math.min(TL.env.length-1,Math.max(0,i))]||0}

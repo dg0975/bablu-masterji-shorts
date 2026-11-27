@@ -1,0 +1,262 @@
+{
+ "kind": "skit",
+ "series": "CHUTKI KE SAWAAL · PART 2",
+ "title": "Chaand ka peecha",
+ "hook": "Chaand *peecha* kar raha hai?! 🌙",
+ "handle": "@bablu.masterji",
+ "post_title": "Chaand peecha kyun karta hai? 😂 Chutki ke Sawaal #shorts",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "cast": {
+  "chutki": {
+   "name": "Chutki",
+   "engine": "gemini",
+   "gvoice": "Achernar",
+   "style": "a cute, dramatic 6-year-old Indian girl, high-pitched and excited"
+  },
+  "raju": {
+   "name": "Raju Bhaiya",
+   "engine": "gemini",
+   "gvoice": "Puck",
+   "style": "a lazy, cool college-going cousin, laid back and casual"
+  },
+  "dadaji": {
+   "name": "Dadaji",
+   "engine": "gemini",
+   "gvoice": "Enceladus",
+   "style": "a sweet, slightly forgetful Indian grandfather in his 70s, funny and full of old stories"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
+ },
+ "scenes": [
+  {
+   "set": "train",
+   "night": true,
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "dadaji",
+     "x": 220,
+     "pose": "idle"
+    },
+    {
+     "id": "raju",
+     "x": 540,
+     "pose": "idle"
+    },
+    {
+     "id": "chutki",
+     "x": 860,
+     "pose": "hand"
+    }
+   ],
+   "beats": [
+    {
+     "who": "chutki",
+     "say": "चाँद पीछा कर रहा है!",
+     "act": {
+      "chutki": "hand",
+      "raju": "shock",
+      "dadaji": "idle"
+     },
+     "cam": {
+      "zoom": 1.0
+     },
+     "hop": [
+      "chutki"
+     ],
+     "fx": {
+      "kind": "lines"
+     },
+     "sfx": "whoosh",
+     "style": "a little girl shouting in shocked excitement, pointing up at the window",
+     "show": {
+      "icon": "moon",
+      "label": "Chaand"
+     }
+    },
+    {
+     "who": "raju",
+     "say": "ब्रो, फ़ॉलो बैक कर!",
+     "act": {
+      "raju": "sly",
+      "chutki": "think"
+     },
+     "punch": "raju",
+     "sfx": "boom",
+     "style": "a lazy cool cousin, totally casual, very sure of himself",
+     "show": {
+      "icon": "phone",
+      "label": "Follow back"
+     }
+    },
+    {
+     "who": "dadaji",
+     "say": "पीछा? टीटी आ गया? टिकट दिखा!",
+     "act": {
+      "dadaji": "shock",
+      "raju": "shock"
+     },
+     "fx": {
+      "kind": "question",
+      "on": "dadaji"
+     },
+     "sfx": "scratch",
+     "style": "a grandfather jolting awake, mishearing, flustered and loud",
+     "show": {
+      "icon": "exclaim",
+      "label": "TT?"
+     }
+    },
+    {
+     "who": "raju",
+     "say": "टिकट तो मेरी स्टोरी पे है!",
+     "act": {
+      "raju": "sly",
+      "dadaji": "angry"
+     },
+     "fx": {
+      "kind": "sweat",
+      "on": "raju"
+     },
+     "punch": "raju",
+     "sfx": "drum",
+     "style": "a cousin caught out, embarrassed and sheepish",
+     "show": {
+      "icon": "phone",
+      "label": "Story pe!"
+     }
+    },
+    {
+     "hold": 0.5,
+     "act": {
+      "dadaji": "facepalm",
+      "chutki": "laugh",
+      "raju": "sad"
+     }
+    }
+   ]
+  },
+  {
+   "set": "train",
+   "night": true,
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 300
+    },
+    {
+     "id": "chutki",
+     "x": 800,
+     "pose": "think"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "पास के पेड़ तेज़ी से पीछे भागते दिखते हैं।",
+     "act": {
+      "masterji": "point",
+      "chutki": "think"
+     },
+     "explain": {
+      "kind": "steps",
+      "title": "Chaand saath kyun chale?",
+      "steps": [
+       "plant:Ped paas: jaldi peeche",
+       "moon:Chaand bahut door",
+       "tick:Khidki mein wahin"
+      ]
+     },
+     "style": "a teacher explaining with excitement, smiling"
+    },
+    {
+     "who": "masterji",
+     "say": "चाँद लगभग चार लाख किलोमीटर दूर है, इसलिए वहीं टिका दिखता है।",
+     "act": {
+      "masterji": "talk",
+      "chutki": "happy"
+     },
+     "style": "a teacher explaining clearly, lively",
+     "show": {
+      "icon": "earth",
+      "label": "4 lakh km"
+     }
+    }
+   ]
+  },
+  {
+   "set": "train",
+   "night": true,
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "dadaji",
+     "x": 220,
+     "pose": "idle"
+    },
+    {
+     "id": "raju",
+     "x": 540,
+     "pose": "sad"
+    },
+    {
+     "id": "chutki",
+     "x": 860,
+     "pose": "happy"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "चाँद लगभग 3.84 लाख किमी दूर है, इसलिए खिड़की में वहीं टिका दिखता है।",
+    "foot": "Aapko bhi chaand peecha karta dikha? Haan ya Na? 👇"
+   },
+   "beats": [
+    {
+     "who": "raju",
+     "say": "चाँद ने भी इग्नोर कर दिया!",
+     "act": {
+      "raju": "sad",
+      "chutki": "laugh",
+      "dadaji": "laugh"
+     },
+     "sfx": "drum",
+     "style": "a cousin heartbroken and sulking, dramatic",
+     "show": {
+      "icon": "heart_broken",
+      "label": "Ignore!"
+     }
+    },
+    {
+     "who": "chutki",
+     "say": "अब तारे भी पीछा कर रहे हैं!",
+     "act": {
+      "chutki": "hand",
+      "dadaji": "facepalm",
+      "raju": "sad"
+     },
+     "turn": {
+      "raju": 180
+     },
+     "sfx": "whoosh",
+     "style": "a little girl excited all over again, pointing up at the window",
+     "show": {
+      "icon": "moon",
+      "label": "Taare bhi!"
+     }
+    }
+   ]
+  }
+ ],
+ "hook_top": 120
+}

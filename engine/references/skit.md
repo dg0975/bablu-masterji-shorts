@@ -17,15 +17,16 @@ kid pitch via rubberband, EQ/compressor, loudness match). Render takes ~3.5 min 
 
 Opening (required since 22 Nov 2026): top-level `"hook"` = 3-7 word Hinglish line with one
 `*highlighted*` word, drawn big from frame 1 until just after the first line (`"hook_until"` seconds
-to override), while the series badge waits; shot 0 has no `enter` and starts with a spoken line,
-which lands on frame 1. `"series"` = "<SERIES> · PART N" (see SKIT_RUN.md 2c). Skits 30-35 s,
-`outro` 0.7, rendered with `--min 28 --max 37`.
+to override; `"hook_top"` = its top edge in px, default 300, e.g. 120 to keep a window or sky
+visible below it), while the series badge waits; shot 0 has no `enter` and starts with a spoken line,
+which lands on frame 1. `"series"` = "<SERIES> · PART N" (see SKIT_RUN.md 2c). Skits 20-25 s (since 28 Nov 2026),
+`outro` 0.7, rendered with `--min 18 --max 27`.
 Props: scene `"props":[{"kind":"matka|bottle|glass|chai|spoon|straw|balloon|balloonsmall","x":..,"y":..,"scale":..}]` (world
 coords; floor is y 1400) and a held `"item"` per cast member or per beat (`"item":{"golu":"glass"}`).
 Joke rules: `SKIT_RUN.md` section 2a (three laughs, punch word last, callback ending,
 character-driven, specific desi detail, reaction after every punch).
 
-Shape that works: 30-35 s, 5-7 shots, one relatable desi situation (home or class), a wrong idea
+Shape that works: 20-25 s, 3-4 shots, one relatable desi situation (home or class), a wrong idea
 from Golu, Mummy/Papa reaction, Masterji explains in 2 short lines, Golu's punchline, ending card
 with the checked science fact and a comment question. Same rules as the explainers: fact-checked,
 original jokes, family-friendly, no real people or brands, varied from earlier skits.

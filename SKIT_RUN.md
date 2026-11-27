@@ -6,7 +6,7 @@ everything it needs is in this repo. **Since 21 Nov 2026 the skit is the channel
 6:30-7:00 PM IST. The 3 PM explainer (DAILY_RUN.md) is paused; DAILY_RUN.md still holds the posting,
 monetisation and report rules this file points to.
 
-Channel: @bablu.masterji. Format: 30-35 s comedy with a science punchline (owner decision 22 Nov 2026,
+Channel: @bablu.masterji. Format: **20-25 s** comedy with a science punchline (owner decision 28 Nov 2026, was 30-35 s;
 see 2c). Read
 `engine/references/skit.md` (format, sets, cast, poses, fx, sfx) and the demo
 `storyboards/2026-11-18-skit-fridge-jugaad.json` before writing.
@@ -45,7 +45,7 @@ the series), push, and send the usual report. Then delete the `ready/<today>-*` 
 - Fact-check the science fact with web search; if unsure, pick another idea.
 
 ## 2. Write the skit
-- 30-35 s, 5-7 shots: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
+- 20-25 s, 3-4 shots, about 8-10 lines: relatable desi moment, Golu's wrong idea or jugaad, Mummy/Papa reaction
   (belan, newspaper, facepalm), Masterji's 2 short lines explaining the science, Golu's punchline,
   ending card (`card`) with the checked fact and a one-word comment question.
 - **Voices: Google Gemini for everyone in a skit, Masterji included (owner feedback 20 Nov: voices must fit the
@@ -172,10 +172,23 @@ almost zero. These rules fix that; every skit must follow them:
 2. **Cold open.** Shot 0 starts mid-action with the funniest/most surprising line: no entrances
    (`enter` is refused in shot 0), no greeting, no setup line; the first spoken line is at most 6
    words and lands on frame 1. Entrances are fine from shot 1 on.
-3. **30-35 s total** (owner decision 22 Nov 2026; render with `--min 28 --max 37`). Use the extra
-   time for one more joke beat (a second escalation, a reaction from the extra cast member or a
-   twist before the punchline), never for slow setup or longer explanations; every line still sets
-   up or lands a joke. Masterji gets one or two short lines.
+3. **20-25 s total** (owner decision 28 Nov 2026, from the watch-time data: viewers left after
+   7-13 s of 30-40 s videos; render with `--min 18 --max 27`). About 8-10 short lines: opening gag,
+   one escalation, Masterji's ONE line of science (two only if both are short), the punchline. Cut
+   any line that does not set up or land a joke; no second escalation beat, no recap.
+   **The first 2-3 seconds must grab (owner request 28 Nov 2026):**
+   - Frame 1 is already the funniest picture of the video: the absurd situation is visible at once
+     (the jugaad in action, the moon in the window, the shrunken balloon), with motion from the
+     first frame (`"fx":{"kind":"lines"}`, a `hop` or `shake`, a prop or sticker popping) and an
+     `sfx` on beat 0 (`boing`, `crash`, `whoosh`, `scratch`).
+   - Use an explicit `cam` on beat 0 that frames the speaker AND the funny thing together; check
+     that the hook text does not cover it (the hook sits about y 300-560 on screen).
+   - Hook text 3-5 words (one `*highlighted*` word), a question or a shock: "Chaand *peecha* kar
+     raha hai?!", not a full sentence.
+   - The first spoken line is 2-5 words, shouted or gasped, and lands on frame 1; a reaction (a
+     second character's `shock`, `punch` or `hop`) follows by about second 2.
+   - Check frames at 0.0, 0.5, 1.0, 2.0 and 3.0 s before the full render: each must show
+     something happening, never a still wide shot or characters just standing.
 4. **Loop ending.** The last line should flow back into the first frame (e.g. ends on a question
    the opening line answers, or Golu starting the same jugaad again), and `outro` stays 0.7 so the
    loop comes quickly. Keep the end card short (`text` up to about 18 words).
@@ -244,10 +257,10 @@ almost zero. These rules fix that; every skit must follow them:
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`
-3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 28 --max 37`
+3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 18 --max 27`
    View the preview sheet: faces not cut off, effects above heads, subtitles readable, no
-   `PAGE ERROR`, and every gesture fits its line (2c rule 12). If the total is over 36 s, cut a line; under 29 s, add one joke beat (push + get_voice again);
-   aim for 30-35 s.
+   `PAGE ERROR`, and every gesture fits its line (2c rule 12). If the total is over 26 s, cut a line; under 19 s, add one joke beat (push + get_voice again);
+   aim for 20-25 s.
 4. Full render the same way without `--check` (detached, as SKILL.md says).
 
 ## 4. Post and report

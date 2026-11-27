@@ -225,12 +225,28 @@ almost zero. These rules fix that; every skit must follow them:
    matka money moon onion phone plant question rain report rice salt snow sun thermo tick tile
    tile_up trowel wind (the render check rejects unknown names).
 
+12. **Gestures must match the line (owner feedback 27 Nov 2026: "character gesture not matching").**
+   Before rendering, read every beat and check each character's pose fits what is said:
+   - `point` only aims sideways (screen-right; `flip` aims left), so use it to point at another
+     character or a prop at body height. To point at something up high (window, moon, sky,
+     shelf, board), use `hand` (arm raised) and put the speaker under that thing, with an explicit
+     `cam` that keeps both in frame.
+   - Emotion poses fit the line: boasting or nostalgia = `happy`, sheepish or caught out = `sly`
+     + `sweat`, panic = `shock`, an innocent question = `think`, roasted = `facepalm`. Never use
+     `talk` for pride (it looks like a raised fist) or `shock` for embarrassment.
+   - No back view or spin while someone is speaking their own line: `spin` and `"turn":180` go on
+     a listener or a `hold` beat, never on the speaker.
+   - The listeners' reactions fit too (laugh at a roast, facepalm at a bad idea).
+   Check it on frames taken mid-line, not only on the preview sheet: render each beat at about 60%
+   of its spoken line (`renderAt(t)` in `work/_page.html`, or `ffmpeg -nostdin -ss <t>` on the
+   MP4; without `-nostdin`, ffmpeg in a `while read` loop eats the list and grabs the wrong frames).
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`
 3. `python3 <engine>/scripts/make_short.py storyboards/<file>.json --out work --check --tts sarvam --voice-dir work/voice --min 28 --max 37`
    View the preview sheet: faces not cut off, effects above heads, subtitles readable, no
-   `PAGE ERROR`. If the total is over 36 s, cut a line; under 29 s, add one joke beat (push + get_voice again);
+   `PAGE ERROR`, and every gesture fits its line (2c rule 12). If the total is over 36 s, cut a line; under 29 s, add one joke beat (push + get_voice again);
    aim for 30-35 s.
 4. Full render the same way without `--check` (detached, as SKILL.md says).
 

@@ -689,6 +689,9 @@ def write_page(sb, tl, out):
                     pup[cid] = {"meta": meta, "img": img}
         data += "\nconst PUPPETS=" + json.dumps(pup) + ";"
     libs = ""
+    if sb.get("kind") == "skit" and sb.get("look") == "3d":   # real 3D cast and sets (assets/skit3d.js)
+        for js in (ASSETS / "vendor" / "three.min.js", ASSETS / "skit3d.js"):
+            libs += f'<script src="file://{js.resolve()}"></script>\n'
     if sb.get("kind") != "skit" and any((sc.get("visual") or {}).get("type") == "3d" for sc in sb["scenes"]):
         for js in (ASSETS / "vendor" / "three.min.js", ASSETS / "g3d.js"):
             libs += f'<script src="file://{js.resolve()}"></script>\n'

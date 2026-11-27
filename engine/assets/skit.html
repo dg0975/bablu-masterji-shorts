@@ -25,7 +25,7 @@ html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden;fo
 #ex{position:absolute;left:98px;top:236px;width:900px;height:440px;overflow:visible;z-index:5;pointer-events:none}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:8;pointer-events:none}
 </style></head>
-<body><div id="frame"><div id="world"><svg id="w" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
+<body><div id="frame"><canvas id="c3d" width="1080" height="1920" style="position:absolute;left:0;top:0;width:1080px;height:1920px"></canvas><div id="world"><svg id="w" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
 <svg id="ex" width="900" height="440" viewBox="0 0 900 440"></svg><svg id="stk" width="1080" height="1920" viewBox="0 0 1080 1920"></svg><div id="hook"></div><div id="title"><div class="series"></div><div class="ep"></div></div><div id="handle"></div>
 <div id="sub"><div class="who"></div><div class="line"></div></div>
 <div id="card"><div class="k"></div><div class="t"></div><div class="f"></div></div><div id="light"></div><div id="flash"></div></div>
@@ -730,7 +730,7 @@ function explainSvg(E,e,t){const f=EXPLAIN[E.kind];if(!f)return '';const s=.72+.
 /* ================= timeline / state ================= */
 const SC=SB.scenes, CAST=SB.cast||{};
 const NAME={masterji:'Masterji',golu:'Golu',mummy:'Mummy',papa:'Papa',dadi:'Dadi',pinky:'Pinky',bunty:'Bunty',aunty:'Sharma Aunty',dadaji:'Dadaji',chutki:'Chutki',gupta:'Gupta Uncle',raju:'Raju Bhaiya'}, TAG={masterji:'#ffd54a',golu:'#8fd3ff',mummy:'#ff9ac2',papa:'#c6f08a',dadi:'#f3efe4',pinky:'#ffb3d1',bunty:'#d6c8ff',aunty:'#9ff0c4',dadaji:'#e6e2da',chutki:'#ffd54a',gupta:'#ffc27a',raju:'#9fe0d0'};
-document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; if(SB.hook_top!=null) $('#hook').style.top=(+SB.hook_top)+'px'; $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); window.__ready=true; });
+document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; if(SB.hook_top!=null) $('#hook').style.top=(+SB.hook_top)+'px'; if(SB.look==='3d'&&window.S3D) S3D.init(); $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); window.__ready=true; });
 function sceneAt(t){let i=0;TL.scenes.forEach((s,k)=>{if(t>=s.start)i=k});return i}
 function beatAt(si,t){const bs=TL.scenes[si].beats;let j=0;bs.forEach((b,k)=>{if(t>=b.start)j=k});return j}
 function envAt(t){if(!TL.env)return .5;const i=Math.floor(t*TL.envFps);return TL.env[Math.min(TL.env.length-1,Math.max(0,i))]||0}
@@ -738,12 +738,14 @@ function envAt(t){if(!TL.env)return .5;const i=Math.floor(t*TL.envFps);return TL
 function poseOf(si,j,id){const s=SC[si];let p=(s.cast.find(c=>c.id===id)||{}).pose||'idle';for(let k=0;k<=j;k++){const a=(s.beats[k].act||{})[id];if(a)p=a}return p}
 const FLOOR=1400;
 function charScale(s,c){return (c.scale||1)*(s.scale||1)*(c.id==='masterji'?1.72:1.85*(SPEC[c.id]?SPEC[c.id].scale:1))}
-function charPos(s,id){const c=s.cast.find(c=>c.id===id);return c?[c.x,c.y||FLOOR]:[540,FLOOR]}
-function headY(s,id){const c=s.cast.find(c=>c.id===id);if(!c)return 700;if(typeof PUPPETS!=='undefined'&&PUPPETS[id])return (c.y||FLOOR)-((PUP_H[id]||440)+30)*charScale(s,c);return (c.y||FLOOR)-430*charScale(s,c)*.92}
+function charPos(s,id){if(D3ON()){const p=S3D.screen(id);if(p)return [p.x,p.foot]}const c=s.cast.find(c=>c.id===id);return c?[c.x,c.y||FLOOR]:[540,FLOOR]}
+function headY(s,id){if(D3ON()){const p=S3D.screen(id);if(p)return p.top}const c=s.cast.find(c=>c.id===id);if(!c)return 700;if(typeof PUPPETS!=='undefined'&&PUPPETS[id])return (c.y||FLOOR)-((PUP_H[id]||440)+30)*charScale(s,c);return (c.y||FLOOR)-430*charScale(s,c)*.92}
 const eBack=x=>{x=clamp(x);const c1=1.25,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)};
 const eBounce=x=>{const n=7.5625,d=2.75;if(x<1/d)return n*x*x;if(x<2/d)return n*(x-=1.5/d)*x+.75;if(x<2.5/d)return n*(x-=2.25/d)*x+.9375;return n*(x-=2.625/d)*x+.984375};
 function dust(x,y,q){let o='';for(let k=0;k<7;k++){const a=k/6*Math.PI, r=30+q*120;o+=`<circle cx="${(x+Math.cos(a)*r*1.6).toFixed(1)}" cy="${(y-14-Math.sin(a)*r*.5).toFixed(1)}" r="${(22+q*34).toFixed(1)}" fill="#e9dfcf" stroke="#b9a98f" stroke-width="3" opacity="${(.9*(1-q)).toFixed(2)}"/>`}return o}
+const D3ON=()=>SB.look==='3d'&&!!window.S3D;
 function renderAt(t){
+ const D3=D3ON(); if(D3) S3D.render(t);
  const si=sceneAt(t), s=SC[si], T=TL.scenes[si], j=beatAt(si,t), B=s.beats[j], TB=T.beats[j], lt=t-T.start, bt=t-TB.start;
  let EX=null, exT0=0; for(let k=0;k<=j;k++){const bb=s.beats[k]; if(bb.explain!==undefined){EX=bb.explain||null; exT0=T.beats[k].start}}   // a board stays up until a beat sets "explain": false
  { const hk=$('#hook'), hu=Number(SB.hook_until)||Math.min(3.2,Math.max(2.2,(TL.scenes[0].beats[0].audioEnd||2)+.4));
@@ -752,12 +754,12 @@ function renderAt(t){
      hk.style.opacity=o.toFixed(3); hk.style.transform=`scale(${sc.toFixed(3)}) rotate(${(-1.5+Math.sin(t*3)*.6).toFixed(2)}deg)`; }
    $('#title').style.opacity=(SB.hook&&t<hu)||EX?0:1; }
  $('#ex').innerHTML=EX&&EX.kind?explainSvg(EX,t-exT0,t):'';
- const set=(SETS[s.set]||SETS.classroom)(t,s);
+ const set=D3?'':(SETS[s.set]||SETS.classroom)(t,s);
  let chars='', defs=GDEFS, fxs0='', STK=[];
  const spk=B.who&&t<TB.audioEnd?B.who:null, spkX=spk?charPos(s,spk)[0]:null;
  const env3=k=>{let a=0;for(let q=-6;q<=6;q++)a+=envAt(t+q/30);return a/13};
  const HANDS={}; for(const sh of [].concat(B.show||[])){const o=typeof sh==='string'?{icon:sh}:sh, who=o.on||B.who; if(o.icon&&who&&iconWhere(o,who)==='hand'&&bt>=(+o.at||0)) HANDS[who]='icon:'+o.icon}
- for(const c of s.cast){
+ for(const c of (D3?[]:s.cast)){
   const id=c.id, Pb=poseOf(si,j,id), Pa=j>0?poseOf(si,j-1,id):Pb, p=Pa===Pb?1:eBack(bt/.32);
   const talk=(B.who===id&&t<TB.audioEnd)?1:0, lv=talk?envAt(t):0, lvs=talk?env3():0;
   let x=c.x, y=c.y||FLOOR, sc=charScale(s,c), flip=c.flip?-1:1;
@@ -808,7 +810,7 @@ function renderAt(t){
    if(wh==='floor'){let fx2=o.x;if(fx2===undefined){const others=s.cast.filter(c=>c.id!==who);fx2=others.length?(cx+others.reduce((a,c)=>Math.abs(c.x-cx)<Math.abs(a.x-cx)?c:a).x)/2:cx+side*260}
      objs+=worldObj(o.icon,fx2,FLOOR-50,o.size||175,q,t,'floor')}
    else objs+=worldObj(o.icon,o.x!==undefined?o.x:cx+side*165,o.y!==undefined?o.y:(who?headY(s,who)+(s.card?240:-30):700),o.size||125,q,t,'float')}
- $('#w').innerHTML=`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
+ $('#w').innerHTML=D3?`<defs>${defs}</defs>`+back+objs+fxs0+fxs:`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
  const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;
@@ -828,18 +830,18 @@ function renderAt(t){
   if(BB.punch&&s.cast.find(c=>c.id===BB.punch)){const q=eOut(clamp((btj-(+BB.punch_at||0))/.16)), zt=2.1, px=charPos(s,BB.punch)[0], py=headY(s,BB.punch)+120;
    ox=lerp(ox,540-px*zt,q); oy=lerp(oy,(s.card?1330:820)-py*zt,q); z=lerp(z,zt,q)}
   ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy)); return {z,ox,oy}};
- let CM=camFor(j,bt);
- if(j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut&&!B.punch){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
+ let CM=D3?{z:1,ox:0,oy:0}:camFor(j,bt);
+ if(!D3&&j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut&&!B.punch){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
  let z=CM.z, ox=CM.ox, oy=CM.oy;
- if(z>1.01){ox+=Math.sin(t*.9)*5+Math.sin(t*2.3)*2;oy+=Math.cos(t*.7)*4; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));}
- if(B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}
- if(B.shake&&bt<.45){const k=(.45-bt)/.45*18;ox+=Math.sin(t*90)*k;oy+=Math.cos(t*77)*k}
+ if(!D3&&z>1.01){ox+=Math.sin(t*.9)*5+Math.sin(t*2.3)*2;oy+=Math.cos(t*.7)*4; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));}
+ if(!D3&&B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}
+ if(!D3&&B.shake&&bt<.45){const k=(.45-bt)/.45*18;ox+=Math.sin(t*90)*k;oy+=Math.cos(t*77)*k}
  { let h='';                                            // stickers in screen space: always fully on screen, above the card
    for(const k of STK){let X=k.wx*z+ox+k.side*40*(z-1), Y=k.wy*z+oy; X=Math.max(135,Math.min(945,X));
     Y=s.card?Math.max(1200,Math.min(1250,Y)):Math.max(SB.hook&&t<3.4?640:340,Math.min(1240,Y)); h+=stickerSvg(k.o.icon,X,Y,k.q,t,k.o.label)}
    $('#stk').innerHTML=h }
  $('#world').style.transform=`translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px) scale(${z.toFixed(4)})`;
- $('#flash').style.opacity=(lt<.12&&si>0&&s.flash!==false)?((.12-lt)/.12*.5).toFixed(2):0;
+ $('#flash').style.opacity=(lt<.12&&si>0&&s.flash!==false&&!(D3&&SC[si-1].set===s.set&&!!SC[si-1].night===!!s.night))?((.12-lt)/.12*.5).toFixed(2):0;
  // subtitles
  const showSub=B.who&&(B.caption||B.say);
  $('#sub').style.opacity=showSub?1:0;

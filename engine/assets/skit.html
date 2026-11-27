@@ -251,8 +251,13 @@ function charDefs(id){const S=SPEC[id]; if(!S) return '';
 const EYE={n:{top:1,bot:.06},wide:{top:1.15,bot:0,size:1.12,pupil:.75},angry:{top:.62,bot:.16,tilt:13},sad:{top:.72,bot:.05,tilt:-13},
  up:{top:1,bot:.05,gy:-5},sly:{top:.42,bot:.2},happy:{happy:true},shut:{shut:true}};
 let EYEN=0;
+const EYEN_NUM={happy:{top:.32,bot:.55},shut:{top:0,bot:.3}};
+function eyeP(k){return Object.assign({top:1,bot:.06,size:1,tilt:0,gy:0,pupil:1},EYEN_NUM[k]||EYE[k]||EYE.n)}
+// eye shape between two expressions: lids, size and tilt blend; the closed "happy" arc only at the ends
+function eyeMix(a,b,q){if(a===b||q>=1)return b;if(q<=0)return a;if(b==='happy'&&q>.78)return 'happy';if(a==='happy'&&q<.22)return 'happy';
+ const A=eyeP(a),B=eyeP(b),o={};for(const k of ['top','bot','size','tilt','gy','pupil'])o[k]=A[k]+(B[k]-A[k])*q;return o}
 function eye2(cx,cy,side,kind,blink,gx,gy,S){
- const E=Object.assign({top:1,bot:.06,size:1,tilt:0,gy:0,pupil:1},EYE[kind]||EYE.n), f=v=>v.toFixed(1);
+ const E=Object.assign({top:1,bot:.06,size:1,tilt:0,gy:0,pupil:1},typeof kind==='object'?kind:(EYE[kind]||EYE.n)), f=v=>v.toFixed(1);
  const rx=15.5*E.size, ry=15*E.size, rot=`rotate(${f(-side*E.tilt)} ${cx} ${cy})`;
  const lash=S.fem?`<path d="M${f(cx+side*rx)} ${f(cy-1)} q${f(side*5)} -1 ${f(side*7)} -6" stroke="${OL}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`:'';
  const tp=E.top*(1-blink);
@@ -268,8 +273,10 @@ function eye2(cx,cy,side,kind,blink,gx,gy,S){
   <path d="M${f(cx-rx-1)} ${f(cy+.5)} Q${cx} ${f(yT-1)} ${f(cx+rx+1)} ${f(cy+.5)}" stroke="${OL}" stroke-width="5.2" fill="none" stroke-linecap="round"/>
   <path d="M${f(cx-rx+3)} ${f(cy+2)} Q${cx} ${f(yB)} ${f(cx+rx-3)} ${f(cy+2)}" stroke="${OL}" stroke-width="1.6" fill="none" opacity=".45"/>${lash}</g>`}
 const BROW={n:[0,0,7],up:[-11,-7,9],angry:[9,-6,2],sad:[-11,5,3],think:[2,2,6],sly:[4,2,5]};
+function browK(kind,side){let k=BROW[kind]||BROW.n; if(kind==='think'&&side>0)k=[-11,-9,9]; if(kind==='sly'&&side>0)k=[-9,-7,8]; return k}
+function browMix(a,b,q,side){const A=browK(a,side),B=browK(b,side);return A.map((v,i)=>v+(B[i]-v)*q)}
 function brows2(kind,raise,col,only){const f=v=>v.toFixed(1);let s='';
- for(const side of (only?[only]:[-1,1])){let k=BROW[kind]||BROW.n; if(kind==='think'&&side>0)k=[-11,-9,9]; if(kind==='sly'&&side>0)k=[-9,-7,8];
+ for(const side of (only?[only]:[-1,1])){let k=Array.isArray(kind)?kind:browK(kind,side);
   const xi=160+side*11, xo=160+side*45, yi=114+k[0]-raise, yo=116+k[1]-raise, xm=(xi+xo)/2, ym=Math.min(yi,yo)-k[2];
   s+=`<path d="M${f(xi)} ${f(yi+4)} Q${f(xm)} ${f(ym+3)} ${f(xo)} ${f(yo+1)} Q${f(xm)} ${f(ym-3)} ${f(xi)} ${f(yi-4.5)} Z" fill="${col}" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>`}
  return s}
@@ -284,18 +291,25 @@ function mouth2(kind,S){const lp=S.lips||shade(S.skin,-.35), L=`stroke="${OL}" s
   smirk:`<path d="M146 192 Q166 198 180 182" ${L} stroke-width="4" fill="none"/>`,
   flat:`<path d="M146 191 h28" ${L} stroke-width="4"/>`};
  return M[kind]||M.smile}
-function arm(pts,skin,sleeve,sleeveLen){const [s,e,h]=pts,f=n=>n.toFixed(1),sl=[lerp(s[0],e[0],sleeveLen),lerp(s[1],e[1],sleeveLen)];
- const d=`M${f(s[0])} ${f(s[1])} L${f(e[0])} ${f(e[1])} L${f(h[0])} ${f(h[1])}`;
+function arm(pts,skin,sleeve,sleeveLen){const [s,e,h]=pts,f=n=>n.toFixed(1);
+ // a soft curve through the elbow (no stiff stick joints); the control point makes the curve pass through e
+ const c=[2*e[0]-(s[0]+h[0])/2, 2*e[1]-(s[1]+h[1])/2], bend=Math.hypot(c[0]-(s[0]+h[0])/2,c[1]-(s[1]+h[1])/2);
+ const cc=bend>60?[ (c[0]+e[0])/2, (c[1]+e[1])/2 ]:c;            // very sharp bends stay a little rounder
+ const d=`M${f(s[0])} ${f(s[1])} Q${f(cc[0])} ${f(cc[1])} ${f(h[0])} ${f(h[1])}`;
+ const qp=u=>[(1-u)*(1-u)*s[0]+2*(1-u)*u*cc[0]+u*u*h[0], (1-u)*(1-u)*s[1]+2*(1-u)*u*cc[1]+u*u*h[1]];
  let o=`<path d="${d}" stroke="${OL}" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${skin}" stroke-width="17.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
- if(sleeve){const ds=sleeveLen>.99?d:`M${f(s[0])} ${f(s[1])} L${f(sl[0])} ${f(sl[1])}`;o+=`<path d="${ds}" stroke="${OL}" stroke-width="33" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${ds}" stroke="${sleeve}" stroke-width="28" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${ds}" stroke="${shade(sleeve,-.22)}" stroke-width="9" fill="none" stroke-linecap="round" transform="translate(4 3)" opacity=".6"/>`}
+ if(sleeve){const u=Math.min(.98,sleeveLen*.5), q1=[s[0]+(cc[0]-s[0])*u, s[1]+(cc[1]-s[1])*u], q2=qp(u);
+  const ds=`M${f(s[0])} ${f(s[1])} Q${f(q1[0])} ${f(q1[1])} ${f(q2[0])} ${f(q2[1])}`;
+  o+=`<path d="${ds}" stroke="${OL}" stroke-width="33" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${ds}" stroke="${sleeve}" stroke-width="28" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
  return o+`<circle cx="${f(h[0])}" cy="${f(h[1])}" r="12.5" fill="${skin}" stroke="${OL}" stroke-width="3"/><path d="M${f(h[0]-6)} ${f(h[1]+4)} q6 5 12 0" stroke="${shade(skin,-.3)}" stroke-width="2" fill="none"/>`}
 function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
- const S=SPEC[id], A=POSES[Pa]||POSES.idle, B=POSES[Pb]||POSES.idle, P=p>.5?B:A, sk=`url(#sk_${id})`, skD=shade(S.skin,-.3), skL=shade(S.skin,-.48);
- const L=A.l.map((q,k)=>[lerp(q[0],B.l[k][0],p),lerp(q[1],B.l[k][1],p)]), R=A.r.map((q,k)=>[lerp(q[0],B.r[k][0],p),lerp(q[1],B.r[k][1],p)]);
+ const S=SPEC[id], A=POSES[Pa]||POSES.idle, B=POSES[Pb]||POSES.idle, pr=p, pe=sstep(p); p=pe; const P=pe>.5?B:A, sk=`url(#sk_${id})`, skD=shade(S.skin,-.3), skL=shade(S.skin,-.48);
+ const L=armBlend(A.l,B.l,pr,-1), R=armBlend(A.r,B.r,pr,1);
  const dance=Pb==='dance'&&p>.5, wig=Math.sin(t*9), lvs=act.lvs||0;
  if(dance){L[2]=[L[2][0]+wig*14,L[2][1]-Math.abs(wig)*10];R[2]=[R[2][0]-wig*12,R[2][1]+wig*16];R[1]=[R[1][0],R[1][1]+wig*8]}
- if(talk&&Pb!=='shock'){const a=.6+lvs,g=Math.sin(t*4.3),h=Math.sin(t*3.1+1);R[2]=[R[2][0]+g*9*a,R[2][1]+h*8*a];R[1]=[R[1][0]+g*4*a,R[1][1]+h*4*a];L[2]=[L[2][0]+h*6*a,L[2][1]+g*6*a]}
- if(Pb==='angry'&&p>.5){R[2]=[R[2][0]+Math.sin(t*14)*6,R[2][1]+Math.sin(t*14)*5]}
+ if(talk&&Pb!=='shock'){const a=(.45+lvs)*clamp(pr*1.6),g=Math.sin(t*2.3+id.length),h=Math.sin(t*1.8+1+id.length);R[2]=[R[2][0]+g*10*a,R[2][1]+h*9*a];R[1]=[R[1][0]+g*4*a,R[1][1]+h*4*a];L[2]=[L[2][0]+h*6*a,L[2][1]+g*6*a];L[1]=[L[1][0]+h*2.5*a,L[1][1]+g*2.5*a]}
+ else{const a=clamp(pr*1.4),g=Math.sin(t*.9+id.length*1.7),h=Math.sin(t*1.15+id.length);R[2]=[R[2][0]+g*2.2*a,R[2][1]+h*2.4*a];L[2]=[L[2][0]-h*2.2*a,L[2][1]+g*2.4*a]}
+ if(Pb==='angry'&&p>.5){R[2]=[R[2][0]+Math.sin(t*7)*5,R[2][1]+Math.sin(t*7)*4]}
  // natural blinks (lid closes over ~0.16 s), at uneven intervals per character
  const bp=((t*1.0+id.length*.83)%(3.1+id.length*.21)), blink=bp<.16?1-Math.abs(bp/.08-1):0;
  const gx=act.gx||0, gy=act.gy||0;
@@ -314,6 +328,7 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
    else if(S.frock) b+=leg(134,kneeL,S.skin)+leg(186,kneeR,S.skin)+`<rect x="${118+kneeL*.6}" y="394" width="32" height="18" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/><rect x="${170+kneeR*.6}" y="394" width="32" height="18" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/>`;
    else b+=leg(134,kneeL,S.pants)+leg(186,kneeR,S.pants);
    b+=`<path d="M${96+kneeL*.2} 426 Q${100+kneeL*.2} 410 ${126+kneeL*.2} 410 Q${152+kneeL*.2} 410 ${156+kneeL*.2} 426 Z" fill="#2a2420" stroke="${OL}" stroke-width="3"/><path d="M${164+kneeR*.2} 426 Q${168+kneeR*.2} 410 ${194+kneeR*.2} 410 Q${220+kneeR*.2} 410 ${224+kneeR*.2} 426 Z" fill="#2a2420" stroke="${OL}" stroke-width="3"/><path d="M${108+kneeL*.2} 416 q14 -4 26 0 M${176+kneeR*.2} 416 q14 -4 26 0" stroke="#fff" stroke-opacity=".25" stroke-width="3" fill="none"/>`}
+ const legsSvg=b; b='';                       // legs stay planted; the upper body bends at the hips
  // torso (shaded cloth, collar, shadow under the chin)
  const cl=`url(#cl_${id})`;
  const shirtD=`M106 206 Q160 194 214 206 Q${S.belly?250:230} 280 ${S.belly?226:220} 332 L${S.belly?94:100} 332 Q${S.belly?70:90} 280 106 206 Z`, frockD='M110 206 Q160 196 210 206 Q218 252 212 286 L246 372 Q160 388 74 372 L108 286 Q102 252 110 206 Z';
@@ -368,8 +383,8 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  // cheeks, brows, eyes, nose
  F.blushL=`<ellipse cx="116" cy="174" rx="17" ry="10" fill="url(#blushG)" opacity="${S.fem||S.kid?.85:.45}"/>`; F.blushR=`<ellipse cx="204" cy="174" rx="17" ry="10" fill="url(#blushG)" opacity="${S.fem||S.kid?.85:.45}"/>`;
  const raise=talk?clamp((lvs-.35)*2.4)*5:0;
- const bk=Pb==='talk'&&!talk?'n':P.b, bcol=S.brow||'#24170f'; F.browL=brows2(bk,raise,bcol,-1); F.browR=brows2(bk,raise,bcol,1);
- F.eyeL=eye2(134,144,-1,P.e,blink,gx,gy,S); F.eyeR=eye2(186,144,1,P.e,blink,gx,gy,S);
+ const brA=Pa==='talk'&&!talk?'n':A.b, brB=Pb==='talk'&&!talk?'n':B.b, bcol=S.brow||'#24170f'; F.browL=brows2(browMix(brA,brB,pe,-1),raise,bcol,-1); F.browR=brows2(browMix(brA,brB,pe,1),raise,bcol,1);
+ const eK=eyeMix(A.e,B.e,pe); F.eyeL=eye2(134,144,-1,eK,blink,gx,gy,S); F.eyeR=eye2(186,144,1,eK,blink,gx,gy,S);
  if(S.specsUp&&!(Pb==='shock'&&p>.5)) F.specs+=`<g transform="translate(0 -54)"><rect x="114" y="128" width="40" height="27" rx="9" fill="#cfeaff" fill-opacity=".3" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="128" width="40" height="27" rx="9" fill="#cfeaff" fill-opacity=".3" stroke="${OL}" stroke-width="4.5"/><path d="M154 138 h12" stroke="${OL}" stroke-width="4"/></g>`;
  if(S.specsUp&&Pb==='shock'&&p>.5) F.specs+=`<rect x="114" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><path d="M154 140 h12" stroke="${OL}" stroke-width="4"/>`;
  if(S.specs) F.specs+=`<circle cx="134" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><circle cx="186" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><path d="M120 132 l10 -6 M172 132 l10 -6" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/><path d="M158 142 h4 M110 140 L96 136 M210 140 L224 136" stroke="${OL}" stroke-width="4"/>`;
@@ -380,7 +395,7 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(S.freckles) F.center+=`<g fill="${shade(S.skin,-.3)}" opacity=".7"><circle cx="112" cy="166" r="2.6"/><circle cx="121" cy="172" r="2.6"/><circle cx="104" cy="172" r="2.2"/><circle cx="199" cy="166" r="2.6"/><circle cx="208" cy="172" r="2.6"/><circle cx="216" cy="166" r="2.2"/></g>`;
  if(S.mooch) F.mouth+=`<path d="M160 174 C140 172 120 174 112 186 C130 184 146 184 160 182 C174 184 190 184 208 186 C200 174 180 172 160 174 Z" fill="${S.moochC||'#3a2c26'}" stroke="${OL}" stroke-width="3"/>`+(S.curlyMooch?`<path d="M112 186 q-16 -2 -12 -18 q4 -6 11 -2 M208 186 q16 -2 12 -18 q-4 -6 -11 -2" stroke="${OL}" stroke-width="3" fill="${S.moochC||'#3a2c26'}"/>`:'');
  const vm=talk?act.vm:null;
- F.mouth+= vm ? lipMouth(vm,160,S.mooch?190:188,1,S.lips||shade(S.skin,-.35),OL) : (talk?lipMouth({w:30,h:8+lv*20,r:0,teeth:.5},160,188,1,S.lips||skD,OL):mouth2(P.m,S));
+ F.mouth+= vm ? lipMouth(vm,160,S.mooch?190:188,1,S.lips||shade(S.skin,-.35),OL) : (talk?lipMouth({w:30,h:8+lv*20,r:0,teeth:.5},160,188,1,S.lips||skD,OL):(A.m!==B.m&&pe<1?`<g opacity="${(1-pe).toFixed(2)}">${mouth2(A.m,S)}</g><g opacity="${pe.toFixed(2)}">${mouth2(B.m,S)}</g>`:mouth2(B.m,S)));
  // ---- turning: every front feature rides round the head (th degrees, + = turning toward screen-right)
  const P3=(x0,r)=>{const a0=Math.asin(Math.max(-.999,Math.min(.999,(x0-160)/r))), a=a0+TH*.8;return {x:160+r*.9*Math.sin(a),k:Math.max(.5,Math.cos(a))/Math.max(.25,Math.cos(a0))*Math.min(1,Math.cos(a)/.2),v:Math.cos(a)}};
  const place=(svg,x0,r,y0)=>{if(!svg)return '';const q=P3(x0,r||hw);if(q.v<=.03)return '';const o=Math.min(1,q.v/.22);
@@ -422,11 +437,14 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  let backCover='';
  if(back>0&&!S.saree){const d=S.kurta?`M108 206 Q160 194 212 206 Q${S.belly?248:234} 300 228 390 L92 390 Q${S.belly?72:86} 300 108 206 Z`:S.frock?frockD:shirtD;
    backCover=`<path d="${d}" fill="url(#cl_${id})" stroke="${OL}" stroke-width="4.5" opacity="${fr(back)}"/>`+(S.shawl?`<path d="M98 208 Q160 230 222 208 L234 270 Q160 290 86 270 Z" fill="${S.shawl}" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')+(S.hoodie?`<path d="M112 206 Q160 196 208 206 Q204 262 160 270 Q116 262 112 206 Z" fill="${shade(S.shirt,-.14)}" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')+(S.bag?`<rect x="118" y="214" width="84" height="104" rx="18" fill="#ff8a3d" stroke="${OL}" stroke-width="4" opacity="${fr(back)}"/>`:'')}
- // head motion: breathing, nods on loud words, tilt while talking
- const br=Math.sin(t*2.4+id.length), nod=talk?(lvs-.3)*7+Math.sin(t*6.1)*1.5*lvs:0;
- const bob=dance?Math.abs(Math.sin(t*9))*-16:br*2.5, tilt=(talk?Math.sin(t*3.7)*2.6:Math.sin(t*1.6)*1.4)+(dance?wig*6:0)+(Pb==='think'?6:0)+(gx*.35);
- const lean=dance?wig*4:(talk?Math.sin(t*1.9)*1.2:0), hop=act&&act.hop?act.hop:0;
- return `<ellipse cx="160" cy="430" rx="${(110-hop*30).toFixed(1)}" ry="20" fill="url(#floorSh)"/><g transform="translate(0 ${(bob-hop*60).toFixed(1)}) rotate(${lean.toFixed(1)} 160 425)">${farArm}<g transform="translate(160 0) scale(${fr(.62+.38*Math.abs(cT))} 1) translate(-160 0)">${b}${backCover}</g>${props}<g transform="translate(160 330) scale(${(1+br*.008).toFixed(4)} ${(1+br*.014).toFixed(4)}) translate(-160 -330)">${armsSvg}${bangles}</g><g transform="translate(0 ${nod.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 205)">${h}</g></g>`;
+ // body language: each pose leans/lifts the body a little, eased in with the pose; idle weight shift; head lags the body
+ const BODYP={shock:[-9,-3.5,-5],happy:[-6,0,4],laugh:[0,-2.5,-6],sad:[7,2.2,7],angry:[0,3,4],think:[0,1.5,7],facepalm:[4,2.5,5],sly:[0,-1.5,-5],hand:[-5,-1,-3],point:[0,1,0]};
+ const bA0=BODYP[Pa]||[0,0,0], bB0=BODYP[Pb]||[0,0,0], hq=sstep((pr-.08)/.92), bodyY=lerp(bA0[0],bB0[0],pe), bodyLean=lerp(bA0[1],bB0[1],pe), headTilt=lerp(bA0[2],bB0[2],hq);
+ const dip=Pa!==Pb?Math.sin(clamp(pr)*Math.PI)*4:0, sway=Math.sin(t*.85+id.length*1.3);
+ const br=Math.sin(t*2.2+id.length), nod=talk?(lvs-.3)*6+Math.sin(t*3.6)*1.4*lvs:0;
+ const bob=(dance?Math.abs(Math.sin(t*9))*-16:br*2.4)+bodyY+dip+(Pb==='laugh'&&p>.3?Math.abs(Math.sin(t*11))*-3:0), tilt=(talk?Math.sin(t*2.3)*2.4:Math.sin(t*1.1)*1.3)+(dance?wig*6:0)+headTilt+(gx*.35);
+ const lean=dance?wig*4:(talk?Math.sin(t*1.3)*1.1:0)+bodyLean+sway*.9, hop=act&&act.hop?act.hop:0;
+ return `<ellipse cx="160" cy="430" rx="${(110-hop*30).toFixed(1)}" ry="20" fill="url(#floorSh)"/><g transform="translate(0 ${(-hop*60).toFixed(1)})"><g transform="translate(160 0) scale(${fr(.62+.38*Math.abs(cT))} 1) translate(-160 0)">${legsSvg}</g><g transform="translate(0 ${bob.toFixed(2)}) rotate(${lean.toFixed(2)} 160 336)">${farArm}<g transform="translate(160 0) scale(${fr(.62+.38*Math.abs(cT))} 1) translate(-160 0)">${b}${backCover}</g>${props}<g transform="translate(160 330) scale(${(1+br*.008).toFixed(4)} ${(1+br*.014).toFixed(4)}) translate(-160 -330)">${armsSvg}${bangles}</g><g transform="translate(0 ${nod.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 205)">${h}</g></g></g>`;
 }
 
 
@@ -437,7 +455,7 @@ const PUP_BROW={n:[0,0],up:[-7,0],angry:[2,13],sad:[-4,-13],think:[0,0],sly:[2,0
 const PUP_LID={n:[0,0],wide:[0,0],angry:[.36,0],sad:[.3,0],up:[0,0],sly:[.38,.1],happy:[.08,.24],shut:[1,0]};
 let PUPN=0;
 const PUP_H={golu:420,bunty:420,pinky:440,mummy:450,papa:470,dadi:430,aunty:455,masterji:470};
-function drawPuppet(id,Pa,Pb,p,t,talk,lv,act){
+function drawPuppet(id,Pa,Pb,p,t,talk,lv,act){p=sstep(p);
  const P=PUPPETS[id], m=P.meta, I=P.img, k=(PUP_H[id]||440)/m.h, f=v=>(+v).toFixed(2), lvs=act.lvs||0;
  const A=PUP_ARMS[Pa]||PUP_ARMS.idle, B=PUP_ARMS[Pb]||PUP_ARMS.idle, X=POSES[Pb]||POSES.idle;
  let aL=lerp(A[0],B[0],p), aR=lerp(A[1],B[1],p); const ar=m.armRange||(m.armsFront?.6:1);
@@ -774,10 +792,11 @@ function renderAt(t){
  const env3=k=>{let a=0;for(let q=-6;q<=6;q++)a+=envAt(t+q/30);return a/13};
  const HANDS={}; for(const sh of [].concat(B.show||[])){const o=typeof sh==='string'?{icon:sh}:sh, who=o.on||B.who; if(o.icon&&who&&iconWhere(o,who)==='hand'&&bt>=(+o.at||0)) HANDS[who]='icon:'+o.icon}
  for(const c of (D3?[]:s.cast)){
-  const id=c.id, Pb=poseOf(si,j,id), Pa=j>0?poseOf(si,j-1,id):Pb, p=Pa===Pb?1:eBack(bt/.32);
+  const id=c.id, Pb=poseOf(si,j,id), Pa=j>0?poseOf(si,j-1,id):Pb, p=Pa===Pb?1:clamp(bt/.5);
   const talk=(B.who===id&&t<TB.audioEnd)?1:0, lv=talk?envAt(t):0, lvs=talk?env3():0;
   let x=c.x, y=c.y||FLOOR, sc=charScale(s,c), flip=c.flip?-1:1;
-  if(c.enter&&lt<.6){const q=eOut(lt/.6);if(c.enter==='left')x=lerp(-300,x,q);if(c.enter==='right')x=lerp(1380,x,q);if(c.enter==='drop')y=lerp(y-900,y,q);if(c.enter==='pop')sc*=q}
+  if(c.enter&&lt<.9){const q=sstep(lt/.9);if(c.enter==='left')x=lerp(-300,x,q);if(c.enter==='right')x=lerp(1380,x,q);if(c.enter==='drop')y=lerp(y-900,y,eOut(lt/.9));if(c.enter==='pop')sc*=eSoft(lt/.5);
+   if(c.enter==='left'||c.enter==='right')y-=Math.abs(Math.sin(lt*11))*12*(1-q)}   // a bouncy walk-in, not a slide
   const hop=(B.hop||[]).includes(id)?Math.max(0,Math.sin(Math.min(1,bt/.45)*Math.PI)):0;
   // eyes: listeners look at whoever is talking; the speaker looks at the camera with small darts
   const sg=Math.floor(t/1.2+id.length);
@@ -795,7 +814,7 @@ function renderAt(t){
     if(!others.length) return c.turn||0;
     const o=others.reduce((a,q)=>Math.abs(q.x-c.x)<Math.abs(a.x-c.x)?q:a);
     return Math.sign(o.x-c.x)*20};
-  let th=faceAt(j); const th0=j>0?faceAt(j-1):th; th=lerp(th0,th,eIO(Math.min(1,bt/.35)));
+  let th=faceAt(j); const th0=j>0?faceAt(j-1):th; th=lerp(th0,th,sstep(bt/.55));
   if((B.spin||[]).includes(id)) th+=360*eIO(Math.min(1,bt/.75));
   if(c.flip) th=-th;
   if(id!=='masterji') defs+=charDefs(id);
@@ -804,7 +823,7 @@ function renderAt(t){
   if((B.hop||[]).includes(id)){const hp=bt/.45; if(hp<1){const q=Math.sin(hp*Math.PI); ssy=1+.1*q; ssx=1-.07*q} else if(hp<1.3){const q=Math.sin((hp-1)/.3*Math.PI); ssy=1-.12*q; ssx=1+.1*q}}
   const fallDir=x<540?1:-1, fellBefore=j>0&&(s.beats[j-1].fall||[]).includes(id);
   if((B.fall||[]).includes(id)){rot=fallDir*84*eBounce(clamp(bt/.55)); if(bt>.4&&bt<1.2) fxs0+=dust(x+fallDir*330*sc,y,clamp((bt-.4)/.8))}
-  else if(fellBefore){rot=fallDir*84*(1-eBack(clamp(bt/.35)))}
+  else if(fellBefore){rot=fallDir*84*(1-sstep(bt/.5))}
   if((B.tremble||[]).includes(id)){dx=Math.sin(t*75)*7; rot+=Math.sin(t*63)*1.6}
   const wrap=(ssx!==1||ssy!==1||rot||dx)?`translate(${(x+dx).toFixed(1)} ${y}) rotate(${rot.toFixed(2)}) scale(${ssx.toFixed(3)} ${ssy.toFixed(3)}) translate(${(-x).toFixed(1)} ${-y})`:'';
   chars+=`<g transform="${wrap}"><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g></g>`;
@@ -841,11 +860,11 @@ function renderAt(t){
   let [fx_,fy_]=cam.on?(typeof cam.on==='string'?[charPos(s,cam.on)[0],headY(s,cam.on)+170]:cam.on):[540,960];
   let z=cam.zoom*(1+cam.push*(auto&&!s.cam&&!BB.cam?eOut(clamp(btj/Math.max(.8,TBj.end-TBj.start))):clamp(lt/Math.max(1,T.end-T.start))));
   let ox=540-fx_*z, oy=(cam.on?760:960)-fy_*z;
-  if(BB.punch&&s.cast.find(c=>c.id===BB.punch)){const q=eOut(clamp((btj-(+BB.punch_at||0))/.16)), zt=2.1, px=charPos(s,BB.punch)[0], py=headY(s,BB.punch)+120;
+  if(BB.punch&&s.cast.find(c=>c.id===BB.punch)){const q=eOut(clamp((btj-(+BB.punch_at||0))/.22)), zt=2.1, px=charPos(s,BB.punch)[0], py=headY(s,BB.punch)+120;
    ox=lerp(ox,540-px*zt,q); oy=lerp(oy,(s.card?1330:820)-py*zt,q); z=lerp(z,zt,q)}
   ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy)); return {z,ox,oy}};
  let CM=D3?{z:1,ox:0,oy:0}:camFor(j,bt);
- if(!D3&&j>0&&bt<.4&&SB.smoothcam!==false&&!B.cut&&!B.punch){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=eIO(bt/.4);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
+ if(!D3&&j>0&&bt<.65&&SB.smoothcam!==false&&!B.cut&&!B.punch){const Tp=T.beats[j-1], P=camFor(j-1,Tp.end-Tp.start), q=sstep(bt/.65);CM={z:lerp(P.z,CM.z,q),ox:lerp(P.ox,CM.ox,q),oy:lerp(P.oy,CM.oy,q)}}
  let z=CM.z, ox=CM.ox, oy=CM.oy;
  if(!D3&&z>1.01){ox+=Math.sin(t*.9)*5+Math.sin(t*2.3)*2;oy+=Math.cos(t*.7)*4; ox=Math.min(0,Math.max(1080-1080*z,ox)); oy=Math.min(0,Math.max(1920-1920*z,oy));}
  if(!D3&&B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}

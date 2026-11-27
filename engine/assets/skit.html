@@ -24,6 +24,20 @@ html,body{margin:0;background:#000;width:1080px;height:1920px;overflow:hidden;fo
 #stk{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:visible;z-index:8;pointer-events:none}
 #ex{position:absolute;left:98px;top:236px;width:900px;height:440px;overflow:visible;z-index:5;pointer-events:none}
 #flash{position:absolute;inset:0;background:#fff;opacity:0;z-index:8;pointer-events:none}
+.d3 #c3d{filter:saturate(1.12) contrast(1.05)}
+.d3 #sub{top:1430px;gap:10px;transform-origin:50% 0}
+.d3 #sub .who{font-size:30px;padding:4px 22px;border:none;box-shadow:0 6px 14px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.6)}
+.d3 #sub .line{background:none;padding:0 10px;font-size:64px;font-weight:700;line-height:1.2;color:#fff;-webkit-text-stroke:13px #120d18;paint-order:stroke fill;text-shadow:0 7px 0 #120d18,0 12px 26px rgba(0,0,0,.45)}
+.d3 #sub .line span{display:inline-block;transition:none}
+.d3 #sub .line span.cur{color:#ffd54a;transform:scale(1.13) translateY(-4px)}
+.d3 #hook{-webkit-text-stroke:11px #120d18;text-shadow:0 4px 0 #120d18,0 8px 0 #120d18,0 12px 0 #120d18,0 16px 0 #2a1e30,0 24px 34px rgba(0,0,0,.55)}
+.d3 #hook b{color:#ffd54a}
+.d3 #title .series{border:none;background:linear-gradient(#ffe68a,#ffbf2e);box-shadow:0 8px 18px rgba(0,0,0,.35),inset 0 2px 0 rgba(255,255,255,.75)}
+.d3 #title .ep{text-shadow:0 3px 0 #120d18,0 0 18px rgba(0,0,0,.6)}
+.d3 #ex{filter:drop-shadow(0 26px 30px rgba(0,0,0,.42));transform:perspective(1500px) rotateX(9deg);transform-origin:50% 100%}
+.d3 #card{border:none;border-radius:46px;background:linear-gradient(165deg,rgba(255,255,255,.96),rgba(255,240,212,.93));box-shadow:0 34px 70px rgba(0,0,0,.42),0 0 0 6px rgba(255,213,74,.95),inset 0 3px 0 #fff}
+.d3 #card .k{box-shadow:0 6px 14px rgba(0,0,0,.2)}
+.d3 #light{background:radial-gradient(ellipse 85% 65% at 50% 45%,rgba(0,0,0,0) 58%,rgba(10,4,0,.38) 100%),linear-gradient(170deg,rgba(255,220,170,.12),rgba(255,220,170,0) 40%)}
 </style></head>
 <body><div id="frame"><canvas id="c3d" width="1080" height="1920" style="position:absolute;left:0;top:0;width:1080px;height:1920px"></canvas><div id="world"><svg id="w" width="1080" height="1920" viewBox="0 0 1080 1920" xmlns="http://www.w3.org/2000/svg"></svg></div>
 <svg id="ex" width="900" height="440" viewBox="0 0 900 440"></svg><svg id="stk" width="1080" height="1920" viewBox="0 0 1080 1920"></svg><div id="hook"></div><div id="title"><div class="series"></div><div class="ep"></div></div><div id="handle"></div>
@@ -730,7 +744,7 @@ function explainSvg(E,e,t){const f=EXPLAIN[E.kind];if(!f)return '';const s=.72+.
 /* ================= timeline / state ================= */
 const SC=SB.scenes, CAST=SB.cast||{};
 const NAME={masterji:'Masterji',golu:'Golu',mummy:'Mummy',papa:'Papa',dadi:'Dadi',pinky:'Pinky',bunty:'Bunty',aunty:'Sharma Aunty',dadaji:'Dadaji',chutki:'Chutki',gupta:'Gupta Uncle',raju:'Raju Bhaiya'}, TAG={masterji:'#ffd54a',golu:'#8fd3ff',mummy:'#ff9ac2',papa:'#c6f08a',dadi:'#f3efe4',pinky:'#ffb3d1',bunty:'#d6c8ff',aunty:'#9ff0c4',dadaji:'#e6e2da',chutki:'#ffd54a',gupta:'#ffc27a',raju:'#9fe0d0'};
-document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; if(SB.hook_top!=null) $('#hook').style.top=(+SB.hook_top)+'px'; if(SB.look==='3d'&&window.S3D) S3D.init(); $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); window.__ready=true; });
+document.fonts.ready.then(()=>{ $('#title .series').textContent=SB.series||'MASTERJI KI CLASS'; $('#title .ep').textContent=SB.title||''; $('#handle').textContent=SB.handle||''; if(SB.hook_top!=null) $('#hook').style.top=(+SB.hook_top)+'px';  $('#hook').innerHTML=(SB.hook||'').replace(/[<>&]/g,'').replace(/\*([^*]+)\*/g,'<b>$1</b>'); if(SB.look==='3d'&&window.S3D) Promise.resolve(S3D.init()).then(()=>{window.__ready=true}); else window.__ready=true; });
 function sceneAt(t){let i=0;TL.scenes.forEach((s,k)=>{if(t>=s.start)i=k});return i}
 function beatAt(si,t){const bs=TL.scenes[si].beats;let j=0;bs.forEach((b,k)=>{if(t>=b.start)j=k});return j}
 function envAt(t){if(!TL.env)return .5;const i=Math.floor(t*TL.envFps);return TL.env[Math.min(TL.env.length-1,Math.max(0,i))]||0}
@@ -810,7 +824,7 @@ function renderAt(t){
    if(wh==='floor'){let fx2=o.x;if(fx2===undefined){const others=s.cast.filter(c=>c.id!==who);fx2=others.length?(cx+others.reduce((a,c)=>Math.abs(c.x-cx)<Math.abs(a.x-cx)?c:a).x)/2:cx+side*260}
      objs+=worldObj(o.icon,fx2,FLOOR-50,o.size||175,q,t,'floor')}
    else objs+=worldObj(o.icon,o.x!==undefined?o.x:cx+side*165,o.y!==undefined?o.y:(who?headY(s,who)+(s.card?240:-30):700),o.size||125,q,t,'float')}
- $('#w').innerHTML=D3?`<defs>${defs}</defs>`+back+objs+fxs0+fxs:`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
+ $('#w').innerHTML=D3?'':`<defs>${defs}</defs><g filter="url(#bgsoft)">${set}</g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
  const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;
@@ -837,7 +851,7 @@ function renderAt(t){
  if(!D3&&B.punch){const pb=bt-(+B.punch_at||0);if(pb>0&&pb<.3){const k=(.3-pb)/.3*14;ox+=Math.sin(t*95)*k;oy+=Math.cos(t*81)*k}}
  if(!D3&&B.shake&&bt<.45){const k=(.45-bt)/.45*18;ox+=Math.sin(t*90)*k;oy+=Math.cos(t*77)*k}
  { let h='';                                            // stickers in screen space: always fully on screen, above the card
-   for(const k of STK){let X=k.wx*z+ox+k.side*40*(z-1), Y=k.wy*z+oy; X=Math.max(135,Math.min(945,X));
+   for(const k of (D3?[]:STK)){let X=k.wx*z+ox+k.side*40*(z-1), Y=k.wy*z+oy; X=Math.max(135,Math.min(945,X));
     Y=s.card?Math.max(1200,Math.min(1250,Y)):Math.max(SB.hook&&t<3.4?640:340,Math.min(1240,Y)); h+=stickerSvg(k.o.icon,X,Y,k.q,t,k.o.label)}
    $('#stk').innerHTML=h }
  $('#world').style.transform=`translate(${ox.toFixed(1)}px,${oy.toFixed(1)}px) scale(${z.toFixed(4)})`;
@@ -845,10 +859,14 @@ function renderAt(t){
  // subtitles
  const showSub=B.who&&(B.caption||B.say);
  $('#sub').style.opacity=showSub?1:0;
- if(showSub){const w=$('#sub .who');w.textContent=(CAST[B.who]&&CAST[B.who].name)||NAME[B.who]||B.who;w.style.background=TAG[B.who]||'#fff';$('#sub .line').textContent=(B.caption||B.say).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim()}
+ if(showSub){const w=$('#sub .who');w.textContent=(CAST[B.who]&&CAST[B.who].name)||NAME[B.who]||B.who;w.style.background=TAG[B.who]||'#fff';const txt=(B.caption||B.say).replace(/<[^>]+>/g,'').replace(/\s+/g,' ').trim();
+  if(!D3) $('#sub .line').textContent=txt;
+  else{const ws=txt.split(' '),tot=ws.reduce((a,x)=>a+x.length+1,0),pr=clamp((t-TB.start)/Math.max(.3,TB.audioEnd-TB.start));let acc=0;
+   $('#sub .line').innerHTML=ws.map(x=>{const s0=acc/tot;acc+=x.length+1;const cls=pr>=s0&&pr<acc/tot?'cur':pr>=acc/tot?'on':'';return `<span class="${cls}">${x.replace(/[<>&]/g,'')}</span>`}).join(' ');
+   const pop=eOut(clamp((t-TB.start)/.18));$('#sub').style.transform=`translateY(${((1-pop)*24).toFixed(1)}px) scale(${(.94+.06*pop).toFixed(3)})`}}
  // ending card
  const card=s.card; const C=$('#card');
- if(card){if(typeof PUPPETS!=='undefined'&&Object.keys(PUPPETS).length)C.style.top='1000px';C.style.padding='30px 40px';C.querySelector('.t').style.fontSize='44px';C.style.opacity=clamp((lt-.2)/.4);C.style.transform=`translateY(${((1-eOut((lt-.2)/.5))*60).toFixed(1)}px)`;C.querySelector('.k').textContent=card.kicker||'Science ka sach';C.querySelector('.t').textContent=card.text||'';C.querySelector('.f').textContent=card.foot||''}
+ if(card){if(typeof PUPPETS!=='undefined'&&Object.keys(PUPPETS).length)C.style.top='1000px';C.style.padding='30px 40px';C.querySelector('.t').style.fontSize='44px';C.style.opacity=clamp((lt-.2)/.4);C.style.transform=`translateY(${((1-eOut((lt-.2)/.5))*60).toFixed(1)}px)`+(D3?` perspective(1400px) rotateX(${(7+Math.sin(t*1.3)*1.5).toFixed(2)}deg) rotateY(${(Math.sin(t*.9)*2.5).toFixed(2)}deg)`:'');C.querySelector('.k').textContent=card.kicker||'Science ka sach';C.querySelector('.t').textContent=card.text||'';C.querySelector('.f').textContent=card.foot||''}
  else C.style.opacity=0;
 }
 window.renderAt=renderAt;

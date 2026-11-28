@@ -133,7 +133,7 @@ def main():
                     res["tries"].append(f"{model}: {err(e)}")
             if done:
                 break
-        if not res["ok"] and os.environ.get("ART_FREE", "1") == "1":
+        if not res["ok"] and os.environ.get("ART_FREE", "0") == "1":
             try:
                 img = pollinations(prompt, int(h[:6], 16))
                 open(f"artout/{name}.png", "wb").write(img)

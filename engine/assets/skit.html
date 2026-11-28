@@ -302,7 +302,14 @@ const SPEC={
  raju:{skin:'#C99068',shirt:'#3C8C7A',pants:'#2B3A55',hair:'messy',beard:true,headphones:true,hoodie:true,scale:.98},
  aunty:{skin:'#C98B62',shirt:'#3BAA6A',saree:'#E8418A',border:'#3BAA6A',hair:'curly',bindi:true,bigBindi:true,bangles:true,scale:.98,belly:true,fem:true,lips:'#b03a52'},
 };
-const GDEFS=`<radialGradient id="irisG" cx=".42" cy=".38" r=".62"><stop offset="0" stop-color="#9a6638"/><stop offset=".62" stop-color="#4f2f19"/><stop offset="1" stop-color="#1e110a"/></radialGradient>
+const GDEFS=`<filter id="paintC" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+  <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="b"/>
+  <feSpecularLighting in="b" surfaceScale="5" specularConstant=".5" specularExponent="16" lighting-color="#fff6e6" result="sp"><feDistantLight azimuth="235" elevation="48"/></feSpecularLighting>
+  <feComposite in="sp" in2="SourceAlpha" operator="in" result="spi"/>
+  <feOffset in="SourceAlpha" dx="7" dy="9" result="o"/><feGaussianBlur in="o" stdDeviation="9" result="ob"/>
+  <feComposite in="SourceAlpha" in2="ob" operator="out" result="rim"/><feFlood flood-color="#3a1a2a" flood-opacity=".22"/><feComposite in2="rim" operator="in" result="ish"/>
+  <feComposite in="SourceGraphic" in2="spi" operator="arithmetic" k1="0" k2="1" k3=".35" k4="0" result="lit"/>
+  <feMerge><feMergeNode in="lit"/><feMergeNode in="ish"/></feMerge></filter><radialGradient id="irisG" cx=".42" cy=".38" r=".62"><stop offset="0" stop-color="#9a6638"/><stop offset=".62" stop-color="#4f2f19"/><stop offset="1" stop-color="#1e110a"/></radialGradient>
  <radialGradient id="blushG"><stop offset="0" stop-color="#ff5f6a" stop-opacity=".6"/><stop offset="1" stop-color="#ff5f6a" stop-opacity="0"/></radialGradient>
  <radialGradient id="floorSh"><stop offset="0" stop-color="#000" stop-opacity=".42"/><stop offset=".7" stop-color="#000" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
  <linearGradient id="hairHi" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".28"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
@@ -892,7 +899,7 @@ function renderAt(t){
   else if(fellBefore){rot=fallDir*84*(1-sstep(bt/.5))}
   if((B.tremble||[]).includes(id)){dx=Math.sin(t*75)*7; rot+=Math.sin(t*63)*1.6}
   const wrap=(ssx!==1||ssy!==1||rot||dx)?`translate(${(x+dx).toFixed(1)} ${y}) rotate(${rot.toFixed(2)}) scale(${ssx.toFixed(3)} ${ssy.toFixed(3)}) translate(${(-x).toFixed(1)} ${-y})`:'';
-  chars+=`<g transform="${wrap}"><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g></g>`;
+  chars+=`<g transform="${wrap}"${SB.paint===false?'':' filter="url(#paintC)"'}><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g></g>`;
  }
  // effects for this beat
  let fxs='', back='';

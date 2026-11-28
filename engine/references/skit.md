@@ -130,3 +130,16 @@ Every set gets an extra layer (`SETX` in assets/skit.html):
   gently, so the frame is never still. Outdoor sets (tapri, park, market) have people strolling far
   behind the cast.
 Switch off with `"bg_extras": false` or `"parallax": false` (not normally needed).
+
+## Painted backgrounds and painted look (28 Nov 2026)
+- Put a painted background at `engine/assets/bg/<set>.jpg` (or `<set>_day.jpg` / `<set>_night.jpg`,
+  e.g. `train_night.jpg`), 9:16, no people or text. It replaces the drawn set automatically for every
+  skit using that set (`"painted_bg": false` keeps the drawn one). Optional `<name>.json` beside it:
+  `{"info":{"kind":"tv|chalk|poster|note|led","x":..,"y":..,"w":..,"h":..},"beams":[{"x":..,"y":..,"w":240,"ang":25}],
+  "walkers":[{"y":1000,"scale":.7,"dir":1}],"lamps":true,"light":[x,y]}` in 1080x1920 frame coordinates,
+  placing the info display on a blank board/screen/poster in the painting, light beams from its
+  windows and background walkers. Parallax and the light wash still apply.
+- The cast gets a painted finish (soft light from the upper left, cel shadow on clothes, rim light,
+  finer warm outlines, faint grain) so it sits in painted sets; `"paint": false` turns it off.
+- Prompts used to make the backgrounds: `art/requests.json` (the `art` workflow can paint them when
+  the Gemini key has image quota; otherwise make them in the Gemini app and add them by hand).

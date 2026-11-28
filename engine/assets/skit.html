@@ -350,7 +350,7 @@ function eyeMix(a,b,q){if(a===b||q>=1)return b;if(q<=0)return a;if(b==='happy'&&
  const A=eyeP(a),B=eyeP(b),o={};for(const k of ['top','bot','size','tilt','gy','pupil'])o[k]=A[k]+(B[k]-A[k])*q;return o}
 function eye2(cx,cy,side,kind,blink,gx,gy,S){
  const E=Object.assign({top:1,bot:.06,size:1,tilt:0,gy:0,pupil:1},typeof kind==='object'?kind:(EYE[kind]||EYE.n)), f=v=>v.toFixed(1);
- const rx=15.5*E.size, ry=15*E.size, rot=`rotate(${f(-side*E.tilt)} ${cx} ${cy})`;
+ const rx=17*E.size, ry=16.2*E.size, rot=`rotate(${f(-side*E.tilt)} ${cx} ${cy})`;
  const lash=S.fem?`<path d="M${f(cx+side*rx)} ${f(cy-1)} q${f(side*5)} -1 ${f(side*7)} -6" stroke="${OL}" stroke-width="2.6" fill="none" stroke-linecap="round"/>`:'';
  const tp=E.top*(1-blink);
  if(E.happy) return `<g transform="${rot}"><path d="M${f(cx-rx)} ${f(cy+3)} Q${cx} ${f(cy-15)} ${f(cx+rx)} ${f(cy+3)}" stroke="${OL}" stroke-width="5.5" fill="none" stroke-linecap="round"/>${lash}</g>`;
@@ -363,14 +363,14 @@ function eye2(cx,cy,side,kind,blink,gx,gy,S){
   <circle cx="${f(ix+3.6)}" cy="${f(iy-4)}" r="3.2" fill="#fff"/><circle cx="${f(ix-3)}" cy="${f(iy+3.4)}" r="1.4" fill="#fff" opacity=".8"/>
   <path d="M${f(cx-rx)} ${cy} Q${cx} ${f(yT)} ${f(cx+rx)} ${cy}" stroke="#000" stroke-opacity=".14" stroke-width="9" fill="none"/></g>
   <path d="M${f(cx-rx-1)} ${f(cy+.5)} Q${cx} ${f(yT-1)} ${f(cx+rx+1)} ${f(cy+.5)}" stroke="${OL}" stroke-width="5.2" fill="none" stroke-linecap="round"/>
-  <path d="M${f(cx-rx+3)} ${f(cy+2)} Q${cx} ${f(yB)} ${f(cx+rx-3)} ${f(cy+2)}" stroke="${OL}" stroke-width="1.6" fill="none" opacity=".45"/>${lash}</g>`}
+  <path d="M${f(cx-rx+3)} ${f(cy+2)} Q${cx} ${f(yB)} ${f(cx+rx-3)} ${f(cy+2)}" stroke="${OL}" stroke-width="1.6" fill="none" opacity=".45"/><path d="M${f(cx-rx*.85)} ${f(yT-4)} Q${cx} ${f(yT-13)} ${f(cx+rx*.85)} ${f(yT-4)}" stroke="#7a4a30" stroke-width="1.6" fill="none" opacity=".5"/>${lash}</g>`}
 const BROW={n:[0,0,7],up:[-11,-7,9],angry:[9,-6,2],sad:[-11,5,3],think:[2,2,6],sly:[4,2,5]};
 function browK(kind,side){let k=BROW[kind]||BROW.n; if(kind==='think'&&side>0)k=[-11,-9,9]; if(kind==='sly'&&side>0)k=[-9,-7,8]; return k}
 function browMix(a,b,q,side){const A=browK(a,side),B=browK(b,side);return A.map((v,i)=>v+(B[i]-v)*q)}
 function brows2(kind,raise,col,only){const f=v=>v.toFixed(1);let s='';
  for(const side of (only?[only]:[-1,1])){let k=Array.isArray(kind)?kind:browK(kind,side);
   const xi=160+side*11, xo=160+side*45, yi=114+k[0]-raise, yo=116+k[1]-raise, xm=(xi+xo)/2, ym=Math.min(yi,yo)-k[2];
-  s+=`<path d="M${f(xi)} ${f(yi+4)} Q${f(xm)} ${f(ym+3)} ${f(xo)} ${f(yo+1)} Q${f(xm)} ${f(ym-3)} ${f(xi)} ${f(yi-4.5)} Z" fill="${col}" stroke="${col}" stroke-width="2" stroke-linejoin="round"/>`}
+  s+=`<path d="M${f(xi)} ${f(yi+5)} Q${f(xm)} ${f(ym+4)} ${f(xo)} ${f(yo+1.5)} Q${f(xm)} ${f(ym-4.5)} ${f(xi)} ${f(yi-5.5)} Z" fill="${col}" stroke="${col}" stroke-width="2.4" stroke-linejoin="round"/><path d="M${f(xi+side*6)} ${f(yi-1)} Q${f(xm)} ${f(ym-1)} ${f(xo-side*5)} ${f(yo-1)}" stroke="#fff" stroke-width="1.2" opacity=".18" fill="none"/>`}
  return s}
 function mouth2(kind,S){const lp=S.lips||shade(S.skin,-.35), L=`stroke="${OL}" stroke-linecap="round" stroke-linejoin="round"`;
  const M={smile:`<path d="M142 186 Q160 199 178 186" ${L} stroke-width="4" fill="none"/><path d="M150 195 Q160 199 170 195" stroke="${lp}" stroke-width="2.4" fill="none" opacity=".7"/>`,
@@ -389,12 +389,12 @@ function arm(pts,skin,sleeve,sleeveLen){const [s,e,h]=pts,f=n=>n.toFixed(1);
  const cc=bend>60?[ (c[0]+e[0])/2, (c[1]+e[1])/2 ]:c;            // very sharp bends stay a little rounder
  const d=`M${f(s[0])} ${f(s[1])} Q${f(cc[0])} ${f(cc[1])} ${f(h[0])} ${f(h[1])}`;
  const qp=u=>[(1-u)*(1-u)*s[0]+2*(1-u)*u*cc[0]+u*u*h[0], (1-u)*(1-u)*s[1]+2*(1-u)*u*cc[1]+u*u*h[1]];
- let o=`<path d="${d}" stroke="${OL}" stroke-width="23" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${skin}" stroke-width="17.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
+ let o=`<path d="${d}" stroke="#5a3424" stroke-width="20.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${d}" stroke="${skin}" stroke-width="17.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`;
  if(SB.paint!==false) o+=`<path d="${d}" stroke="#fff" stroke-width="4.5" fill="none" stroke-linecap="round" opacity=".2" transform="translate(-4 -2)"/>`;
  if(sleeve){const u=Math.min(.98,sleeveLen*.5), q1=[s[0]+(cc[0]-s[0])*u, s[1]+(cc[1]-s[1])*u], q2=qp(u);
   const ds=`M${f(s[0])} ${f(s[1])} Q${f(q1[0])} ${f(q1[1])} ${f(q2[0])} ${f(q2[1])}`;
-  o+=`<path d="${ds}" stroke="${OL}" stroke-width="33" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${ds}" stroke="${sleeve}" stroke-width="28" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
- return o+`<circle cx="${f(h[0])}" cy="${f(h[1])}" r="12.5" fill="${skin}" stroke="${OL}" stroke-width="3"/><path d="M${f(h[0]-6)} ${f(h[1]+4)} q6 5 12 0" stroke="${shade(skin,-.3)}" stroke-width="2" fill="none"/>`}
+  o+=`<path d="${ds}" stroke="#4a2e28" stroke-width="30.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="${ds}" stroke="${sleeve}" stroke-width="28" fill="none" stroke-linecap="round" stroke-linejoin="round"/>`}
+ return o+handSvg(h,e,skin,h[0]>160?1:-1)}
 function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  const S=SPEC[id], A=POSES[Pa]||POSES.idle, B=POSES[Pb]||POSES.idle, pr=p, pe=sstep(p); p=pe; const P=pe>.5?B:A, sk=`url(#sk_${id})`, skD=shade(S.skin,-.3), skL=shade(S.skin,-.48);
  const L=armBlend(A.l,B.l,pr,-1), R=armBlend(A.r,B.r,pr,1);
@@ -415,7 +415,7 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  const kneeL=dance?wig*16:0, kneeR=dance?-wig*16:0;
  if(S.saree){b+=`<path d="M100 330 Q96 400 84 422 L236 422 Q224 400 220 330 Z" fill="url(#sa_${id})" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/><path d="M130 340 Q126 390 120 418 M176 340 Q182 392 190 418" stroke="${shade(S.saree,-.25)}" stroke-width="3" fill="none" opacity=".7"/><path d="M84 412 L236 412" stroke="${S.border}" stroke-width="12"/>
    <ellipse cx="120" cy="426" rx="26" ry="8" fill="${S.skin}" stroke="${OL}" stroke-width="3"/><ellipse cx="200" cy="426" rx="26" ry="8" fill="${S.skin}" stroke="${OL}" stroke-width="3"/>`}
- else{const leg=(x,kx,c)=>`<path d="M${x} 330 L${x+kx} 376 L${x} 418" stroke="${OL}" stroke-width="37" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${x} 330 L${x+kx} 376 L${x} 418" stroke="${c}" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${x+7} 334 L${x+7+kx} 376 L${x+7} 414" stroke="${shade(c,-.25)}" stroke-width="9" fill="none" stroke-linecap="round" opacity=".7"/>`;
+ else{const leg=(x,kx,c)=>`<path d="M${x} 330 L${x+kx} 376 L${x} 418" stroke="#4a2e28" stroke-width="33.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${x} 330 L${x+kx} 376 L${x} 418" stroke="${c}" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/><path d="M${x+7} 334 L${x+7+kx} 376 L${x+7} 414" stroke="${shade(c,-.25)}" stroke-width="9" fill="none" stroke-linecap="round" opacity=".7"/>`;
    if(S.shorts){b+=leg(134,kneeL,S.skin)+leg(186,kneeR,S.skin)+`<path d="M104 322 L216 322 L222 370 L166 370 L160 352 L154 370 L98 370 Z" fill="${S.pants}" stroke="${OL}" stroke-width="4.5" stroke-linejoin="round"/><path d="M196 326 L204 368" stroke="${shade(S.pants,.25)}" stroke-width="3" opacity=".6"/>`+
      `<rect x="${118+kneeL*.6}" y="392" width="32" height="22" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/><rect x="${170+kneeR*.6}" y="392" width="32" height="22" rx="6" fill="#d2413a" stroke="${OL}" stroke-width="3"/>`}
    else if(S.frock) b+=leg(134,kneeL,S.skin)+leg(186,kneeR,S.skin)+`<rect x="${118+kneeL*.6}" y="394" width="32" height="18" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/><rect x="${170+kneeR*.6}" y="394" width="32" height="18" rx="6" fill="#fff" stroke="${OL}" stroke-width="3"/>`;
@@ -462,7 +462,9 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(S.hair==='curly') F.hairTop+=[0,1,2,3,4,5,6,7,8].map(k=>`<circle cx="${(160+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(120+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="22" fill="#2a1e18" stroke="${OL}" stroke-width="3"/><circle cx="${(156+Math.cos(3.4+k*.36)*70).toFixed(0)}" cy="${(114+Math.sin(3.4+k*.36)*64).toFixed(0)}" r="8" fill="#fff" opacity=".12"/>`).join('');
  if(S.hair==='pigtails'){const pig=(x,sg)=>`<path d="M${x} 112 Q${x+sg*46} ${fr(100+Math.sin(t*4)*3)} ${x+sg*52} 150 Q${x+sg*48} 196 ${x+sg*20} 202 Q${x+sg*34} 160 ${x} 140 Z" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/><circle cx="${x+sg*8}" cy="118" r="12" fill="#ff4d8d" stroke="${OL}" stroke-width="2.5"/><path d="M${x+sg*8} 118 l${sg*-14} -10 l0 20 Z M${x+sg*8} 118 l${sg*14} -10 l0 20 Z" fill="#ff4d8d" stroke="${OL}" stroke-width="2"/>`;F.hairTop+=pig(100,-1)+pig(220,1)}
  if(S.hair==='bun') F.hairTop+=`<circle cx="160" cy="62" r="34" fill="${hairC}" stroke="${OL}" stroke-width="3.5"/>`+[0,1,2,3,4,5].map(k=>`<circle cx="${(160+Math.cos(k)*36).toFixed(1)}" cy="${(62+Math.sin(k)*36).toFixed(1)}" r="8" fill="#fff" stroke="#cfcab8" stroke-width="2"/>`).join('');
- F.head+=`<path d="M${160-hw} 132 C${160-hw} 86 ${160-hw*.55} 70 160 70 C${160+hw*.55} 70 ${160+hw} 86 ${160+hw} 132 C${160+hw} 176 ${160+hw*.45} 207 160 209 C${160-hw*.45} 207 ${160-hw} 176 ${160-hw} 132 Z" fill="${sk}" stroke="${skL}" stroke-width="4"/>`;
+ F.head+=`<path d="M${160-hw} 130 C${160-hw} 84 ${160-hw*.55} 68 160 68 C${160+hw*.55} 68 ${160+hw} 84 ${160+hw} 130 C${160+hw} 166 ${160+hw*.84} 192 ${160+hw*.46} 204 Q160 215 ${160-hw*.46} 204 C${160-hw*.84} 192 ${160-hw} 166 ${160-hw} 130 Z" fill="${sk}" stroke="${skL}" stroke-width="2.6"/>`;
+ if(SB.paint!==false){const hid='hd'+(EYEN++), hp=`M${160-hw} 130 C${160-hw} 84 ${160-hw*.55} 68 160 68 C${160+hw*.55} 68 ${160+hw} 84 ${160+hw} 130 C${160+hw} 166 ${160+hw*.84} 192 ${160+hw*.46} 204 Q160 215 ${160-hw*.46} 204 C${160-hw*.84} 192 ${160-hw} 166 ${160-hw} 130 Z`;
+   F.head+=`<clipPath id="${hid}"><path d="${hp}"/></clipPath><g clip-path="url(#${hid})"><ellipse cx="${160+hw*.95}" cy="150" rx="${hw*.62}" ry="95" fill="#3a1a10" opacity=".2"/><ellipse cx="160" cy="222" rx="${hw*.9}" ry="34" fill="#3a1a10" opacity=".16"/><ellipse cx="${160-hw*.45}" cy="104" rx="${hw*.42}" ry="30" fill="#fff4e0" opacity=".16"/></g>`}
  if(SB.paint!==false) F.head+=`<path d="M${160-hw+8} 150 C${160-hw+6} 112 ${160-hw*.6} 84 ${160-hw*.15} 78" stroke="#fff" stroke-width="5" fill="none" opacity=".22" stroke-linecap="round"/><ellipse cx="160" cy="104" rx="${hw*.8}" ry="14" fill="#2a1020" opacity=".08"/><ellipse cx="${160+hw*.42}" cy="176" rx="${hw*.34}" ry="22" fill="#2a1020" opacity=".07"/>`;
  F.head+=`<path d="M${160+hw-14} 112 C${160+hw-4} 150 ${160+hw-20} 186 ${160+16} 204" stroke="${skD}" stroke-width="10" fill="none" opacity=".28" stroke-linecap="round"/>`;
  if(S.hair==='spiky') F.hairFront+=`<path d="M${160-hw-1} 134 Q${160-hw+2} 72 160 70 Q${160+hw-2} 72 ${160+hw+1} 134 Q${160+hw-16} 100 160 100 Q${160-hw+16} 100 ${160-hw-1} 134 Z" fill="${hairC}" stroke="${OL}" stroke-width="3"/>`;
@@ -485,7 +487,7 @@ function drawPerson(id,Pa,Pb,p,t,talk,lv,act){
  if(S.specsUp&&Pb==='shock'&&p>.5) F.specs+=`<rect x="114" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><rect x="166" y="130" width="40" height="27" rx="9" fill="none" stroke="${OL}" stroke-width="4.5"/><path d="M154 140 h12" stroke="${OL}" stroke-width="4"/>`;
  if(S.specs) F.specs+=`<circle cx="134" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><circle cx="186" cy="144" r="24" fill="#cfeaff" fill-opacity=".16" stroke="${OL}" stroke-width="4.5"/><path d="M120 132 l10 -6 M172 132 l10 -6" stroke="#fff" stroke-width="3" opacity=".7" stroke-linecap="round"/><path d="M158 142 h4 M110 140 L96 136 M210 140 L224 136" stroke="${OL}" stroke-width="4"/>`;
  const earring=S.earrings;
- F.center+=`<path d="M163 140 Q170 156 168 166" stroke="${skD}" stroke-width="3" fill="none" opacity=".55" stroke-linecap="round"/><path d="M150 166 Q152 174 160 174 Q168 174 170 166" stroke="${skL}" stroke-width="3" fill="${shade(S.skin,-.08)}" stroke-linecap="round"/><circle cx="156" cy="160" r="3.4" fill="#fff" opacity=".35"/>`;
+ F.center+=`<path d="M163 138 Q169 152 168 160" stroke="${skD}" stroke-width="2.4" fill="none" opacity=".45" stroke-linecap="round"/><ellipse cx="160" cy="165" rx="${S.kid?10:12}" ry="${S.kid?8.5:10}" fill="${shade(S.skin,-.06)}" stroke="${skL}" stroke-width="2"/><ellipse cx="163" cy="169" rx="7" ry="4" fill="${skD}" opacity=".35"/><ellipse cx="155" cy="170" rx="2.6" ry="1.8" fill="${skL}" opacity=".7"/><ellipse cx="165" cy="170" rx="2.6" ry="1.8" fill="${skL}" opacity=".7"/><ellipse cx="156" cy="161" rx="4" ry="3" fill="#fff" opacity=".38"/>`;
  if(S.bindi) F.center+=`<circle cx="160" cy="104" r="${S.bigBindi?11:6}" fill="#d2213a" stroke="${S.bigBindi?OL:'none'}" stroke-width="2"/>`;
  if(S.beard) F.center+=`<path d="M104 148 Q104 204 160 216 Q216 204 216 148 Q208 190 184 196 Q172 186 160 188 Q148 186 136 196 Q112 190 104 148 Z" fill="#2a1e18" opacity=".36"/><path d="M142 176 Q160 170 178 176" stroke="#2a1e18" stroke-width="6" opacity=".5" fill="none" stroke-linecap="round"/>`;
  if(S.freckles) F.center+=`<g fill="${shade(S.skin,-.3)}" opacity=".7"><circle cx="112" cy="166" r="2.6"/><circle cx="121" cy="172" r="2.6"/><circle cx="104" cy="172" r="2.2"/><circle cx="199" cy="166" r="2.6"/><circle cx="208" cy="172" r="2.6"/><circle cx="216" cy="166" r="2.2"/></g>`;
@@ -923,7 +925,7 @@ function renderAt(t){
   else if(fellBefore){rot=fallDir*84*(1-sstep(bt/.5))}
   if((B.tremble||[]).includes(id)){dx=Math.sin(t*75)*7; rot+=Math.sin(t*63)*1.6}
   const wrap=(ssx!==1||ssy!==1||rot||dx)?`translate(${(x+dx).toFixed(1)} ${y}) rotate(${rot.toFixed(2)}) scale(${ssx.toFixed(3)} ${ssy.toFixed(3)}) translate(${(-x).toFixed(1)} ${-y})`:'';
-  const body2=SB.paint===false?body:body.replace(/stroke="(#2A1A16|#1E1620|#1e1620)"( stroke-width=")([\d.]+)"/g,(m,c,sw,w)=>+w<=6.5?`stroke="#3b2a26"${sw}${(+w*.62).toFixed(1)}"`:m);   // finer, warmer outlines (painted look)
+  const body2=SB.paint===false?body:body.replace(/stroke="(#2A1A16|#1E1620|#1e1620)"( stroke-width=")([\d.]+)"/g,(m,c,sw,w)=>+w<=8?`stroke="#4a2e24"${sw}${(+w*.55).toFixed(1)}"`:m);   // finer, warmer outlines (painted look)
   chars+=`<g transform="${wrap}"${SB.paint===false?'':' filter="url(#paintC)"'}><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body2}</g></g>`;
  }
  // effects for this beat

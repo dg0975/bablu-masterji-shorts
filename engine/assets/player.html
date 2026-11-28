@@ -213,6 +213,10 @@ function drawMascot(i,Pa,Pb,p,t,talk,hop){
 
 /* ---------------- Bablu Masterji (main mascot, from the user's design) ---------------- */
 // smooth motion helpers shared by Masterji and the skit cast
+function handSvg(h,e,skin,side){const a=Math.atan2(h[1]-e[1],h[0]-e[0])*180/Math.PI-90, f=n=>n.toFixed(1), ol='#5a3424';
+ const fing=[-7,0,7].map((x,k)=>`<rect x="${x-3.6}" y="4" width="7.2" height="${15-Math.abs(k-1)*2}" rx="3.6" fill="${skin}" stroke="${ol}" stroke-width="1.6"/>`).join('');
+ return `<g transform="translate(${f(h[0])} ${f(h[1])}) rotate(${f(a)})">${fing}<ellipse cx="0" cy="0" rx="12.5" ry="11" fill="${skin}" stroke="${ol}" stroke-width="1.8"/>
+  <rect x="${side>0?7:-15}" y="-6" width="8" height="15" rx="4" fill="${skin}" stroke="${ol}" stroke-width="1.6" transform="rotate(${side>0?-30:30} ${side>0?11:-11} -2)"/><ellipse cx="-3" cy="-3" rx="5" ry="3.5" fill="#fff" opacity=".22"/></g>`}
 const sstep=x=>{x=Math.max(0,Math.min(1,x));return x*x*x*(x*(x*6-15)+10)};                     // smootherstep: soft start, soft stop
 const eSoft=x=>{x=Math.max(0,Math.min(1,x));const c1=.55,c3=c1+1;return 1+c3*Math.pow(x-1,3)+c1*Math.pow(x-1,2)}; // tiny settle overshoot
 // blend two arm poses [shoulder, elbow, hand] by joint angles (bones keep their length), the forearm trailing the
@@ -271,13 +275,14 @@ const MJ_BODY=`
   <ellipse cx="196" cy="418" rx="22" ry="7" fill="#EDE7D9" stroke="#1E1620" stroke-width="3"/>
   <path d="M110 421 Q124 409 140 421 M180 421 Q196 409 210 421" stroke="#7B4A2A" stroke-width="5" stroke-linecap="round" fill="none"/>
   <path d="M96 326 Q160 350 224 326 L208 366 Q160 376 112 366 Z" fill="#5E5243" stroke="#1E1620" stroke-width="3" stroke-linejoin="round"/>
-  <path d="M104 212 Q110 200 132 198 L188 198 Q210 200 216 212 Q250 280 228 334 Q160 354 92 334 Q70 280 104 212 Z" fill="#E6EEF8" stroke="#1E1620" stroke-width="3" stroke-linejoin="round"/>
+  <path d="M104 212 Q110 200 132 198 L188 198 Q210 200 216 212 Q250 280 228 334 Q160 354 92 334 Q70 280 104 212 Z" fill="#E6EEF8" stroke="#4a2e24" stroke-width="2" stroke-linejoin="round"/>
   <path d="M98 337 Q160 357 222 337" stroke="#3A2618" stroke-width="8" fill="none"/>
   <rect x="153" y="342" width="15" height="11" rx="2" fill="#D9B44A" stroke="#1E1620" stroke-width="2"/>
   <path d="M110 208 L126 204 L160 290 L194 204 L210 208 Q244 276 226 322 Q160 342 94 322 Q76 276 110 208 Z" fill="#8A4B2F" stroke="#1E1620" stroke-width="3" stroke-linejoin="round"/>
   <path d="M97 318 Q160 338 223 318" stroke="#6E3822" stroke-width="7" fill="none"/>
   <path d="M126 205 L160 289 L194 205" stroke="#A9623F" stroke-width="5" fill="none" stroke-linejoin="round"/>
-  <path d="M112 240 L106 300 M210 240 L216 300 M130 252 L126 310 M190 252 L194 310 M160 300 L160 326" stroke="#76402A" stroke-width="2" stroke-dasharray="4 5" fill="none"/>
+  <g stroke="#76402A" stroke-width="1.6" fill="none" opacity=".7"><path d="M104 225 L100.6 322"/><path d="M113 223 L110.2 322"/><path d="M122 222 L119.7 322"/><path d="M131 220 L129.3 322"/><path d="M140 218 L138.8 322"/><path d="M149 216 L148.3 322"/><path d="M158 214 L157.9 322"/><path d="M167 215 L167.4 322"/><path d="M176 217 L177.0 322"/><path d="M185 219 L186.5 322"/><path d="M194 221 L196.0 322"/><path d="M203 223 L205.6 322"/><path d="M212 224 L215.1 322"/></g>
+  <path d="M196 214 Q238 270 222 322 Q200 330 186 330 Q214 270 190 220 Z" fill="#3a1a0c" opacity=".22"/><path d="M118 222 Q100 262 104 300" stroke="#fff" stroke-width="5" opacity=".1" fill="none" stroke-linecap="round"/>
   <g fill="#F3EFE4" opacity="0.45">
     <ellipse cx="118" cy="297" rx="11" ry="13"/>
     <ellipse cx="106" cy="281" rx="3.5" ry="8" transform="rotate(-25 106 281)"/>
@@ -308,15 +313,15 @@ const MJ_FACE={
   combN:`<g stroke="#2B2420" stroke-width="3" fill="none" stroke-linecap="round"><path d="M106 112 Q148 58 208 100"/><path d="M108 118 Q152 66 212 108"/><path d="M110 106 Q140 56 198 90"/></g>`,
   combUp:`<g stroke="#2B2420" stroke-width="3" fill="none" stroke-linecap="round"><path d="M146 76 Q140 46 150 18"/><path d="M160 74 Q164 40 156 10"/><path d="M172 76 Q182 46 176 20"/><path d="M128 30 L136 38 M192 30 L184 38 M160 0 L160 -6" stroke="#FFD54A" stroke-width="2.5"/></g>`,
   wrinkles:`<path d="M138 101 Q160 95 182 101 M144 93 Q160 88 176 93" stroke="#A86E45" stroke-width="2.5" fill="none" stroke-linecap="round"/>`,
-  browsN:`<path d="M114 114 Q134 111 152 122 M168 122 Q186 111 206 114" fill="none" stroke="#2A1E18" stroke-width="7" stroke-linecap="round"/>`,
-  browsT:`<path d="M114 121 Q132 116 152 122 M168 110 Q188 98 206 108" fill="none" stroke="#2A1E18" stroke-width="7" stroke-linecap="round"/>`,
-  browsUp:`<path d="M116 108 Q134 96 150 105 M170 105 Q186 96 204 108" fill="none" stroke="#2A1E18" stroke-width="7" stroke-linecap="round"/>`,
-  browsSad:`<path d="M114 118 Q132 114 150 104 M170 104 Q188 114 206 118" fill="none" stroke="#2A1E18" stroke-width="7" stroke-linecap="round"/>`,
-  eyesDot:`<ellipse cx="134" cy="142" rx="4.5" ry="6" fill="#1E1620"/><ellipse cx="186" cy="142" rx="4.5" ry="6" fill="#1E1620"/><circle cx="135.5" cy="140" r="1.5" fill="#FFFFFF"/><circle cx="187.5" cy="140" r="1.5" fill="#FFFFFF"/>`,
-  eyesBlink:`<path d="M128 142 H140 M180 142 H192" stroke="#1E1620" stroke-width="3.5" stroke-linecap="round"/>`,
-  eyesUp:`<circle cx="134" cy="141" r="8" fill="#FFFFFF" stroke="#1E1620" stroke-width="2"/><circle cx="186" cy="141" r="8" fill="#FFFFFF" stroke="#1E1620" stroke-width="2"/><circle cx="137" cy="137" r="4" fill="#1E1620"/><circle cx="189" cy="137" r="4" fill="#1E1620"/>`,
-  eyesWide:`<circle cx="134" cy="141" r="11" fill="#FFFFFF" stroke="#1E1620" stroke-width="2"/><circle cx="186" cy="141" r="11" fill="#FFFFFF" stroke="#1E1620" stroke-width="2"/><circle cx="134" cy="141" r="3" fill="#1E1620"/><circle cx="186" cy="141" r="3" fill="#1E1620"/>`,
-  eyesHappy:`<path d="M126 145 Q134 134 142 145 M178 145 Q186 134 194 145" stroke="#1E1620" stroke-width="4" fill="none" stroke-linecap="round"/>`,
+  browsN:`<path opacity=".95" d="M114 114 Q134 111 152 122 M168 122 Q186 111 206 114" fill="none" stroke="#2A1E18" stroke-width="8.5" stroke-linecap="round"/>`,
+  browsT:`<path opacity=".95" d="M114 121 Q132 116 152 122 M168 110 Q188 98 206 108" fill="none" stroke="#2A1E18" stroke-width="8.5" stroke-linecap="round"/>`,
+  browsUp:`<path opacity=".95" d="M116 108 Q134 96 150 105 M170 105 Q186 96 204 108" fill="none" stroke="#2A1E18" stroke-width="8.5" stroke-linecap="round"/>`,
+  browsSad:`<path opacity=".95" d="M114 118 Q132 114 150 104 M170 104 Q188 114 206 118" fill="none" stroke="#2A1E18" stroke-width="8.5" stroke-linecap="round"/>`,
+  eyesDot:`<ellipse cx="134" cy="142" rx="12.5" ry="10.5" fill="#FBF8F2" stroke="#4a2e24" stroke-width="1.6"/><path d="M121.5 141 Q134 128 146.5 141" stroke="#3a2418" stroke-width="3.2" fill="none" stroke-linecap="round"/><circle cx="134" cy="143" r="6.6" fill="url(#mjIris)"/><circle cx="134" cy="143" r="3.1" fill="#140c08"/><circle cx="136.4" cy="140.4" r="1.9" fill="#fff"/><path d="M123 133 Q134 123 145 133" stroke="#8a5a3a" stroke-width="1.4" fill="none" opacity=".55"/><ellipse cx="186" cy="142" rx="12.5" ry="10.5" fill="#FBF8F2" stroke="#4a2e24" stroke-width="1.6"/><path d="M173.5 141 Q186 128 198.5 141" stroke="#3a2418" stroke-width="3.2" fill="none" stroke-linecap="round"/><circle cx="186" cy="143" r="6.6" fill="url(#mjIris)"/><circle cx="186" cy="143" r="3.1" fill="#140c08"/><circle cx="188.4" cy="140.4" r="1.9" fill="#fff"/><path d="M175 133 Q186 123 197 133" stroke="#8a5a3a" stroke-width="1.4" fill="none" opacity=".55"/>`,
+  eyesBlink:`<path d="M122 142 Q134 148 146 142 M174 142 Q186 148 198 142" stroke="#3a2418" stroke-width="3.2" fill="none" stroke-linecap="round"/>`,
+  eyesUp:`<ellipse cx="134" cy="141" rx="12.5" ry="10.5" fill="#FBF8F2" stroke="#4a2e24" stroke-width="1.6"/><path d="M121.5 140 Q134 127 146.5 140" stroke="#3a2418" stroke-width="3.2" fill="none" stroke-linecap="round"/><circle cx="137" cy="138" r="6.6" fill="url(#mjIris)"/><circle cx="137" cy="138" r="3.1" fill="#140c08"/><circle cx="139.4" cy="135.4" r="1.9" fill="#fff"/><path d="M123 132 Q134 122 145 132" stroke="#8a5a3a" stroke-width="1.4" fill="none" opacity=".55"/><ellipse cx="186" cy="141" rx="12.5" ry="10.5" fill="#FBF8F2" stroke="#4a2e24" stroke-width="1.6"/><path d="M173.5 140 Q186 127 198.5 140" stroke="#3a2418" stroke-width="3.2" fill="none" stroke-linecap="round"/><circle cx="189" cy="138" r="6.6" fill="url(#mjIris)"/><circle cx="189" cy="138" r="3.1" fill="#140c08"/><circle cx="191.4" cy="135.4" r="1.9" fill="#fff"/><path d="M175 132 Q186 122 197 132" stroke="#8a5a3a" stroke-width="1.4" fill="none" opacity=".55"/>`,
+  eyesWide:`<ellipse cx="134" cy="141" rx="13.5" ry="13" fill="#FBF8F2" stroke="#3a2418" stroke-width="2.4"/><ellipse cx="186" cy="141" rx="13.5" ry="13" fill="#FBF8F2" stroke="#3a2418" stroke-width="2.4"/><circle cx="134" cy="141" r="5" fill="url(#mjIris)"/><circle cx="186" cy="141" r="5" fill="url(#mjIris)"/><circle cx="134" cy="141" r="2.2" fill="#140c08"/><circle cx="186" cy="141" r="2.2" fill="#140c08"/><circle cx="136" cy="139" r="1.4" fill="#fff"/><circle cx="188" cy="139" r="1.4" fill="#fff"/>`,
+  eyesHappy:`<path d="M122 146 Q134 132 146 146 M174 146 Q186 132 198 146" stroke="#3a2418" stroke-width="3.6" fill="none" stroke-linecap="round"/><path d="M124 150 Q134 154 144 150 M176 150 Q186 154 196 150" stroke="#9a6440" stroke-width="1.6" fill="none" opacity=".6"/>`,
   blush:`<g fill="#FF8A8A" opacity="0.4"><ellipse cx="120" cy="170" rx="11" ry="6"/><ellipse cx="200" cy="170" rx="11" ry="6"/></g>`,
   mouthSmile:`<path d="M147 189 Q160 198 173 189" stroke="#1E1620" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
   mouthHmm:`<path d="M149 193 Q155 188 161 193 Q167 198 173 192" stroke="#1E1620" stroke-width="3.5" fill="none" stroke-linecap="round"/>`,
@@ -326,12 +331,15 @@ const MJ_FACE={
   sweat:`<path d="M232 92 Q222 108 232 114 Q242 108 232 92 Z" fill="#8FD3FF" stroke="#1E1620" stroke-width="2"/>`,
 };
 const MJ_HEAD_BASE=`
-  <ellipse cx="98" cy="146" rx="11" ry="15" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/>
-  <ellipse cx="222" cy="146" rx="11" ry="15" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/>
+  <defs><radialGradient id="mjIris" cx=".4" cy=".35" r=".7"><stop offset="0" stop-color="#a0703f"/><stop offset=".7" stop-color="#5a341a"/><stop offset="1" stop-color="#2a170c"/></radialGradient><radialGradient id="mjSkin" cx=".38" cy=".34" r=".75"><stop offset="0" stop-color="#e2a979"/><stop offset=".55" stop-color="#C68A5B"/><stop offset="1" stop-color="#9a6440"/></radialGradient><radialGradient id="mjNose" cx=".38" cy=".32" r=".7"><stop offset="0" stop-color="#e6ad80"/><stop offset=".6" stop-color="#c0814f"/><stop offset="1" stop-color="#93593a"/></radialGradient></defs>
+  <ellipse cx="97" cy="146" rx="12" ry="16" fill="url(#mjSkin)" stroke="#5a3424" stroke-width="2"/>
+  <ellipse cx="223" cy="146" rx="12" ry="16" fill="url(#mjSkin)" stroke="#5a3424" stroke-width="2"/>
   <path d="M96 140 Q92 148 98 154 M224 140 Q228 148 222 154" stroke="#A86E45" stroke-width="2.5" fill="none" stroke-linecap="round"/>
-  <ellipse cx="160" cy="140" rx="64" ry="67" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/>
-  <path d="M98 130 Q96 108 112 95 L117 103 Q105 114 107 132 Z" fill="#5B524C" stroke="#1E1620" stroke-width="2" stroke-linejoin="round"/>
-  <path d="M222 130 Q224 108 208 95 L203 103 Q215 114 213 132 Z" fill="#5B524C" stroke="#1E1620" stroke-width="2" stroke-linejoin="round"/>
+  <path d="M96 138 C96 92 124 72 160 72 C196 72 224 92 224 138 C224 172 210 198 186 206 Q160 214 134 206 C110 198 96 172 96 138 Z" fill="url(#mjSkin)" stroke="#5a3424" stroke-width="2.2"/>
+  <path d="M212 118 C222 150 214 186 188 202" stroke="#7a4628" stroke-width="12" fill="none" opacity=".22" stroke-linecap="round"/><ellipse cx="116" cy="172" rx="13" ry="8" fill="#e0726a" opacity=".22"/><ellipse cx="204" cy="172" rx="13" ry="8" fill="#e0726a" opacity=".22"/><path d="M104 120 C104 100 120 84 140 80" stroke="#fff" stroke-width="5" fill="none" opacity=".18" stroke-linecap="round"/>
+  <path d="M96 134 Q93 106 112 92 L119 102 Q104 114 106 136 Z" fill="#4e4540" stroke="#3a2a22" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M224 134 Q227 106 208 92 L201 102 Q216 114 214 136 Z" fill="#4e4540" stroke="#3a2a22" stroke-width="1.6" stroke-linejoin="round"/>
+  <path d="M100 126 Q100 110 110 100 M104 132 Q103 116 113 104 M220 126 Q220 110 210 100 M216 132 Q217 116 207 104" stroke="#8a807a" stroke-width="1.4" fill="none" opacity=".8"/>
   <ellipse cx="138" cy="93" rx="20" ry="8" fill="#FFFFFF" opacity="0.3" transform="rotate(-20 138 93)"/>
   <path d="M206 104 L234 150" stroke="#1E1620" stroke-width="10" stroke-linecap="round"/>
   <path d="M206 104 L234 150" stroke="#2F6BD8" stroke-width="6" stroke-linecap="round"/>
@@ -344,18 +352,18 @@ const MJ_GLASSES=`
     <path d="M121 131 L128 139 L124 145 L132 152" stroke="#FFFFFF" stroke-width="1.5" fill="none" opacity="0.75"/>
     <g transform="rotate(-12 160 139)"><rect x="152" y="132" width="16" height="14" rx="2" fill="#F3EBD8" stroke="#1E1620" stroke-width="1.5"/><path d="M155 135 L155 143 M160 135 L160 143 M165 135 L165 143" stroke="#C9BFA8" stroke-width="1.2"/></g>`;
 const MJ_MOOCH=`
-  <path id="mjm" d="M160 181 C150 179 134 179 122 183 C112 187 101 187 97 179 C94 172 99 166 104 166 C102 172 108 175 114 172 C128 164 146 162 160 164 Z" fill="#2A1E18" stroke="#1E1620" stroke-width="2" stroke-linejoin="round"/>
-  <g transform="translate(320 0) scale(-1 1)"><path d="M160 181 C150 179 134 179 122 183 C112 187 101 187 97 179 C94 172 99 166 104 166 C102 172 108 175 114 172 C128 164 146 162 160 164 Z" fill="#2A1E18" stroke="#1E1620" stroke-width="2" stroke-linejoin="round"/></g>
-  <path d="M128 172 Q140 168 152 168 M168 168 Q180 168 192 172" stroke="#6B5A50" stroke-width="1.5" fill="none" opacity="0.7"/>
-  <ellipse cx="160" cy="161" rx="14" ry="12" fill="#B87346" stroke="#1E1620" stroke-width="3"/>
-  <ellipse cx="155" cy="157" rx="4" ry="3" fill="#FFFFFF" opacity="0.35"/>`;
+  <path id="mjm" d="M160 181 C150 179 134 179 122 183 C112 187 101 187 97 179 C94 172 99 166 104 166 C102 172 108 175 114 172 C128 164 146 162 160 164 Z" fill="#2c211b" stroke="#3a2a22" stroke-width="1.6" stroke-linejoin="round"/>
+  <g transform="translate(320 0) scale(-1 1)"><path d="M160 181 C150 179 134 179 122 183 C112 187 101 187 97 179 C94 172 99 166 104 166 C102 172 108 175 114 172 C128 164 146 162 160 164 Z" fill="#2c211b" stroke="#3a2a22" stroke-width="1.6" stroke-linejoin="round"/></g>
+  <path d="M128 172 Q140 168 152 168 M168 168 Q180 168 192 172 M118 178 Q132 172 148 172 M172 172 Q188 172 202 178 M108 176 Q118 176 126 172 M212 176 Q202 176 194 172" stroke="#6B5A50" stroke-width="1.3" fill="none" opacity="0.8"/>
+  <path d="M152 132 Q150 146 147 152" stroke="#9a6440" stroke-width="2" fill="none" opacity=".5"/><ellipse cx="160" cy="159" rx="17" ry="14" fill="url(#mjNose)" stroke="#5a3424" stroke-width="2"/>
+  <ellipse cx="153" cy="166" rx="3.6" ry="2.4" fill="#5a2e1c" opacity=".7"/><ellipse cx="167" cy="166" rx="3.6" ry="2.4" fill="#5a2e1c" opacity=".7"/><ellipse cx="154" cy="153" rx="5" ry="3.6" fill="#FFFFFF" opacity="0.4"/>`;
 function mjArm(pts,shirt){
   const [s,e,h]=pts, f=n=>n.toFixed(1), c=[2*e[0]-(s[0]+h[0])/2, 2*e[1]-(s[1]+h[1])/2], bend=Math.hypot(c[0]-(s[0]+h[0])/2,c[1]-(s[1]+h[1])/2);
   const cc=bend>60?[(c[0]+e[0])/2,(c[1]+e[1])/2]:c, u=.3, q1=[s[0]+(cc[0]-s[0])*u, s[1]+(cc[1]-s[1])*u];
   const q2=[(1-u)*(1-u)*s[0]+2*(1-u)*u*cc[0]+u*u*h[0], (1-u)*(1-u)*s[1]+2*(1-u)*u*cc[1]+u*u*h[1]];
   const d=`M${f(s[0])} ${f(s[1])} Q${f(cc[0])} ${f(cc[1])} ${f(h[0])} ${f(h[1])}`, ds=`M${f(s[0])} ${f(s[1])} Q${f(q1[0])} ${f(q1[1])} ${f(q2[0])} ${f(q2[1])}`;
-  return `<path d="${d}" stroke="#1E1620" stroke-width="24"/><path d="${d}" stroke="#C68A5B" stroke-width="17"/>`+
-         `<path d="${ds}" stroke="#1E1620" stroke-width="34"/><path d="${ds}" stroke="${shirt}" stroke-width="27"/>`;
+  return `<path d="${d}" stroke="#5a3424" stroke-width="20.5"/><path d="${d}" stroke="#C68A5B" stroke-width="17"/>`+
+         `<path d="${ds}" stroke="#5a3a30" stroke-width="30.5"/><path d="${ds}" stroke="${shirt}" stroke-width="27"/><path d="${ds}" stroke="#fff" stroke-width="6" opacity=".35" transform="translate(-4 -3)"/>`;
 }
 function drawMasterji(Pa,Pb,p,t,talk,hop,wave,lv,lvs,vm){
   // talk = 1 while his clip plays; lv = voice loudness now (0..1, drives the mouth); lvs = smoothed loudness (drives head and brows)
@@ -402,8 +410,7 @@ function drawMasterji(Pa,Pb,p,t,talk,hop,wave,lv,lvs,vm){
    <g transform="translate(0 ${bob.toFixed(2)}) rotate(${lean.toFixed(2)} 160 425)">
     <g transform="translate(160 425) scale(${(1+.006*br).toFixed(4)} ${(1+.014*br).toFixed(4)}) translate(-160 -425)">${MJ_BODY}${props}
     <g fill="none" stroke-linecap="round" stroke-linejoin="round">${mjArm(L,'#E6EEF8')}${mjArm(R,'#E6EEF8')}</g>
-    <circle cx="${L[2][0].toFixed(1)}" cy="${L[2][1].toFixed(1)}" r="12" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/>
-    <circle cx="${R[2][0].toFixed(1)}" cy="${R[2][1].toFixed(1)}" r="12" fill="#C68A5B" stroke="#1E1620" stroke-width="3"/></g>
+    ${handSvg(L[2],L[1],'#C68A5B',-1)}${handSvg(R[2],R[1],'#C68A5B',1)}</g>
     <g transform="translate(0 ${hy.toFixed(2)}) rotate(${tilt.toFixed(2)} 160 200)">${MJ_HEAD_BASE}${on.has('combUp')?MJ_FACE.combUp:MJ_FACE.combN}${face}${MJ_MOOCH}${on.has('sweat')?MJ_FACE.sweat:''}</g>
    </g>`;
 }

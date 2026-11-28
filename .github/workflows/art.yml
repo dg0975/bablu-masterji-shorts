@@ -1,0 +1,39 @@
+name: art
+# Paints skit backgrounds (art/requests.json) with a Google image model and publishes them on the `art` branch.
+on:
+  push:
+    branches: [main]
+    paths: ["art/requests.json"]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: art
+  cancel-in-progress: false
+
+jobs:
+  paint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Previous images (kept when the prompt did not change)
+        run: |
+          if git ls-remote --exit-code origin art >/dev/null 2>&1; then
+            git fetch --depth 1 origin art
+            git worktree add artprev FETCH_HEAD
+          fi
+      - name: Paint
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GEMINI_API_KEY_2: ${{ secrets.GEMINI_API_KEY_2 }}
+        run: python3 scripts/art_job.py
+      - name: Publish art branch
+        run: |
+          cd artout
+          git init -q -b art
+          git add -A
+          git -c user.name="Bablu Masterji bot" -c user.email="bot@users.noreply.github.com" commit -q -m "art for ${GITHUB_SHA::7}"
+          git push -q -f "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${GITHUB_REPOSITORY}.git" art:art

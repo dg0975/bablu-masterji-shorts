@@ -1,0 +1,45 @@
+{
+ "style": "Digital illustration in a polished semi-realistic cartoon style like a modern animated short film: soft painted shading, gentle warm bloom lighting, clean rounded shapes, subtle surface textures, rich but soft colours, slight depth of field so far things are softly blurred. Vertical 9:16 frame, eye-level camera about 1.4 m high, the floor visible in the bottom third, the middle of the room empty and uncluttered so cartoon characters can stand there later. No people, no animals, no text, no letters, no numbers, no logos, no watermark.",
+ "items": [
+  {
+   "name": "classroom",
+   "prompt": "A bright Indian school science classroom: a large blank green chalkboard on the back wall in the upper middle with nothing written on it, colourful science charts without words on the side walls, lab benches at the far sides, tube lights on the ceiling, a window on the right with daylight streaming in."
+  },
+  {
+   "name": "livingroom",
+   "prompt": "A cosy Indian middle-class living room: warm cream back wall, a wall-mounted flat TV on the left part of the wall with the screen switched off and dark, a window with red curtains on the right letting in sunlight, a blue sofa against the wall, a potted plant, a ceiling fan, a patterned rug on the floor."
+  },
+  {
+   "name": "kitchen",
+   "prompt": "An Indian home kitchen: light tiled wall, a granite counter along the back with a gas stove and a steel pressure cooker, steel utensils on a rack, spice jars on a shelf, a white fridge on the right with a blank yellow sticky note on its door, a small window with daylight on the left."
+  },
+  {
+   "name": "train_day",
+   "prompt": "Inside an Indian train sleeper coach in daytime: blue cushioned seats along the back wall below two large windows showing green fields and trees, a blank white poster on the wall between the two windows, luggage racks and small ceiling fans above, a grey floor in the foreground."
+  },
+  {
+   "name": "train_night",
+   "prompt": "Inside an Indian train sleeper coach at night: blue cushioned seats along the back wall below two large windows showing a dark blue night sky, dark trees and a bright full moon in the right window, a blank white poster on the wall between the two windows, warm tube lights inside, luggage racks above, a grey floor in the foreground."
+  },
+  {
+   "name": "tapri",
+   "prompt": "A roadside Indian chai stall on a city street in late afternoon: a wooden stall on the right with a big steel kettle, small glasses and a blank dark green menu board above it, old pastel buildings in the background on the left, a wooden bench, golden sunlight, an empty pavement in the foreground."
+  },
+  {
+   "name": "terrace",
+   "prompt": "An Indian house rooftop terrace on a sunny day: a black water tank on the right, a clothes line with colourful clothes, a low parapet wall, other rooftops behind, a blue sky with soft clouds, an empty terrace floor in the foreground."
+  },
+  {
+   "name": "bedroom",
+   "prompt": "A kid's bedroom in an Indian home: lavender walls, a bed on the left, a study table on the right with books and a lamp, a window with daylight in the middle-right, a blank poster on the wall on the left, a wooden floor."
+  },
+  {
+   "name": "park",
+   "prompt": "A green Indian city park in the morning: an empty path in the foreground, a red swing set in the middle-right background, leafy trees, a bench, a blank dark green notice board on two wooden posts on the left, soft sunlight through the trees."
+  },
+  {
+   "name": "market",
+   "prompt": "A colourful Indian vegetable market street in warm evening light: three stalls with striped awnings and heaps of vegetables and fruits, bunting flags across the top, a long blank dark signboard strip above the stalls, an empty street in the foreground."
+  }
+ ]
+}

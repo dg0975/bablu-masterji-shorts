@@ -1,0 +1,20 @@
+{
+ "storyboard": "storyboards/2026-11-28-skit-steel-chammach.json",
+ "storyboard_md5": "dd045dd766f88e91fc6452cbd0d0aa7b",
+ "engine": "sarvam",
+ "model": "bulbul:v4-flash",
+ "speaker": "harpreet_pa_narration",
+ "pace": 0.97,
+ "ok": true,
+ "error": null,
+ "clips": {
+  "a43d70b077517004": "clips/a43d70b077517004.wav",
+  "c5862774a5d16afc": "clips/c5862774a5d16afc.wav",
+  "9bb007b19853a18c": "clips/9bb007b19853a18c.wav",
+  "905ca9914c515f53": "clips/905ca9914c515f53.wav",
+  "31ba06b3ac215a8e": "clips/31ba06b3ac215a8e.wav",
+  "335de41553a68cab": "clips/335de41553a68cab.wav",
+  "a571b06d26a20abd": "clips/a571b06d26a20abd.wav",
+  "52b5cd0a53a81881": "clips/52b5cd0a53a81881.wav"
+ }
+}

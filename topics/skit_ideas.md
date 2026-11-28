@@ -5,7 +5,7 @@
 - chashma-bhaap: Papa's glasses fog up over hot chai, Golu blames "bhoot"; condensation on cold glass (used 2026-11-22: Dadaji, Chutki, Raju at the tapri)
 - balloon-fridge: Golu's party balloon shrinks in the fridge, he thinks it is "darr gaya"; gas contracts when cold (used 2026-11-24: Chutki, Golu, Papa in the kitchen)
 - chaand-peecha: Golu says the moon follows the car; parallax, far objects seem to move with you (used 2026-11-27: Chutki, Raju, Dadaji on a night train)
-- steel-chammach: Golu leaves a steel spoon in hot dal, Mummy's wooden spoon stays cool; conduction
+- steel-chammach: Golu leaves a steel spoon in hot dal, Mummy's wooden spoon stays cool; conduction (used 2026-11-28: Sharma Aunty, Golu, Mummy in the kitchen)
 - cycle-tyre: Golu over-pumps his cycle tyre on a hot afternoon; air expands with heat, pressure rises
 - pyaz-aansu: Golu cries cutting onions and claims "emotional scene"; onion gas reacts with eyes' moisture
 - echo-ghar: in the empty new flat Golu "talks to his own clone"; echo from bare walls

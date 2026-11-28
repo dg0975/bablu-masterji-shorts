@@ -4,7 +4,7 @@
  "title": "Chammach ne kaata",
  "hook": "Chammach ne *kaata*?! 😱",
  "handle": "@bablu.masterji",
- "post_title": "Sharma Aunty ki Breaking News 😂 Sharma Aunty News, Part 1 #shorts",
+ "post_title": "Steel ka chammach garam kyun? 😂 Sharma Aunty News, Part 1 #shorts",
  "tts": "sarvam",
  "outro": 0.7,
  "music_style": "funky",
@@ -128,7 +128,8 @@
      "style": "a boy in pain, sarcastic and fed up",
      "show": {
       "icon": "fire",
-      "label": "Haath garam"
+      "label": "Haath garam",
+      "side": "left"
      }
     },
     {
@@ -299,9 +300,9 @@
       }
      ],
      "style": "an offended aunty, huffy and stubborn, then yelping in pain at the end",
-     "show": {
-      "icon": "fire",
-      "label": "Aah!"
+     "fx": {
+      "kind": "sweat",
+      "on": "aunty"
      }
     }
    ]

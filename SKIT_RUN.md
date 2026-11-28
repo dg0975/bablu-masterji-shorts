@@ -262,6 +262,12 @@ almost zero. These rules fix that; every skit must follow them:
    `"bgfact": "<short answer, under 30 characters>"`. Light beams, parallax and background people are
    automatic. Character motion is smoothed automatically too (see engine/references/skit.md).
 
+14. **Painted sets (owner, 28 Nov 2026).** All 9 sets now use painted backgrounds
+   (`engine/assets/bg/*.jpg`, train has `_day` / `_night`), with the info display placed on a board,
+   TV, note or poster in the painting, light beams, background walkers, steam and trees rushing past the
+   train windows. Nothing to set. New painted sets: save the image in `art/src/<name>.png`, add its
+   layout to `art/bg_layout.json`, run `python3 scripts/make_bg.py <name>`, check a frame, commit.
+
 ## 3. Voice, check, render
 1. Save to `storyboards/<YYYY-MM-DD>-skit-<slug>.json`, commit and push to `main`.
 2. `bash scripts/get_voice.sh storyboards/<file>.json work/voice`

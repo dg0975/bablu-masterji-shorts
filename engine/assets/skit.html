@@ -169,6 +169,13 @@ function bgImageExtras(BI,t,s){const M=BI.meta||{}, i=M.info;let o='';
  for(const b of (M.beams||[])) o+=beams(b.x,b.y,b.w||240,b.ang||25,t,null,b.len||900);
  for(const w of (M.walkers||[])) o+=walker(t,w.period||15,w.y,w.scale||.7,w.dir||1,w.c1||'#2f6bd8',w.c2||'#1d1614',w.ph||0);
  if(M.lamps) o+=lampSweep(t);
+ // painted windows: trees and poles rush past (the painted moon/sky stays put behind them)
+ (M.windows||[]).forEach((w,k)=>{const [x,y,ww,hh]=w, id='bw'+k, f=v=>v.toFixed(1);let tr='';
+   for(let i=0;i<5;i++){const tx=x+((i*ww/2.3-t*520)%(ww*2.2)+ww*2.2)%(ww*2.2)-ww*.4, r=hh*(.16+.05*(i%3));
+     tr+=`<g opacity="${M.night?.92:.7}"><rect x="${f(tx-6)}" y="${f(y+hh*.62)}" width="12" height="${f(hh*.4)}" fill="${M.night?'#08120c':'#5a4a2e'}"/><circle cx="${f(tx)}" cy="${f(y+hh*.58)}" r="${f(r)}" fill="${M.night?'#0b1a12':'#3f7a3c'}"/><circle cx="${f(tx-r*.6)}" cy="${f(y+hh*.66)}" r="${f(r*.7)}" fill="${M.night?'#0b1a12':'#4a8a44'}"/></g>`}
+   const px=x+((ww*1.5-t*1100)%(ww*3)+ww*3)%(ww*3)-ww*.2;
+   o+=`<clipPath id="${id}"><rect x="${x}" y="${y}" width="${ww}" height="${hh}" rx="14"/></clipPath><g clip-path="url(#${id})">${tr}<rect x="${f(px)}" y="${y}" width="10" height="${hh}" fill="${M.night?'#111':'#555'}" opacity=".8"/></g>`});
+ (M.steam||[]).forEach(([sx,sy])=>{for(let k=0;k<4;k++){const q=(t*.55+k/4)%1;o+=`<circle cx="${(sx+Math.sin(t*2+k)*14).toFixed(1)}" cy="${(sy-q*220).toFixed(1)}" r="${(14+q*34).toFixed(1)}" fill="#fff" opacity="${(.45*(1-q)).toFixed(2)}"/>`}});
  const L=M.light||[540,500]; return o+wash(t,L[0],L[1],s.night?'#bcd0ff':null)}
 const BGDEFS=`<linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4" stop-opacity="1"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></linearGradient>
  <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
@@ -313,7 +320,7 @@ const SPEC={
  raju:{skin:'#C99068',shirt:'#3C8C7A',pants:'#2B3A55',hair:'messy',beard:true,headphones:true,hoodie:true,scale:.98},
  aunty:{skin:'#C98B62',shirt:'#3BAA6A',saree:'#E8418A',border:'#3BAA6A',hair:'curly',bindi:true,bigBindi:true,bangles:true,scale:.98,belly:true,fem:true,lips:'#b03a52'},
 };
-const GDEFS=`<filter id="paintC" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+const GDEFS=`<filter id="bgsoft2" x="0" y="0" width="1" height="1"><feGaussianBlur stdDeviation="1.1" edgeMode="duplicate"/></filter><filter id="paintC" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
   <feGaussianBlur in="SourceAlpha" stdDeviation="7" result="b"/>
   <feSpecularLighting in="b" surfaceScale="5" specularConstant=".5" specularExponent="16" lighting-color="#fff6e6" result="sp"><feDistantLight azimuth="235" elevation="48"/></feSpecularLighting>
   <feComposite in="sp" in2="SourceAlpha" operator="in" result="spi"/>
@@ -934,7 +941,7 @@ function renderAt(t){
    if(wh==='floor'){let fx2=o.x;if(fx2===undefined){const others=s.cast.filter(c=>c.id!==who);fx2=others.length?(cx+others.reduce((a,c)=>Math.abs(c.x-cx)<Math.abs(a.x-cx)?c:a).x)/2:cx+side*260}
      objs+=worldObj(o.icon,fx2,FLOOR-50,o.size||175,q,t,'floor')}
    else objs+=worldObj(o.icon,o.x!==undefined?o.x:cx+side*165,o.y!==undefined?o.y:(who?headY(s,who)+(s.card?240:-30):700),o.size||125,q,t,'float')}
- $('#w').innerHTML=D3?'':`<defs>${defs}${BGDEFS}</defs><g id="bgL"><g filter="url(#bgsoft)">${set}${SB.bg_extras===false?'':BI?bgImageExtras(BI,t,s):(SETX[s.set]||(()=>''))(t,s)}</g></g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
+ $('#w').innerHTML=D3?'':`<defs>${defs}${BGDEFS}</defs><g id="bgL"><g filter="url(#${BI?'bgsoft2':'bgsoft'})">${set}${SB.bg_extras===false?'':BI?bgImageExtras(BI,t,s):(SETX[s.set]||(()=>''))(t,s)}</g></g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
  const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;

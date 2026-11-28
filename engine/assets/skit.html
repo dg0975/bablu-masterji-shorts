@@ -159,6 +159,17 @@ function wash(t,cx,cy,warm){const x=cx+Math.sin(t*.17)*40, f=v=>v.toFixed(1);
 // night train: light from passing station lamps sweeps across the coach
 function lampSweep(t){const u=(t%3.6)/1.1;if(u>1)return '';const x=lerp(1500,-500,u), f=v=>v.toFixed(1);
  return `<path d="M${f(x)} 380 L${f(x+260)} 380 L${f(x+60)} 1300 L${f(x-200)} 1300 Z" fill="#fff4cc" opacity="${f(.16*Math.sin(u*Math.PI))}" style="mix-blend-mode:screen"/>`}
+
+// painted backgrounds: assets/bg/<key>.jpg replaces the drawn set; <key>.json places the info display and light
+function bgKey(s){const n=s.set||'classroom', B=typeof BGIMG!=='undefined'?BGIMG:{};
+ if(s.night&&B[n+'_night'])return n+'_night'; if(!s.night&&B[n+'_day'])return n+'_day'; return B[n]?n:null}
+function bgImageSvg(BI){return `<image href="${BI.url}" x="0" y="0" width="1080" height="1920" preserveAspectRatio="xMidYMid slice"/>`}
+function bgImageExtras(BI,t,s){const M=BI.meta||{}, i=M.info;let o='';
+ if(i) o+=infoPanel(i.kind||'poster',i.x,i.y,i.w,i.h,t);
+ for(const b of (M.beams||[])) o+=beams(b.x,b.y,b.w||240,b.ang||25,t,null,b.len||900);
+ for(const w of (M.walkers||[])) o+=walker(t,w.period||15,w.y,w.scale||.7,w.dir||1,w.c1||'#2f6bd8',w.c2||'#1d1614',w.ph||0);
+ if(M.lamps) o+=lampSweep(t);
+ const L=M.light||[540,500]; return o+wash(t,L[0],L[1],s.night?'#bcd0ff':null)}
 const BGDEFS=`<linearGradient id="beamG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#fff3c4" stop-opacity="1"/><stop offset="1" stop-color="#fff3c4" stop-opacity="0"/></linearGradient>
  <linearGradient id="floorFade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".22"/></linearGradient>
  <radialGradient id="tvGlow" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#4f7bff"/><stop offset="1" stop-color="#16204a"/></radialGradient>`;
@@ -859,7 +870,8 @@ function renderAt(t){
      hk.style.opacity=o.toFixed(3); hk.style.transform=`scale(${sc.toFixed(3)}) rotate(${(-1.5+Math.sin(t*3)*.6).toFixed(2)}deg)`; }
    $('#title').style.opacity=(SB.hook&&t<hu)||EX?0:1; }
  $('#ex').innerHTML=EX&&EX.kind?explainSvg(EX,t-exT0,t):'';
- const set=D3?'':(SETS[s.set]||SETS.classroom)(t,s);
+ const BI=!D3&&bgKey(s)?BGIMG[bgKey(s)]:null;
+ const set=D3?'':BI?bgImageSvg(BI):(SETS[s.set]||SETS.classroom)(t,s);
  let chars='', defs=GDEFS, fxs0='', STK=[];
  const spk=B.who&&t<TB.audioEnd?B.who:null, spkX=spk?charPos(s,spk)[0]:null;
  const env3=k=>{let a=0;for(let q=-6;q<=6;q++)a+=envAt(t+q/30);return a/13};
@@ -899,7 +911,8 @@ function renderAt(t){
   else if(fellBefore){rot=fallDir*84*(1-sstep(bt/.5))}
   if((B.tremble||[]).includes(id)){dx=Math.sin(t*75)*7; rot+=Math.sin(t*63)*1.6}
   const wrap=(ssx!==1||ssy!==1||rot||dx)?`translate(${(x+dx).toFixed(1)} ${y}) rotate(${rot.toFixed(2)}) scale(${ssx.toFixed(3)} ${ssy.toFixed(3)}) translate(${(-x).toFixed(1)} ${-y})`:'';
-  chars+=`<g transform="${wrap}"${SB.paint===false?'':' filter="url(#paintC)"'}><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body}</g></g>`;
+  const body2=SB.paint===false?body:body.replace(/stroke="(#2A1A16|#1E1620|#1e1620)"( stroke-width=")([\d.]+)"/g,(m,c,sw,w)=>+w<=6.5?`stroke="#3b2a26"${sw}${(+w*.62).toFixed(1)}"`:m);   // finer, warmer outlines (painted look)
+  chars+=`<g transform="${wrap}"${SB.paint===false?'':' filter="url(#paintC)"'}><g transform="translate(${(x-160*sc*flip).toFixed(1)} ${(y-430*sc).toFixed(1)}) scale(${(sc*flip).toFixed(3)} ${sc.toFixed(3)})">${body2}</g></g>`;
  }
  // effects for this beat
  let fxs='', back='';
@@ -916,7 +929,7 @@ function renderAt(t){
    if(wh==='floor'){let fx2=o.x;if(fx2===undefined){const others=s.cast.filter(c=>c.id!==who);fx2=others.length?(cx+others.reduce((a,c)=>Math.abs(c.x-cx)<Math.abs(a.x-cx)?c:a).x)/2:cx+side*260}
      objs+=worldObj(o.icon,fx2,FLOOR-50,o.size||175,q,t,'floor')}
    else objs+=worldObj(o.icon,o.x!==undefined?o.x:cx+side*165,o.y!==undefined?o.y:(who?headY(s,who)+(s.card?240:-30):700),o.size||125,q,t,'float')}
- $('#w').innerHTML=D3?'':`<defs>${defs}${BGDEFS}</defs><g id="bgL"><g filter="url(#bgsoft)">${set}${SB.bg_extras===false?'':(SETX[s.set]||(()=>''))(t,s)}</g></g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
+ $('#w').innerHTML=D3?'':`<defs>${defs}${BGDEFS}</defs><g id="bgL"><g filter="url(#bgsoft)">${set}${SB.bg_extras===false?'':BI?bgImageExtras(BI,t,s):(SETX[s.set]||(()=>''))(t,s)}</g></g>`+(s.props||[]).map(q=>`<g transform="translate(${q.x} ${q.y})">${propSvg(q.kind,t,q.scale||1)}</g>`).join('')+back+chars+objs+fxs0+fxs;
   // camera: per-beat framing; glides from the last beat's framing; "punch" = crash zoom on a face
  const exOn=jj=>{let e=null;for(let k=0;k<=jj;k++){const bb=s.beats[k];if(bb.explain!==undefined)e=bb.explain||null}return !!(e&&e.kind)};
  const camFor=(jj,btj)=>{const BB=s.beats[jj], TBj=T.beats[jj]; let auto=null;

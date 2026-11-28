@@ -688,6 +688,17 @@ def write_page(sb, tl, out):
                             img[part] = "data:image/png;base64," + base64.b64encode((d / f"{part}.png").read_bytes()).decode()
                     pup[cid] = {"meta": meta, "img": img}
         data += "\nconst PUPPETS=" + json.dumps(pup) + ";"
+        # painted backgrounds (assets/bg/<set>.jpg, train_day / train_night ...) with optional <name>.json layout
+        bgi = {}
+        bgdir = ASSETS / "bg"
+        if bgdir.exists() and sb.get("painted_bg", True):
+            for f in sorted(bgdir.iterdir()):
+                if f.suffix.lower() in (".jpg", ".jpeg", ".png", ".webp"):
+                    meta = {}
+                    if f.with_suffix(".json").exists():
+                        meta = json.loads(f.with_suffix(".json").read_text())
+                    bgi[f.stem] = {"url": f"file://{f.resolve()}", "meta": meta}
+        data += "\nconst BGIMG=" + json.dumps(bgi) + ";"
     libs = ""
     if sb.get("kind") == "skit" and sb.get("look") == "3d":   # real 3D cast and sets (assets/skit3d.js)
         for js in (ASSETS / "vendor" / "three.min.js", ASSETS / "skit3d.js"):

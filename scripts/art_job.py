@@ -4,7 +4,7 @@ Reads art/requests.json: {"style": "...", "items": [{"name": "train_night", "pro
 Writes artout/<name>.png plus artout/status.json (model used or the API error per image; never any key).
 Images already on the `art` branch are kept unless their prompt changed.
 """
-import base64, hashlib, json, os, sys, time, urllib.error, urllib.request
+import base64, hashlib, json, os, sys, time, urllib.error, urllib.parse, urllib.request
 
 BASE = "https://generativelanguage.googleapis.com/v1beta/"
 KEYS = [k for k in (os.environ.get("GEMINI_API_KEY"), os.environ.get("GEMINI_API_KEY_2")) if k]
@@ -79,6 +79,23 @@ def paint(model, kind, prompt, key):
     return base64.b64decode(b)
 
 
+def pollinations(prompt, seed):
+    """free image service (FLUX), no key; used when the Google image models are not available"""
+    q = urllib.parse.quote(prompt[:1800])
+    url = f"https://image.pollinations.ai/prompt/{q}?width=1080&height=1920&model=flux&nologo=true&private=true&enhance=false&seed={seed}"
+    req = urllib.request.Request(url, headers={"User-Agent": "bablu-masterji-art/1.0"})
+    for i in range(3):
+        try:
+            with urllib.request.urlopen(req, timeout=240) as r:
+                data = r.read()
+            if len(data) > 20000 and data[:3] in (b"\xff\xd8\xff", b"\x89PN"):
+                return data
+            raise RuntimeError(f"not an image ({len(data)} bytes)")
+        except Exception as e:
+            last = e; time.sleep(15 * (i + 1))
+    raise last
+
+
 def main():
     req = json.load(open("art/requests.json"))
     os.makedirs("artout", exist_ok=True)
@@ -105,7 +122,7 @@ def main():
         if prev.get(name, {}).get("md5") == h and os.path.exists(f"artprev/{name}.png"):
             os.replace(f"artprev/{name}.png", f"artout/{name}.png"); st["items"][name] = prev[name]; continue
         res = {"md5": h, "ok": False, "tries": []}
-        for model, kind in cands:
+        for model, kind in ([] if st.get("google_blocked") else cands):
             done = False
             for k in KEYS:
                 try:
@@ -116,6 +133,16 @@ def main():
                     res["tries"].append(f"{model}: {err(e)}")
             if done:
                 break
+        if not res["ok"] and os.environ.get("ART_FREE", "1") == "1":
+            try:
+                img = pollinations(prompt, int(h[:6], 16))
+                open(f"artout/{name}.png", "wb").write(img)
+                res.update(ok=True, model="pollinations-flux")
+            except Exception as e:
+                res["tries"].append(f"pollinations: {err(e)}")
+            time.sleep(8)
+        if res["tries"] and all("HTTP 429" in x for x in res["tries"] if not x.startswith("pollinations")) and len([x for x in res["tries"] if not x.startswith("pollinations")]) >= 2:
+            st["google_blocked"] = True
         st["items"][name] = res
         if not res["ok"]:
             st["ok"] = False

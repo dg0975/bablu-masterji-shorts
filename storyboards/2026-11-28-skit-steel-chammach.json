@@ -1,0 +1,310 @@
+{
+ "kind": "skit",
+ "series": "SHARMA AUNTY NEWS · PART 1",
+ "title": "Chammach ne kaata",
+ "hook": "Chammach ne *kaata*?! 😱",
+ "handle": "@bablu.masterji",
+ "post_title": "Sharma Aunty ki Breaking News 😂 Sharma Aunty News, Part 1 #shorts",
+ "tts": "sarvam",
+ "outro": 0.7,
+ "music_style": "funky",
+ "music": 0.16,
+ "duck": 0.65,
+ "format": "skit",
+ "bgfact": "Steel garmi tez failata",
+ "hook_top": 215,
+ "cast": {
+  "golu": {
+   "name": "Golu",
+   "engine": "gemini",
+   "gvoice": "Zephyr",
+   "style": "a cheeky 10-year-old Indian boy, excited and mischievous"
+  },
+  "aunty": {
+   "name": "Sharma Aunty",
+   "engine": "gemini",
+   "gvoice": "Laomedeia",
+   "style": "a nosy, gossipy neighbour aunty, loud and dramatic"
+  },
+  "mummy": {
+   "name": "Mummy",
+   "engine": "gemini",
+   "gvoice": "Kore",
+   "style": "an Indian mother scolding her son, loud, dramatic and annoyed"
+  },
+  "masterji": {
+   "name": "Masterji",
+   "engine": "gemini",
+   "gvoice": "Charon",
+   "style": "Masterji, a funny and warm Indian school teacher in his 50s, confident, lively and clear"
+  }
+ },
+ "scenes": [
+  {
+   "set": "kitchen",
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "golu",
+     "x": 220,
+     "pose": "shock",
+     "item": "spoon"
+    },
+    {
+     "id": "aunty",
+     "x": 540,
+     "pose": "shock"
+    },
+    {
+     "id": "mummy",
+     "x": 860,
+     "pose": "idle",
+     "item": "woodspoon"
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "आह! चम्मच ने काटा!",
+     "act": {
+      "golu": "shock",
+      "aunty": "shock",
+      "mummy": "idle"
+     },
+     "cam": {
+      "zoom": 1.15,
+      "on": [
+       420,
+       900
+      ]
+     },
+     "hop": [
+      "golu"
+     ],
+     "fx": {
+      "kind": "lines"
+     },
+     "sfx": "boing",
+     "style": "a boy yelping in sudden pain, shouting, shaking his hand"
+    },
+    {
+     "who": "aunty",
+     "say": "हाय! ब्रेकिंग न्यूज़, चम्मच काटने लगे!",
+     "act": {
+      "aunty": "shock",
+      "golu": "sad"
+     },
+     "sfx": "scratch",
+     "style": "a nosy aunty gasping dramatically, thrilled to have fresh gossip",
+     "show": {
+      "icon": "exclaim",
+      "label": "Breaking!"
+     }
+    },
+    {
+     "who": "aunty",
+     "say": "फ़ॉरवर्ड में पढ़ा, स्टील दाल की गर्मी चूस लेता है!",
+     "act": {
+      "aunty": "happy",
+      "golu": "think",
+      "mummy": "think"
+     },
+     "style": "a gossipy aunty sharing a 'fact' very proudly, know-it-all",
+     "show": {
+      "icon": "phone",
+      "label": "Forward"
+     }
+    },
+    {
+     "who": "golu",
+     "say": "हाँ, और मेरे हाथ में उगल देता है!",
+     "act": {
+      "golu": "angry",
+      "aunty": "shock",
+      "mummy": "laugh"
+     },
+     "punch": "golu",
+     "sfx": "boom",
+     "style": "a boy in pain, sarcastic and fed up",
+     "show": {
+      "icon": "fire",
+      "label": "Haath garam"
+     }
+    },
+    {
+     "hold": 0.6,
+     "act": {
+      "mummy": "laugh",
+      "aunty": "sad",
+      "golu": "sad"
+     },
+     "sfx": "drum",
+     "tremble": [
+      "aunty"
+     ]
+    },
+    {
+     "who": "mummy",
+     "say": "मेरा लकड़ी वाला चम्मच, बीस साल से ठंडा!",
+     "act": {
+      "mummy": "happy",
+      "golu": "shock",
+      "aunty": "think"
+     },
+     "sfx": "ding",
+     "style": "a smug Indian mother bragging, proud and teasing",
+     "show": {
+      "icon": "snow",
+      "label": "Thanda!"
+     }
+    }
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.9,
+   "cast": [
+    {
+     "id": "masterji",
+     "x": 300,
+     "enter": "pop"
+    },
+    {
+     "id": "aunty",
+     "x": 800,
+     "pose": "think"
+    }
+   ],
+   "beats": [
+    {
+     "who": "masterji",
+     "say": "स्टील गर्मी का हाईवे है, लकड़ी स्पीड ब्रेकर!",
+     "act": {
+      "masterji": "point",
+      "aunty": "think"
+     },
+     "explain": {
+      "kind": "steps",
+      "title": "Chammach garam kyun?",
+      "steps": [
+       "fire:Garam dal",
+       "thermo:Steel: garmi tez",
+       "cross:Lakdi: garmi ruki"
+      ]
+     },
+     "style": "a teacher explaining with excitement, playful and lively"
+    }
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "golu",
+     "x": 220,
+     "pose": "happy",
+     "item": "spoon"
+    },
+    {
+     "id": "aunty",
+     "x": 540,
+     "pose": "shock"
+    },
+    {
+     "id": "mummy",
+     "x": 860,
+     "pose": "laugh",
+     "item": "woodspoon"
+    }
+   ],
+   "beats": [
+    {
+     "who": "golu",
+     "say": "गर्मी से भी तेज़ फैलती है, आंटी की खबर!",
+     "act": {
+      "golu": "happy",
+      "aunty": "shock",
+      "mummy": "laugh"
+     },
+     "punch": "golu",
+     "sfx": "boom",
+     "style": "a cheeky boy roasting the aunty, thrilled, laughing",
+     "show": {
+      "icon": "phone",
+      "label": "Khabar!"
+     }
+    },
+    {
+     "hold": 0.65,
+     "act": {
+      "aunty": "angry",
+      "mummy": "laugh",
+      "golu": "laugh"
+     },
+     "spin": [
+      "golu"
+     ],
+     "tremble": [
+      "aunty"
+     ],
+     "sfx": "drum"
+    }
+   ]
+  },
+  {
+   "set": "kitchen",
+   "scale": 0.78,
+   "cast": [
+    {
+     "id": "golu",
+     "x": 220,
+     "pose": "laugh"
+    },
+    {
+     "id": "aunty",
+     "x": 540,
+     "pose": "angry",
+     "item": "spoon"
+    },
+    {
+     "id": "mummy",
+     "x": 860,
+     "pose": "laugh",
+     "item": "woodspoon"
+    }
+   ],
+   "card": {
+    "kicker": "Science ka sach",
+    "text": "स्टील जैसी धातु गर्मी जल्दी आगे पहुँचाती है, लकड़ी नहीं। इसलिए करछी के हैंडल लकड़ी के होते हैं।",
+    "foot": "Aapke ghar ki karchhi: Steel ya Lakdi? 👇"
+   },
+   "beats": [
+    {
+     "who": "aunty",
+     "say": "हुंह! मैं खुद छूकर देखती हूँ, आह!",
+     "act": {
+      "aunty": "angry",
+      "golu": "shock",
+      "mummy": "shock"
+     },
+     "hop": [
+      "aunty"
+     ],
+     "sfx": [
+      {
+       "s": "boing",
+       "at": 1.4,
+       "gain": 0.8
+      }
+     ],
+     "style": "an offended aunty, huffy and stubborn, then yelping in pain at the end",
+     "show": {
+      "icon": "fire",
+      "label": "Aah!"
+     }
+    }
+   ]
+  }
+ ]
+}

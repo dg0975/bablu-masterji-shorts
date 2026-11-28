@@ -35,7 +35,7 @@ SKIT_EXPLAIN = {"molecules", "evaporation", "heat", "pressure", "sound", "light"
 SKIT_POSES = {"idle", "talk", "shock", "happy", "laugh", "angry", "sad", "point", "think", "sly", "dance", "hand", "facepalm", "hold", "wave"}
 SKIT_FX = {"bulb", "sweat", "question", "stars", "anger", "hearts", "pop", "lines"}
 SKIT_ICONS = set(__import__("re").findall(r"^ (\w+):`", (Path(__file__).resolve().parent.parent / "assets" / "skit.html").read_text(), __import__("re").M))
-SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon", "balloon", "balloonsmall", "report"}
+SKIT_PROPS = {"matka", "bottle", "glass", "chai", "straw", "spoon", "woodspoon", "balloon", "balloonsmall", "report"}
 SFX_NAMES = {"boing", "ding", "whoosh", "drum", "pop", "crash", "bell", "slide", "scratch", "boom", "thud"}
 
 
